@@ -1,7 +1,9 @@
 #!/bin/sh
 
+set -e
+
 echo "run_id: $RUN_ID"
-npm test
+./scripts/github_run_tests.sh
 
 npm run report:publish
 publish_exit_code=$?

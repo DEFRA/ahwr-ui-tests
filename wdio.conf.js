@@ -1,6 +1,8 @@
-import fs from 'node:fs'
+import { browser } from "@wdio/globals";
+import path from "path";
+import fs from "fs";
 
-const oneMinute = 60 * 1000
+const projectPath = process.cwd();
 
 export const config = {
   //
@@ -8,95 +10,172 @@ export const config = {
   // Runner Configuration
   // ====================
   // WebdriverIO supports running e2e tests as well as unit and component tests.
-  runner: 'local',
+  runner: "local",
+  // maxInstances: 1,
+  //
+  // ==================
+  // Specify Test Files
+  // ==================
+  // Define which test specs should run. The pattern is relative to the directory
+  // of the configuration file being run.
+  //
+  // The specs are defined as an array of spec files (optionally using wildcards
+  // that will be expanded). The test for each spec file will be run in a separate
+  // worker process. In order to have a group of spec files run in the same worker
+  // process simply enclose them in an array within the specs array.
+  //
+  // The path of the spec files will be resolved relative from the directory of
+  // of the config file unless it's absolute.
+  //
+  // specs: [],
+  suites: {
+    mainSuite: [
+      // "./test/specs/mainSuite/test.apply.journeys.js",
+      // "./test/specs/mainSuite/test.review-claim-before-mh-launch.journeys.js",
+      // "./test/specs/mainSuite/test.follow-up-claim-before-mh-launch.journeys.js",
+       "./test/specs/mainSuite/test.pre.mh.journeys.js",
+      // "./test/specs/mainSuite/test.pre.and.post.mh.journeys.js",
+      // "./test/specs/mainSuite/test.beef.journeys.js",
+      // "./test/specs/mainSuite/test.dairy.journeys.js",
+      // "./test/specs/mainSuite/test.pigs.journeys.js",
+      // "./test/specs/mainSuite/test.sheep.journeys.js",
+      // "./test/specs/mainSuite/test.claim.session.journeys.js",
+      // "./test/specs/mainSuite/test.dashboard.journeys.js",
+      // "./test/specs/mainSuite/test.backoffice.journeys.js",
+    ],
+    comp: ["./test/specs/test.claim-compliance.journeys.js"],
+    compFA: ["./test/specs/test.claim-compliance-feature-assurance.journeys.js"],
+  },
+  // Patterns to exclude.
+  exclude: [
+    // 'path/to/excluded/files'
+  ],
+  //
+  // ============
+  // Capabilities
+  // ============
+  // Define your capabilities here. WebdriverIO can run multiple capabilities at the same
+  // time. Depending on the number of capabilities, WebdriverIO launches several test
+  // sessions. Within your capabilities you can overwrite the spec and exclude options in
+  // order to group specific specs to a specific capability.
+  //
+  // First, you can define how many instances should be started at the same time. Let's
+  // say you have 3 different capabilities (Chrome, Firefox, and Safari) and you have
+  // set maxInstances to 1; wdio will spawn 3 processes. Therefore, if you have 10 spec
+  // files and you set maxInstances to 10, all spec files will get tested at the same time
+  // and 30 processes will get spawned. The property handles how many capabilities
+  // from the same test should run tests.
+  //
+  maxInstances: Number.parseInt(process.env.USE_INSTANCES ?? "1", 10),
+  //
+  // If you have trouble getting all important capabilities together, check out the
+  // Sauce Labs platform configurator - a great tool to configure your capabilities:
+  // https://saucelabs.com/platform/platform-configurator
+  //
+  capabilities: [
+    {
+      maxInstances: 1,
+      browserName: "chrome",
+      "goog:chromeOptions": {
+        args: [
+          "--no-sandbox",
+          "--headless",
+          "--disable-gpu",
+          "--enable-automation",
+          "--disable-dev-shm-usage",
+        ],
+      },
+    },
+  ],
+  //
+  // ===================
+  // Test Configurations
+  // ===================
+  // Define all options that are relevant for the WebdriverIO instance here
+  //
+  // Level of logging verbosity: trace | debug | info | warn | error | silent
+  logLevel: "warn",
+  //
+  // Set specific log levels per logger
+  // loggers:
+  // - webdriver, webdriverio
+  // - @wdio/browserstack-service, @wdio/lighthouse-service, @wdio/sauce-service
+  // - @wdio/mocha-framework, @wdio/jasmine-framework
+  // - @wdio/local-runner
+  // - @wdio/sumologic-reporter
+  // - @wdio/cli, @wdio/config, @wdio/utils
+  // Level of logging verbosity: trace | debug | info | warn | error | silent
+  // logLevels: {
+  //     webdriver: 'info',
+  //     '@wdio/appium-service': 'info'
+  // },
+  //
+  // If you only want to run your tests until a specific amount of tests have failed use
+  // bail (default is 0 - don't bail, run all tests).
+  bail: 0,
   //
   // Set a base URL in order to shorten url command calls. If your `url` parameter starts
   // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
   // If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
   // gets prepended directly.
-  baseUrl: `https://ahwr-ui-tests.${process.env.ENVIRONMENT}.cdp-int.defra.cloud`,
-
-  // Connection to remote chromedriver
-  hostname: process.env.CHROMEDRIVER_URL || '127.0.0.1',
-  port: process.env.CHROMEDRIVER_PORT || 4444,
-
-  // Tests to run
-  specs: ['./test/specs/**/*.js'],
-  // Tests to exclude
-  exclude: [],
-  maxInstances: 1,
-
-  capabilities: [
-    {
-      ...(process.env.HTTP_PROXY && {
-        proxy: {
-          proxyType: 'manual',
-          httpProxy: new URL(process.env.HTTP_PROXY).host,
-          sslProxy: new URL(process.env.HTTP_PROXY).host
-        }
-      }),
-      browserName: 'chrome',
-      'goog:chromeOptions': {
-        args: [
-          '--no-sandbox',
-          '--disable-infobars',
-          '--headless',
-          '--disable-gpu',
-          '--window-size=1920,1080',
-          '--enable-features=NetworkService,NetworkServiceInProcess',
-          '--password-store=basic',
-          '--use-mock-keychain',
-          '--dns-prefetch-disable',
-          '--disable-background-networking',
-          '--disable-remote-fonts',
-          '--ignore-certificate-errors',
-          '--disable-dev-shm-usage'
-        ]
-      }
-    }
-  ],
-
-  execArgv: ['--loader', 'esm-module-alias/loader'],
-
-  logLevel: 'info',
-
-  logLevels: {
-    webdriver: 'error'
-  },
-
-  // Number of failures before the test suite bails.
-  bail: 0,
+  // baseUrl: 'http://localhost:8080',
+  //
+  // Default timeout for all waitFor* commands.
   waitforTimeout: 10000,
-  waitforInterval: 200,
-  connectionRetryTimeout: 6000,
+  //
+  // Default timeout in milliseconds for request
+  // if browser driver or grid doesn't send response
+  connectionRetryTimeout: 120000,
+  //
+  // Default request retries count
   connectionRetryCount: 3,
-  framework: 'mocha',
+  //
+  // Test runner services
+  // Services take over a specific job you don't want to take care of. They enhance
+  // your test setup with almost no effort. Unlike plugins, they don't add new
+  // commands. Instead, they hook themselves up into the test process.
+  // services: [],
+  //
+  // Framework you want to run your specs with.
+  // The following are supported: Mocha, Jasmine, and Cucumber
+  // see also: https://webdriver.io/docs/frameworks
+  //
+  // Make sure you have the wdio adapter package for the specific framework installed
+  // before running any tests.
+  framework: "mocha",
 
+  //
+  // The number of times to retry the entire specfile when it fails as a whole
+  // specFileRetries: 1,
+  //
+  // Delay in seconds between the spec file retry attempts
+  // specFileRetriesDelay: 0,
+  //
+  // Whether or not retried spec files should be retried immediately or deferred to the end of the queue
+  // specFileRetriesDeferred: false,
+  //
+  // Test reporter for stdout.
+  // The only one supported by default is 'dot'
+  // see also: https://webdriver.io/docs/dot-reporter
   reporters: [
+    "spec",
     [
-      // Spec reporter provides rolling output to the logger so you can see it in-progress
-      'spec',
+      "allure",
       {
-        addConsoleLogs: true,
-        realtimeReporting: true,
-        color: false
-      }
+        outputDir: "allure-results",
+        disableWebdriverStepsReporting: true,
+        disableWebdriverScreenshotsReporting: false,
+      },
     ],
-    [
-      // Allure is used to generate the final HTML report
-      'allure',
-      {
-        outputDir: 'allure-results'
-      }
-    ]
   ],
 
   // Options to be passed to Mocha.
   // See the full list at http://mochajs.org/
   mochaOpts: {
-    ui: 'bdd',
-    timeout: oneMinute
+    ui: "bdd",
+    timeout: 180000,
   },
+
   //
   // =====
   // Hooks
@@ -110,9 +189,47 @@ export const config = {
    * @param {object} config wdio configuration object
    * @param {Array.<Object>} capabilities list of capabilities details
    */
-  // onPrepare: function (config, capabilities) {},
+  onPrepare: function (config, capabilities) {
+    if (process.env.CI === "false") {
+      console.log("Skipping chmod since not running in pipeline");
+      return;
+    }
+
+    function chmodRecursive(dirPath) {
+      try {
+        fs.chmodSync(dirPath, 0o777);
+      } catch (error) {
+        console.error(`Failed to chmod ${dirPath}`, error);
+      }
+
+      const entries = fs.readdirSync(dirPath, { withFileTypes: true });
+
+      for (const entry of entries) {
+        const fullPath = path.join(dirPath, entry.name);
+
+        if (entry.isDirectory()) {
+          chmodRecursive(fullPath); // Recurse into subdirectory
+        } else {
+          try {
+            fs.chmodSync(fullPath, 0o777);
+          } catch (error) {
+            console.error(`Failed to chmod ${fullPath}`, error);
+          }
+        }
+      }
+    }
+
+    try {
+      if (fs.existsSync(projectPath)) {
+        console.log("Changing file permissions on all files under project directory:", projectPath);
+        chmodRecursive(projectPath);
+      }
+    } catch (error) {
+      console.error("Error changing file permissions on files under project directory:", error);
+    }
+  },
   /**
-   * Gets executed before a worker process is spawned and can be used to initialise specific service
+   * Gets executed before a worker process is spawned and can be used to initialize specific service
    * for that worker as well as modify runtime environments in an async fashion.
    * @param  {string} cid      capability id (e.g 0-0)
    * @param  {object} caps     object containing capabilities for session that will be spawn in the worker
@@ -120,7 +237,8 @@ export const config = {
    * @param  {object} args     object that will be merged with the main configuration once worker is initialized
    * @param  {object} execArgv list of string arguments passed to the worker process
    */
-  // onWorkerStart: function (cid, caps, specs, args, execArgv) {},
+  // onWorkerStart: function (cid, caps, specs, args, execArgv) {
+  // },
   /**
    * Gets executed just after a worker process has exited.
    * @param  {string} cid      capability id (e.g 0-0)
@@ -128,7 +246,8 @@ export const config = {
    * @param  {object} specs    specs to be run in the worker process
    * @param  {number} retries  number of retries used
    */
-  // onWorkerEnd: function (cid, exitCode, specs, retries) {},
+  // onWorkerEnd: function (cid, exitCode, specs, retries) {
+  // },
   /**
    * Gets executed just before initialising the webdriver session and test framework. It allows you
    * to manipulate configurations depending on the capability or spec.
@@ -137,7 +256,8 @@ export const config = {
    * @param {Array.<String>} specs List of spec file paths that are to be run
    * @param {string} cid worker id (e.g. 0-0)
    */
-  // beforeSession: function (config, capabilities, specs, cid) {},
+  // beforeSession: function (config, capabilities, specs, cid) {
+  // },
   /**
    * Gets executed before test execution begins. At this point you can access to all global
    * variables like `browser`. It is the perfect place to define custom commands.
@@ -145,36 +265,38 @@ export const config = {
    * @param {Array.<String>} specs        List of spec file paths that are to be run
    * @param {object}         browser      instance of created browser/device session
    */
-  // before: function (capabilities, specs) {},
+  // before: function (capabilities, specs) {
+  // },
   /**
    * Runs before a WebdriverIO command gets executed.
    * @param {string} commandName hook command name
    * @param {Array} args arguments that command would receive
    */
-  // beforeCommand: function (commandName, args) {},
+  // beforeCommand: function (commandName, args) {
+  // },
   /**
    * Hook that gets executed before the suite starts
    * @param {object} suite suite details
    */
-  // beforeSuite: function (suite) {},
+  // beforeSuite: function (suite) {
+  // },
   /**
    * Function to be executed before a test (in Mocha/Jasmine) starts.
    */
-  // beforeTest: function (test, context) {},
+  // beforeTest: function (test, context) {
+  // },
   /**
    * Hook that gets executed _before_ a hook within the suite starts (e.g. runs before calling
    * beforeEach in Mocha)
    */
-  // beforeHook: function (test, context) {},
+  // beforeHook: function (test, context, hookName) {
+  // },
   /**
    * Hook that gets executed _after_ a hook within the suite starts (e.g. runs after calling
    * afterEach in Mocha)
    */
-  // afterHook: function (
-  //   test,
-  //   context,
-  //   { error, result, duration, passed, retries }
-  // ) {},
+  // afterHook: function (test, context, { error, result, duration, passed, retries }, hookName) {
+  // },
   /**
    * Function to be executed after a test (in Mocha/Jasmine only)
    * @param {object}  test             test object
@@ -185,13 +307,34 @@ export const config = {
    * @param {boolean} result.passed    true if test has passed, otherwise false
    * @param {object}  result.retries   information about spec related retries, e.g. `{ attempts: 0, limit: 0 }`
    */
-  afterTest: async function (
-    test,
-    context,
-    { error, result, duration, passed, retries }
-  ) {
-    if (error) {
-      await browser.takeScreenshot()
+  afterTest: async function (test, context, result) {
+    if (test.pending) {
+      console.log(`⚠️ Skipping screenshot for skipped test: ${test.title}`);
+      return;
+    }
+
+    if (!result.passed) {
+      const originalWindowSize = await browser.getWindowSize();
+      // To set the window size to see the full screen when screenshot is taken
+      await browser.setWindowSize(1200, 1600);
+      const screenshot = await browser.takeScreenshot();
+      await browser.setWindowSize(originalWindowSize.width, originalWindowSize.height);
+      const screenshotPath = path.join(
+        projectPath,
+        "screenshots",
+        `${test.title.replace(/\s+/g, "_")}.png`,
+      );
+
+      console.log(`Saving screenshot to ${screenshotPath}`);
+      console.log(`Current URL is ${await browser.getUrl()}`);
+
+      // Ensure the directory exists
+      fs.mkdirSync(path.dirname(screenshotPath), { recursive: true });
+
+      // Save the screenshot to a file
+      fs.writeFileSync(screenshotPath, screenshot, "base64");
+    } else {
+      console.log(`Test passed: ${test.title}`);
     }
   },
 
@@ -199,7 +342,8 @@ export const config = {
    * Hook that gets executed after the suite has ended
    * @param {object} suite suite details
    */
-  // afterSuite: function (suite) {},
+  // afterSuite: function (suite) {
+  // },
   /**
    * Runs after a WebdriverIO command gets executed
    * @param {string} commandName hook command name
@@ -207,7 +351,8 @@ export const config = {
    * @param {number} result 0 - command success, 1 - command error
    * @param {object} error error object if any
    */
-  // afterCommand: function (commandName, args, result, error) {},
+  // afterCommand: function (commandName, args, result, error) {
+  // },
   /**
    * Gets executed after all tests are done. You still have access to all global variables from
    * the test.
@@ -215,14 +360,16 @@ export const config = {
    * @param {Array.<Object>} capabilities list of capabilities details
    * @param {Array.<String>} specs List of spec file paths that ran
    */
-  // after: function (result, capabilities, specs) {},
+  // after: function (result, capabilities, specs) {
+  // },
   /**
    * Gets executed right after terminating the webdriver session.
    * @param {object} config wdio configuration object
    * @param {Array.<Object>} capabilities list of capabilities details
    * @param {Array.<String>} specs List of spec file paths that ran
    */
-  // afterSession: function (config, capabilities, specs) {},
+  // afterSession: function (config, capabilities, specs) {
+  // },
   /**
    * Gets executed after all workers got shut down and the process is about to exit. An error
    * thrown in the onComplete hook will result in the test run failing.
@@ -231,16 +378,25 @@ export const config = {
    * @param {Array.<Object>} capabilities list of capabilities details
    * @param {<Object>} results object containing test results
    */
-  onComplete: function (exitCode, config, capabilities, results) {
-    // !Do Not Remove! Required for test status to show correctly in portal.
-    if (results?.failed && results.failed > 0) {
-      fs.writeFileSync('FAILED', JSON.stringify(results))
-    }
-  }
+  // onComplete: function (exitCode, config, capabilities, results) {
+  // },
   /**
    * Gets executed when a refresh happens.
    * @param {string} oldSessionId session ID of the old session
    * @param {string} newSessionId session ID of the new session
    */
-  // onReload: function (oldSessionId, newSessionId) {}
-}
+  // onReload: function(oldSessionId, newSessionId) {
+  // }
+  /**
+   * Hook that gets executed before a WebdriverIO assertion happens.
+   * @param {object} params information about the assertion to be executed
+   */
+  // beforeAssertion: function(params) {
+  // }
+  /**
+   * Hook that gets executed after a WebdriverIO assertion happened.
+   * @param {object} params information about the assertion that was executed, including its results
+   */
+  // afterAssertion: function(params) {
+  // }
+};
