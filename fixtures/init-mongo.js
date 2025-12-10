@@ -2,9 +2,9 @@
 
 // Switch to (or create) a database, e.g. "testdb"
 /* eslint-disable-next-line no-global-assign */
-db = db.getSiblingDB('ahwr-application-backend')
+db = db.getSiblingDB("ahwr-application-backend");
 
-db.createCollection('applications')
+db.createCollection("applications");
 db.getCollection("applications").insertMany([
   {
     reference: "IAHW-AC1H-BBA4",
@@ -368,7 +368,7 @@ db.getCollection("applications").insertMany([
   },
 ]);
 
-db.createCollection('claims')
+db.createCollection("claims");
 db.getCollection("claims").insertMany([
   {
     reference: "REBC-ULQQ-I38P",
@@ -499,5 +499,5 @@ db.getCollection("claims").insertMany([
   },
 ]);
 
-db.createCollection('herds')
-db.createCollection('owapplications')
+db.createCollection("herds");
+db.createCollection("owapplications");

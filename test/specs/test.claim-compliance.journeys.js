@@ -6,8 +6,6 @@ import { createSheepReviewClaim } from "../utils/reviews/index.js";
 const fillerSbis = ["106416234", "107361798", "107645299", "106258541", "107346082"];
 
 describe("Claim compliance checks", async function () {
-  
-
   beforeEach(async () => {
     for (const sbi of fillerSbis) {
       await performDevLogin(sbi);

@@ -29,8 +29,8 @@ services:
       - ahwr-network-auto
     image: ahwr-application-backend:latest
     links:
-      - 'localstack:localstack'
-      - 'mongodb:mongodb'
+      - "localstack:localstack"
+      - "mongodb:mongodb"
     depends_on:
       localstack:
         condition: service_healthy
@@ -39,7 +39,7 @@ services:
     ports:
       - "3001:3001"
     env_file:
-      - 'fixtures/aws.env'
+      - "fixtures/aws.env"
     environment:
       PORT: 3001
       NODE_ENV: development
@@ -60,21 +60,21 @@ services:
   localstack:
     image: localstack/localstack:3.0.2
     ports:
-      - '4566:4566' # LocalStack Gateway
-      - '4510-4559:4510-4559' # external services port range
+      - "4566:4566" # LocalStack Gateway
+      - "4510-4559:4510-4559" # external services port range
     env_file:
-      - 'fixtures/aws.env'
+      - "fixtures/aws.env"
     environment:
       DEBUG: ${DEBUG:-1}
       LS_LOG: WARN # Localstack DEBUG Level
       SERVICES: s3,sqs,sns,firehose
       LOCALSTACK_HOST: 127.0.0.1
     volumes:
-      - '${TMPDIR:-/tmp}/localstack:/var/lib/localstack'
+      - "${TMPDIR:-/tmp}/localstack:/var/lib/localstack"
       - ./scripts/start_localstack.sh:/etc/localstack/init/ready.d/start-localstack.sh
       - ./fixtures:/etc/localstack/init/fixtures
     healthcheck:
-      test: ['CMD', 'curl', 'localhost:4566']
+      test: ["CMD", "curl", "localhost:4566"]
       interval: 5s
       start_period: 5s
       retries: 3
@@ -86,7 +86,7 @@ services:
     networks:
       - ahwr-network-auto
     ports:
-      - '27017:27017'
+      - "27017:27017"
     volumes:
       - ./fixtures/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
     restart: always

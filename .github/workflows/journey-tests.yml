@@ -23,7 +23,7 @@ jobs:
       AADAR_AUTHORITY_URL: ${{ secrets.AADAR_AUTHORITY_URL }}
       AADAR_CLIENT_SECRET: ${{ secrets.AADAR_CLIENT_SECRET }}
       AADAR_CLIENT_ID: ${{ secrets.AADAR_CLIENT_ID }}
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

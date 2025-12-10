@@ -13,7 +13,9 @@ export const assertClaimToBeOnHold = async (claimReference) => {
 };
 
 export const assertAllClaimsAreInCheck = async (claimReferences) => {
-  claimReferences.forEach((claimReference) => expect(isClaimStatusInCheck(claimReference)).toBe(true));
+  claimReferences.forEach((claimReference) =>
+    expect(isClaimStatusInCheck(claimReference)).toBe(true),
+  );
 };
 
 export const assertSomeClaimsAreOnHold = async (claimReferences) => {

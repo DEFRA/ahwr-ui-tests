@@ -33,7 +33,7 @@ export const config = {
       "./test/specs/mainSuite/test.apply.journeys.js",
       "./test/specs/mainSuite/test.review-claim-before-mh-launch.journeys.js",
       "./test/specs/mainSuite/test.follow-up-claim-before-mh-launch.journeys.js",
-       "./test/specs/mainSuite/test.pre.mh.journeys.js",
+      "./test/specs/mainSuite/test.pre.mh.journeys.js",
       "./test/specs/mainSuite/test.pre.and.post.mh.journeys.js",
       "./test/specs/mainSuite/test.beef.journeys.js",
       "./test/specs/mainSuite/test.dairy.journeys.js",

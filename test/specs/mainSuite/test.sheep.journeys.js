@@ -38,8 +38,6 @@ import { createMultipleHerdSheepFollowUp } from "../../utils/follow-ups/index.js
 let claimReference;
 
 describe("Multiple herd sheep claim journeys", async function () {
-  
-
   it("can create the first review claim for a flock of sheep for a business", async () => {
     await performDevLogin(MULTIPLE_HERDS_SBI);
 

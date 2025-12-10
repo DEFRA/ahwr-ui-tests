@@ -33,8 +33,6 @@ import {
 } from "../../utils/constants.js";
 
 describe("Follow-up claim journeys for various species before multiple herds launch", async function () {
-  
-
   it("can create a follow-up claim for sheep", async () => {
     await performDevLogin(SHEEP_ENDEMIC_CLAIM_SBI);
 

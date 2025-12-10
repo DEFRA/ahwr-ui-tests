@@ -5,8 +5,6 @@ import { TERMS_AND_CONDITIONS_CHECKBOX } from "../../utils/selectors.js";
 import { APPLY_REVIEW_CLAIM_SBI } from "../../utils/constants.js";
 
 describe("Apply journeys", async function () {
-  
-
   it("can create a new application", async () => {
     await performDevLogin(APPLY_REVIEW_CLAIM_SBI);
     await clickSubmitButton();

@@ -16,8 +16,6 @@ let claimReference;
 const additionalHerd = "Beef additional herd 1";
 
 describe("Multiple herds beef cattle claim journeys", async function () {
-  
-
   it("can create the first review claim with a positive test result for a beef herd for a farmer business", async () => {
     await performDevLogin(MULTIPLE_HERDS_SBI);
 

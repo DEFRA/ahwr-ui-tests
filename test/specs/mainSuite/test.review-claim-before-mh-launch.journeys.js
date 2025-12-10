@@ -24,8 +24,6 @@ import {
 import { PRE_MH_REVIEWS_HERD_SBI } from "../../utils/constants.js";
 
 describe("Review claim journeys for various species before multiple herds launch", async function () {
-  
-
   it("can create a new review claim for Sheep", async () => {
     await performDevLogin(PRE_MH_REVIEWS_HERD_SBI);
 
