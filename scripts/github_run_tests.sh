@@ -1,6 +1,6 @@
 #!/bin/bash
 
-./scripts/cleanup_allure-results.s
+./scripts/cleanup_allure-results.sh
 ./scripts/pull_latest_images.sh
 ./scripts/build_wdio_test_image.sh
 ./scripts/run_tests.sh mainSuite
