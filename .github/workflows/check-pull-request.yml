@@ -15,6 +15,14 @@ jobs:
   pr-build:
     name: Run Journey Tests
     runs-on: ubuntu-latest
+    env:
+      MESSAGE_QUEUE_HOST: ${{ secrets.MESSAGE_QUEUE_HOST }}
+      EVENT_QUEUE_ADDRESS: ${{ secrets.EVENT_QUEUE_ADDRESS }}
+      MESSAGE_QUEUE_USER: ${{ secrets.MESSAGE_QUEUE_USER }}
+      FCP_AHWR_EVENT_QUEUE_SA_KEY: ${{ secrets.FCP_AHWR_EVENT_QUEUE_SA_KEY }}
+      AADAR_AUTHORITY_URL: ${{ secrets.AADAR_AUTHORITY_URL }}
+      AADAR_CLIENT_SECRET: ${{ secrets.AADAR_CLIENT_SECRET }}
+      AADAR_CLIENT_ID: ${{ secrets.AADAR_CLIENT_ID }}
     
     steps:
       - name: Checkout code
