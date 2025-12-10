@@ -12,23 +12,23 @@ import {
   createMultipleHerdPigsFollowUpForAdditionalHerd,
 } from "../../utils/follow-ups/index.js";
 
-let claimNumber;
+let claimReference;
 
 describe("Multiple herds pigs claim journeys", async function () {
   it("can create the first review claim for a pigs herd for a farmer business with a positive test result", async () => {
     await performDevLogin(MULTIPLE_HERDS_SBI);
 
-    claimNumber = await createPigsReviewClaim({
+    claimReference = await createPigsReviewClaim({
       multipleHerdFlag: true,
       reviewTestResult: "positive",
     });
 
-    expect(claimNumber).toEqual(expect.stringContaining("REPI"));
+    expect(claimReference).toEqual(expect.stringContaining("REPI"));
   });
 
   it("can create a vaccinated follow-up claim incorporating both PCR positive and genetic sequencing outcomes for a pigs review with a positive test result", async () => {
     // Use the review claim from the test above for doing the follow-up claim
-    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimNumber);
+    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimReference);
 
     await performDevLogin(MULTIPLE_HERDS_SBI);
 
@@ -42,15 +42,15 @@ describe("Multiple herds pigs claim journeys", async function () {
 
     await performDevLogin(MULTIPLE_HERDS_SBI);
 
-    claimNumber = await createPigsReviewForAdditionalHerd({
+    claimReference = await createPigsReviewForAdditionalHerd({
       herd: herdName,
       reviewTestResult: "positive",
       urn: "pg-rr-5343463",
     });
 
-    expect(claimNumber).toEqual(expect.stringContaining("REPI"));
+    expect(claimReference).toEqual(expect.stringContaining("REPI"));
 
-    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimNumber);
+    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimReference);
 
     await performDevLogin(MULTIPLE_HERDS_SBI);
 
@@ -70,15 +70,15 @@ describe("Multiple herds pigs claim journeys", async function () {
 
     await performDevLogin(MULTIPLE_HERDS_SBI);
 
-    claimNumber = await createPigsReviewForAdditionalHerd({
+    claimReference = await createPigsReviewForAdditionalHerd({
       herd: herdName,
       reviewTestResult: "positive",
       urn: "pg-rr-5343464",
     });
 
-    expect(claimNumber).toEqual(expect.stringContaining("REPI"));
+    expect(claimReference).toEqual(expect.stringContaining("REPI"));
 
-    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimNumber);
+    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimReference);
 
     await performDevLogin(MULTIPLE_HERDS_SBI);
 
@@ -98,15 +98,15 @@ describe("Multiple herds pigs claim journeys", async function () {
 
     await performDevLogin(MULTIPLE_HERDS_SBI);
 
-    claimNumber = await createPigsReviewForAdditionalHerd({
+    claimReference = await createPigsReviewForAdditionalHerd({
       herd: herdName,
       reviewTestResult: "positive",
       urn: "pg-rr-5343465",
     });
 
-    expect(claimNumber).toEqual(expect.stringContaining("REPI"));
+    expect(claimReference).toEqual(expect.stringContaining("REPI"));
 
-    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimNumber);
+    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimReference);
 
     await performDevLogin(MULTIPLE_HERDS_SBI);
 
@@ -126,15 +126,15 @@ describe("Multiple herds pigs claim journeys", async function () {
 
     await performDevLogin(MULTIPLE_HERDS_SBI);
 
-    claimNumber = await createPigsReviewForAdditionalHerd({
+    claimReference = await createPigsReviewForAdditionalHerd({
       herd: herdName,
       reviewTestResult: "negative",
       urn: "pg-rr-5343466",
     });
 
-    expect(claimNumber).toEqual(expect.stringContaining("REPI"));
+    expect(claimReference).toEqual(expect.stringContaining("REPI"));
 
-    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimNumber);
+    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimReference);
 
     await performDevLogin(MULTIPLE_HERDS_SBI);
 
@@ -154,15 +154,15 @@ describe("Multiple herds pigs claim journeys", async function () {
 
     await performDevLogin(MULTIPLE_HERDS_SBI);
 
-    claimNumber = await createPigsReviewForAdditionalHerd({
+    claimReference = await createPigsReviewForAdditionalHerd({
       herd: herdName,
       reviewTestResult: "negative",
       urn: "pg-rr-5343467",
     });
 
-    expect(claimNumber).toEqual(expect.stringContaining("REPI"));
+    expect(claimReference).toEqual(expect.stringContaining("REPI"));
 
-    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimNumber);
+    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimReference);
 
     await performDevLogin(MULTIPLE_HERDS_SBI);
 
@@ -182,15 +182,15 @@ describe("Multiple herds pigs claim journeys", async function () {
 
     await performDevLogin(MULTIPLE_HERDS_SBI);
 
-    claimNumber = await createPigsReviewForAdditionalHerd({
+    claimReference = await createPigsReviewForAdditionalHerd({
       herd: herdName,
       reviewTestResult: "negative",
       urn: "pg-rr-5343468",
     });
 
-    expect(claimNumber).toEqual(expect.stringContaining("REPI"));
+    expect(claimReference).toEqual(expect.stringContaining("REPI"));
 
-    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimNumber);
+    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimReference);
 
     await performDevLogin(MULTIPLE_HERDS_SBI);
 
@@ -210,15 +210,15 @@ describe("Multiple herds pigs claim journeys", async function () {
 
     await performDevLogin(MULTIPLE_HERDS_SBI);
 
-    claimNumber = await createPigsReviewForAdditionalHerd({
+    claimReference = await createPigsReviewForAdditionalHerd({
       herd: herdName,
       reviewTestResult: "negative",
       urn: "pg-rr-5343469",
     });
 
-    expect(claimNumber).toEqual(expect.stringContaining("REPI"));
+    expect(claimReference).toEqual(expect.stringContaining("REPI"));
 
-    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimNumber);
+    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimReference);
 
     await performDevLogin(MULTIPLE_HERDS_SBI);
 

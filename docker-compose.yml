@@ -51,11 +51,11 @@ services:
       FCP_AHWR_EVENT_QUEUE_SA_KEY: AnyOldString
       MESSAGE_QUEUE_USER: AnyOldString
       EVENT_QUEUE_ADDRESS: AnyOldString
-      APPLICATION_BACKEND_QUEUE_URL: https://sqs.eu-west-2.amazonaws.com/332499610595/ahwr_application_backend_queue
-      DOCUMENT_REQUEST_TOPIC_ARN: arn:aws:sns:eu-west-2:332499610595:ahwr_document_request
-      REMINDER_REQUEST_TOPIC_ARN: arn:aws:sns:eu-west-2:332499610595:ahwr_reminder_request
-      STATUS_CHANGE_TOPIC_ARN: arn:aws:sns:eu-west-2:332499610595:ahwr_status_change
-      PAYMENT_REQUEST_TOPIC_ARN: arn:aws:sns:eu-west-2:332499610595:ahwr_payment_request
+      APPLICATION_BACKEND_QUEUE_URL: arn:aws:sns:eu-west-2:000000000000:ahwr_application_backend_queue
+      DOCUMENT_REQUEST_TOPIC_ARN: arn:aws:sns:eu-west-2:000000000000:ahwr_document_request
+      REMINDER_REQUEST_TOPIC_ARN: arn:aws:sns:eu-west-2:000000000000:ahwr_reminder_request
+      STATUS_CHANGE_TOPIC_ARN: arn:aws:sns:eu-west-2:000000000000:ahwr_status_change
+      PAYMENT_REQUEST_TOPIC_ARN: arn:aws:sns:eu-west-2:000000000000:ahwr_payment_request
 
   localstack:
     image: localstack/localstack:3.0.2

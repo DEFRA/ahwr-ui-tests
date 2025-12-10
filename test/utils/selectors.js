@@ -14,7 +14,7 @@ export const LIVESTOCK_SHEEP_RADIO = 'input[value="sheep"]';
 
 export const AGREEMENT_SUMMARY_LINK = 'a[href*="download-application"]';
 
-export const AGREEMENT_NUMBER_SELECTOR = ".govuk-panel__body strong";
+export const AGREEMENT_REFERENCE_SELECTOR = ".govuk-panel__body strong";
 
 export const CONTINUE_BUTTON = "//button[contains(text(), 'Continue')]";
 
@@ -60,7 +60,7 @@ export const MANAGE_YOUR_CLAIMS_LINK = 'a[href*="/vet-visits"]';
 
 export const EXTERNAL_GOV_LINK = '.govuk-link[rel="external"]';
 
-export const DATE_OF_VISIT_GOV_LINK = '.govuk-link[href="/claim/endemics/date-of-visit"]';
+export const DATE_OF_VISIT_GO_BACK_LINK = '.govuk-link[href="/date-of-visit"]';
 
 export const GOV_RADIOS_INPUT_LABEL = "label.govuk-radios__label";
 

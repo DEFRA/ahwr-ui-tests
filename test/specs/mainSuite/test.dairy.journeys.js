@@ -12,22 +12,22 @@ import {
   createMultipleHerdDairyFollowUpForAdditionalHerd,
 } from "../../utils/follow-ups/index.js";
 
-let claimNumber;
+let claimReference;
 const additionalHerd = "Diary additional herd 1";
 describe("Multiple herds dairy cattle claim journeys", async function () {
   it("can create the first review claim with a positive test result for a dairy herd for a farmer business", async () => {
     await performDevLogin(MULTIPLE_HERDS_SBI);
 
-    claimNumber = await createDairyReviewClaim({
+    claimReference = await createDairyReviewClaim({
       reviewTestResult: "positive",
     });
 
-    expect(claimNumber).toEqual(expect.stringContaining("REDC"));
+    expect(claimReference).toEqual(expect.stringContaining("REDC"));
   });
 
   it("can create a PI hunt follow-up claim for an approved dairy review claim with positive test result", async () => {
     // Answer yes to all PI hunt questions
-    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimNumber);
+    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimReference);
 
     await performDevLogin(MULTIPLE_HERDS_SBI);
 
@@ -39,7 +39,7 @@ describe("Multiple herds dairy cattle claim journeys", async function () {
   it("can create a review claim with negative test result for a different group (herd) of dairy species for the same farmer business", async () => {
     await performDevLogin(MULTIPLE_HERDS_SBI);
 
-    claimNumber = await createDairyReviewForAdditionalHerd({
+    claimReference = await createDairyReviewForAdditionalHerd({
       herd: additionalHerd,
       reviewTestResult: "negative",
     });
@@ -49,7 +49,7 @@ describe("Multiple herds dairy cattle claim journeys", async function () {
 
   it("can create a PI hunt follow-up claim for the approved dairy review claim with negative test result", async () => {
     // Use the review claim from the test above and answer yes to all PI hunt questions for doing the follow-up claim
-    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimNumber);
+    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimReference);
 
     await performDevLogin(MULTIPLE_HERDS_SBI);
 
@@ -67,7 +67,7 @@ describe("Multiple herds dairy cattle claim journeys", async function () {
     await performDevLogin(MULTIPLE_HERDS_SBI);
     const herdName = "Diary additional herd 2";
 
-    claimNumber = await createDairyReviewForAdditionalHerd({
+    claimReference = await createDairyReviewForAdditionalHerd({
       herd: herdName,
       reviewTestResult: "negative",
       urn: "dc-rr-511148",
@@ -75,7 +75,7 @@ describe("Multiple herds dairy cattle claim journeys", async function () {
 
     await expect($(CLAIM_REFERENCE)).toHaveText(expect.stringContaining("REDC"));
 
-    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimNumber);
+    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimReference);
 
     await performDevLogin(MULTIPLE_HERDS_SBI);
 
@@ -94,7 +94,7 @@ describe("Multiple herds dairy cattle claim journeys", async function () {
     await performDevLogin(MULTIPLE_HERDS_SBI);
     const herdName = "Diary additional herd 3";
 
-    claimNumber = await createDairyReviewForAdditionalHerd({
+    claimReference = await createDairyReviewForAdditionalHerd({
       herd: herdName,
       reviewTestResult: "negative",
       urn: "dc-rr-511149",
@@ -102,7 +102,7 @@ describe("Multiple herds dairy cattle claim journeys", async function () {
 
     await expect($(CLAIM_REFERENCE)).toHaveText(expect.stringContaining("REDC"));
 
-    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimNumber);
+    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimReference);
 
     await performDevLogin(MULTIPLE_HERDS_SBI);
 
@@ -121,7 +121,7 @@ describe("Multiple herds dairy cattle claim journeys", async function () {
     await performDevLogin(MULTIPLE_HERDS_SBI);
     const herdName = "Diary additional herd 4";
 
-    claimNumber = await createDairyReviewForAdditionalHerd({
+    claimReference = await createDairyReviewForAdditionalHerd({
       herd: herdName,
       reviewTestResult: "negative",
       urn: "dc-rr-511151",
@@ -129,7 +129,7 @@ describe("Multiple herds dairy cattle claim journeys", async function () {
 
     await expect($(CLAIM_REFERENCE)).toHaveText(expect.stringContaining("REDC"));
 
-    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimNumber);
+    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimReference);
 
     await performDevLogin(MULTIPLE_HERDS_SBI);
 

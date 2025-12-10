@@ -29,7 +29,7 @@ import { approveClaim } from "../../utils/backoffice-common.js";
 // This test suite covers various claim journeys with a visit date after the MH release date for the pre-MH claims
 
 describe("Multiple herds journeys when Pre-MH claims present", async function () {
-  // this.retries(2);
+  
 
   it("can create a follow-up claim for a pre-MH sheep review claim if the follow-up visit date is after the MH release date - associating the pre-MH unnamed flock with a real flock", async () => {
     // This test uses data from the script located at changelog/insert_pre_post_mh_application_review.sql
@@ -64,12 +64,12 @@ describe("Multiple herds journeys when Pre-MH claims present", async function ()
     await performDevLogin(PRE_POST_MULTIPLE_HERD_SBI);
 
     // note the review is positive - important when creating pig follow ups
-    const claimNumber = await createPigsReviewClaim({
+    const claimReference = await createPigsReviewClaim({
       enterVisitDateAndContinueFunc: enterPreMHReleaseDateAndContinue,
     });
     await expect($(CLAIM_REFERENCE)).toHaveText(expect.stringContaining("REPI"));
 
-    await approveClaim(PRE__POST_MULTIPLE_HERD_AGREEMENT_REF, claimNumber);
+    await approveClaim(PRE__POST_MULTIPLE_HERD_AGREEMENT_REF, claimReference);
 
     await performDevLogin(PRE_POST_MULTIPLE_HERD_SBI);
 

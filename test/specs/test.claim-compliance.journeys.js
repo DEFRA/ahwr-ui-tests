@@ -6,13 +6,13 @@ import { createSheepReviewClaim } from "../utils/reviews/index.js";
 const fillerSbis = ["106416234", "107361798", "107645299", "106258541", "107346082"];
 
 describe("Claim compliance checks", async function () {
-  // this.retries(2);
+  
 
   beforeEach(async () => {
     for (const sbi of fillerSbis) {
       await performDevLogin(sbi);
-      const claimNumber = await createSheepReviewClaim({ multipleHerdFlag: true });
-      expect(claimNumber).toEqual(expect.stringContaining("RESH"));
+      const claimReference = await createSheepReviewClaim({ multipleHerdFlag: true });
+      expect(claimReference).toEqual(expect.stringContaining("RESH"));
     }
   });
 

@@ -22,7 +22,7 @@ import {
   CLAIMS_MAIN_HEADING_SELECTOR,
   LABORATORY_URN,
   EXTERNAL_GOV_LINK,
-  DATE_OF_VISIT_GOV_LINK,
+  DATE_OF_VISIT_GO_BACK_LINK,
 } from "../../utils/selectors.js";
 import {
   HERD_NAME,
@@ -35,19 +35,19 @@ import { approveClaim } from "../../utils/backoffice-common.js";
 import { createSheepReviewClaim } from "../../utils/reviews/index.js";
 import { createMultipleHerdSheepFollowUp } from "../../utils/follow-ups/index.js";
 
-let claimNumber;
+let claimReference;
 
 describe("Multiple herd sheep claim journeys", async function () {
-  // this.retries(2);
+  
 
   it("can create the first review claim for a flock of sheep for a business", async () => {
     await performDevLogin(MULTIPLE_HERDS_SBI);
 
-    claimNumber = await createSheepReviewClaim({
+    claimReference = await createSheepReviewClaim({
       multipleHerdFlag: true,
     });
 
-    expect(claimNumber).toEqual(expect.stringContaining("RESH"));
+    expect(claimReference).toEqual(expect.stringContaining("RESH"));
   });
 
   it("cannot create a second review claim for the same flock of sheep for the same business", async () => {
@@ -66,7 +66,7 @@ describe("Multiple herd sheep claim journeys", async function () {
     await expect($(EXTERNAL_GOV_LINK)).toHaveText(
       expect.stringContaining("There must be at least 10 months between your reviews."),
     );
-    await expect($(DATE_OF_VISIT_GOV_LINK)).toHaveText(
+    await expect($(DATE_OF_VISIT_GO_BACK_LINK)).toHaveText(
       "Enter the date the vet last visited your farm for this review.",
     );
   });
@@ -108,7 +108,7 @@ describe("Multiple herd sheep claim journeys", async function () {
   });
 
   it("can create a follow-up claim when a review claim is approved for a flock of sheep", async () => {
-    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimNumber);
+    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimReference);
 
     await performDevLogin(MULTIPLE_HERDS_SBI);
 

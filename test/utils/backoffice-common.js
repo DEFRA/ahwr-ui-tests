@@ -1,7 +1,7 @@
 import { browser, $, expect } from "@wdio/globals";
 import {
   BO_AGREEMENTS_TAB,
-  getAgreementNumberSelector,
+  getAgreementReferenceSelector,
   getViewClaimLinkSelector,
   BO_RECOMMEND_TO_PAY_BUTTON,
   BO_CHECKED_CHECKLIST_CHECKBOX,
@@ -14,11 +14,11 @@ import {
 } from "./backoffice-selectors.js";
 import { swapBackOfficeUser, getBackOfficeUrl } from "./common.js";
 
-export async function approveClaim(agreementNumber, claimNumber) {
+export async function approveClaim(agreementReference, claimReference) {
   await browser.url(getBackOfficeUrl());
   await $(BO_AGREEMENTS_TAB).click();
-  await $(getAgreementNumberSelector(agreementNumber)).click();
-  await $(getViewClaimLinkSelector(claimNumber)).click();
+  await $(getAgreementReferenceSelector(agreementReference)).click();
+  await $(getViewClaimLinkSelector(claimReference)).click();
   await $(BO_RECOMMEND_TO_PAY_BUTTON).click();
   await $(BO_CHECKED_CHECKLIST_CHECKBOX).click();
   await $(BO_SENT_CHECK_LIST_CHECKBOX).click();
@@ -28,8 +28,8 @@ export async function approveClaim(agreementNumber, claimNumber) {
   // Swapping to another user to approve the claim
   await swapBackOfficeUser("Admin");
   await $(BO_AGREEMENTS_TAB).click();
-  await $(getAgreementNumberSelector(agreementNumber)).click();
-  await $(getViewClaimLinkSelector(claimNumber)).click();
+  await $(getAgreementReferenceSelector(agreementReference)).click();
+  await $(getViewClaimLinkSelector(claimReference)).click();
   await $(BO_PAY_BUTTON).click();
   await $(BO_PAY_CHECKBOX_ONE).click();
   await $(BO_PAY_CHECKBOX_TWO).click();

@@ -3,13 +3,22 @@ name: Run Journey Tests on GitHub
 permissions:
   checks: write
   pull-requests: write
+  contents: read
 
 on:
   workflow_dispatch:
   workflow_call:
+  repository_dispatch:
+    types: [run-tests]
+
 jobs:
   build:
     name: Run Journey Tests
     runs-on: ubuntu-latest
+    
     steps:
-      - uses: DEFRA/cdp-node-journey-test-suite-template/run-journey-tests@main
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run test script
+        run: ./scripts/github_run_tests.sh

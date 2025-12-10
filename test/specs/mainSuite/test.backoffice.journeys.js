@@ -24,7 +24,7 @@ import {
   BO_DELETE_FLAG_BUTTON,
   BO_FLAG_DELETION_NOTE,
   BO_SUBMIT_DELETE_FLAG_BUTTON,
-  getAgreementNumberSelector,
+  getAgreementReferenceSelector,
   getViewClaimLinkSelector,
   getAgreeToMultipleHerdTermsSelector,
   getFlaggedAgreementRowSelector,
@@ -47,37 +47,37 @@ import { approveClaim } from "../../utils/backoffice-common.js";
 import { createSheepReviewClaim } from "../../utils/reviews/index.js";
 
 describe("Backoffice journeys", async function () {
-  // this.retries(2);
+  
 
   it("can move a claim from 'In check' to 'Recommend to pay' and then to 'Ready to pay'", async () => {
-    const agreementNumber = await createAgreement(BACK_OFFICE_APPROVE_SBI);
+    const agreementReference = await createAgreement(BACK_OFFICE_APPROVE_SBI);
 
     await performDevLogin(BACK_OFFICE_APPROVE_SBI);
 
-    const claimNumber = await createSheepReviewClaim({
+    const claimReference = await createSheepReviewClaim({
       multipleHerdFlag: true,
     });
 
-    expect(claimNumber).toEqual(expect.stringContaining("RESH"));
+    expect(claimReference).toEqual(expect.stringContaining("RESH"));
 
-    await approveClaim(agreementNumber, claimNumber);
+    await approveClaim(agreementReference, claimReference);
   });
 
   it("can move a claim from 'In check' to 'Recommend to reject' and then to 'Rejected'", async () => {
-    const agreementNumber = await createAgreement(BACK_OFFICE_REJECT_SBI);
+    const agreementReference = await createAgreement(BACK_OFFICE_REJECT_SBI);
 
     await performDevLogin(BACK_OFFICE_REJECT_SBI);
 
-    const claimNumber = await createSheepReviewClaim({
+    const claimReference = await createSheepReviewClaim({
       multipleHerdFlag: true,
     });
 
-    expect(claimNumber).toEqual(expect.stringContaining("RESH"));
+    expect(claimReference).toEqual(expect.stringContaining("RESH"));
 
     await browser.url(getBackOfficeUrl());
     await $(BO_AGREEMENTS_TAB).click();
-    await $(getAgreementNumberSelector(agreementNumber)).click();
-    await $(getViewClaimLinkSelector(claimNumber)).click();
+    await $(getAgreementReferenceSelector(agreementReference)).click();
+    await $(getViewClaimLinkSelector(claimReference)).click();
     await $(BO_RECOMMEND_TO_REJECT_BUTTON).click();
     await $(BO_CHECKED_CHECKLIST_CHECKBOX).click();
     await $(BO_SENT_CHECK_LIST_CHECKBOX).click();
@@ -89,8 +89,8 @@ describe("Backoffice journeys", async function () {
     // Swapping to another user to reject the claim
     await swapBackOfficeUser("Rejector");
     await $(BO_AGREEMENTS_TAB).click();
-    await $(getAgreementNumberSelector(agreementNumber)).click();
-    await $(getViewClaimLinkSelector(claimNumber)).click();
+    await $(getAgreementReferenceSelector(agreementReference)).click();
+    await $(getViewClaimLinkSelector(claimReference)).click();
     await $(BO_REJECT_BUTTON).click();
     await $(BO_PAY_CHECKBOX_ONE).click();
     await $(BO_PAY_CHECKBOX_TWO).click();
@@ -122,7 +122,7 @@ describe("Backoffice journeys", async function () {
   it("can move an on hold claim from 'On hold' to 'In check' and then to 'Recommend to reject', and finally 'Rejected'", async () => {
     await swapBackOfficeUser("Initial-user");
     await $(BO_AGREEMENTS_TAB).click();
-    await $(getAgreementNumberSelector(agreementNumber)).click();
+    await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
     await $(getViewClaimLinkSelector(ON_HOLD_CLAIM_REF)).click();
 
     await $(BO_MOVE_TO_IN_CHECK_BUTTON).click();
@@ -142,7 +142,7 @@ describe("Backoffice journeys", async function () {
     // Swapping to another user to reject the claim
     await swapBackOfficeUser("Rejector");
     await $(BO_AGREEMENTS_TAB).click();
-    await $(getAgreementNumberSelector(agreementNumber)).click();
+    await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
     await $(getViewClaimLinkSelector(ON_HOLD_CLAIM_REF)).click();
 
     await $(BO_REJECT_BUTTON).click();
@@ -171,7 +171,7 @@ describe("Backoffice journeys", async function () {
     await expect(rows.length).toBeGreaterThan(0);
   });
 
-  it("can find an agreement by searching using agreement number, business, SBI, agreement date or status and verify the the agreement details are correct.", async function () {
+  it("can find an agreement by searching using agreement reference, business, SBI, agreement date or status and verify the the agreement details are correct.", async function () {
     addDescription("Test not implemented yet, Jira ticket: AHWR-1314", TYPE.MARKDOWN);
     this.skip();
   });

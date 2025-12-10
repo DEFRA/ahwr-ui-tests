@@ -23,7 +23,7 @@ import { approveClaim } from "../../utils/backoffice-common.js";
 // This test suite covers various claim journeys with a visit date before the MH release date
 
 describe("Journeys involving Pre-multiple herds launch claims", async function () {
-  // this.retries(2);
+  
 
   it("cannot create a second review claim for sheep species when visit date is before MH release date and within 10 months of its pre-MH review claim", async () => {
     // This test uses data from the script in changelog/insert_pre_mh_application_review.sql
@@ -73,11 +73,11 @@ describe("Journeys involving Pre-multiple herds launch claims", async function (
     await performDevLogin(PRE_MULTIPLE_HERD_SBI);
 
     // note the review is positive - important when creating pig follow ups
-    const claimNumber = await createPigsReviewClaim({
+    const claimReference = await createPigsReviewClaim({
       enterVisitDateAndContinueFunc: enterPreMHReleaseDateAndContinue,
     });
 
-    await approveClaim(PRE_MULTIPLE_HERD_AGREEMENT_REF, claimNumber);
+    await approveClaim(PRE_MULTIPLE_HERD_AGREEMENT_REF, claimReference);
 
     await performDevLogin(PRE_MULTIPLE_HERD_SBI);
 

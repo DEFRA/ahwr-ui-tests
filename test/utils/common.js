@@ -10,7 +10,7 @@ import {
   getWhenTestingWasCarriedOutSelector,
   getSheepTestsDiseaseConditionSelector,
   START_NEW_CLAIM_BUTTON,
-  AGREEMENT_NUMBER_SELECTOR,
+  AGREEMENT_REFERENCE_SELECTOR,
   TERMS_AND_CONDITIONS_CHECKBOX,
   GOV_RADIOS_INPUT_LABEL,
   getConfirmCheckDetailsSelector,
@@ -147,9 +147,9 @@ export async function createAgreement(sbi) {
   await $(TERMS_AND_CONDITIONS_CHECKBOX).click();
   await clickSubmitButton();
   await verifySubmission("Application complete");
-  const agreementNumber = (await $(AGREEMENT_NUMBER_SELECTOR).getText()).trim();
+  const agreementReference = (await $(AGREEMENT_REFERENCE_SELECTOR).getText()).trim();
 
-  return agreementNumber;
+  return agreementReference;
 }
 
 export async function swapBackOfficeUser(userName) {

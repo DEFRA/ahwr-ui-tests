@@ -54,7 +54,7 @@ export function getClaimSelectorFromTable(claimReference) {
   return `a[href*="${claimReference}"]`;
 }
 
-export function getAgreementNumberSelector(agreementReference) {
+export function getAgreementReferenceSelector(agreementReference) {
   return `a[href*="${agreementReference}"]`;
 }
 
