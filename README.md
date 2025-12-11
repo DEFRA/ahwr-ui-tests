@@ -41,19 +41,13 @@ logs also get generated in the pipeline when it runs, and they can be accessed v
 ## 🧪 Running Automated Tests
 
 ```bash
-# Install dependencies
-npm install
-
-# Log into Azure, and select the SND2 tenant when prompted
-az login
-
 # Pull latest images
 ./scripts/pull_latest_images.sh
 
-# Build WDIO test image
+# Build test image
 ./scripts/build_wdio_test_image.sh
 
-# Run tests (provide mainSuite, comp or compFA argument, dependant on which test suite you want to run from wdio.conf.js)
+# Run main suite tests
 ./scripts/run_tests.sh mainSuite
 
 ```

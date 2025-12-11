@@ -1,9 +1,16 @@
 #!/bin/bash
+set -eo pipefail
 
-./scripts/cleanup_allure-results.sh
-./scripts/pull_latest_images.sh
-./scripts/build_wdio_test_image.sh
-./scripts/run_tests.sh mainSuite
-./scripts/run_tests.sh comp 5
-./scripts/run_tests.sh compFA 5
-./scripts/generate_allure_report.sh
+EXIT_CODE=0
+
+./scripts/cleanup_allure-results.sh || EXIT_CODE=1
+./scripts/pull_latest_images.sh || EXIT_CODE=1
+./scripts/build_wdio_test_image.sh || EXIT_CODE=1
+
+./scripts/run_tests.sh mainSuite || EXIT_CODE=1
+./scripts/run_tests.sh comp 5 || EXIT_CODE=1
+./scripts/run_tests.sh compFA 5 || EXIT_CODE=1
+
+./scripts/generate_allure_report.sh || EXIT_CODE=1
+
+exit $EXIT_CODE

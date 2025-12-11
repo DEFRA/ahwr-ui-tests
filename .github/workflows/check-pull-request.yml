@@ -28,5 +28,48 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Restore Docker cache
+        uses: actions/cache@v4
+        with:
+          path: /tmp/docker-cache
+          key: docker-${{ runner.os }}-${{ github.ref }}
+          restore-keys: |
+            docker-${{ runner.os }}-
+
+      - name: Load cached Docker images
+        run: |
+          if [ -f /tmp/docker-cache/images.tar ]; then
+            echo "Loading cached Docker images..."
+            docker load -i /tmp/docker-cache/images.tar
+          else
+            echo "No cached image tarball found."
+          fi
+
       - name: Run test script
         run: ./scripts/github_run_tests.sh
+
+      - name: Save updated Docker cache
+        run: |
+          mkdir -p /tmp/docker-cache
+          docker save $(docker images -q) -o /tmp/docker-cache/images.tar
+
+      - name: Upload Allure Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report/
+
+      - name: Upload Logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: logs
+          path: logs/
+
+      - name: Upload Screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: screenshots/
