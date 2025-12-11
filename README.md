@@ -1,111 +1,89 @@
-ahwr-ui-tests
+# 📦 ahwr-ui-tests
 
-The template to create a service that runs WDIO tests against an environment.
+## 📝 Table of Contents
 
-- [Local](#local)
-  - [Requirements](#requirements)
-    - [Node.js](#nodejs)
-  - [Setup](#setup)
-  - [Running local tests](#running-local-tests)
-  - [Debugging local tests](#debugging-local-tests)
-- [Production](#production)
-  - [Debugging tests](#debugging-tests)
-- [Licence](#licence)
-  - [About the licence](#about-the-licence)
+- [📖 Overview](#-overview)
+- [🚀 Prerequisites](#️-prerequisites)
+- [🧪 Running Automated Tests](#-running-automated-tests)
+- [📦 Working with Pipeline Artifacts](#-Working-with-Pipeline-Artifacts)
+- [🙈 Gotchas](#-gotchas)
 
-## Local Development
+---
 
-### Requirements
+## 📖 Overview
 
-#### Node.js
+This project is home to the Vets Visits teams automated tests. We pull the images for the services we need to run the project locally,
+run them in a Docker container, and then run Webdriver IO automated tests to validate the key journeys work. These can be run in the pipeline
+as well as locally.
 
-Please install [Node.js](http://nodejs.org/) `>= v20` and [npm](https://nodejs.org/) `>= v9`. You will find it
-easier to use the Node Version Manager [nvm](https://github.com/creationix/nvm)
+We use the pull_latest_images.sh script inside the /scripts folder to pull the latest images from ACR in Azure for the services we need to run. Once we have these,
+we can use the run_tests script to set some env vars, and it uses docker compose to start the needed services, before the Webdriver IO tests execute.
 
-To use the correct version of Node.js for this application, via nvm:
+When you run the tests, they output the logs in a /logs directory which gets created in the root of your repo (note it's not committed to the repo). These
+logs also get generated in the pipeline when it runs, and they can be accessed via the Jenkins workspace (click into the pipeline run, click on workspaces).
 
-```bash
-nvm use
-```
+---
 
-### Setup
+## 🚀 Prerequisites
 
-Install application dependencies:
+- macOS (this repo has been developed on a Macbook laptop, so if you are running Windows it probably needs some changes to get it to work)
+- Node version 20.18.1
+- NVM (Node Version manager)
+- Azure login for SND2 tenant
+- Make sure you are on the VPN
+- Docker
+- Create a .env file in the root of the repo
+- Make sure you have MESSAGE_QUEUE_PASSWORD, MESSAGE_QUEUE_SUFFIX and APPLICATIONINSIGHTS_CONNECTION_STRING in your .env file
+- MESSAGE_QUEUE_SUFFIX should be whichever queues you want to use in SND2, e.g. -auto. The -pipe queues are reserved for the pipeline.
+- Add CLEANUP_FIRST=true to your .env file if you want to ensure a clean-up of logs and screenshots before running the tests locally
+- Add USE_INSTANCES=10 to your .env file if you want to run tests in parallel, to make things faster
+- You can find these values by speaking to a dev
 
-```bash
-npm install
-```
-
-### Running local tests
-
-Start application you are testing on the url specified in `baseUrl` [wdio.local.conf.js](wdio.local.conf.js)
-
-```bash
-npm run test:local
-```
-
-### Debugging local tests
+## 🧪 Running Automated Tests locally
 
 ```bash
-npm run test:local:debug
+# Pull latest images
+./scripts/pull_latest_images.sh
+
+# Build test image
+./scripts/build_wdio_test_image.sh
+
+# Run main suite tests
+./scripts/run_tests.sh mainSuite
+
 ```
 
-## Production
+## 📦 Working with Pipeline Artifacts
 
-### Running the tests
+When the automated tests run in the pipeline, several files are collected and uploaded as artifacts so they can be inspected after the run. These include:
 
-Tests are run from the CDP-Portal under the Test Suites section. Before any changes can be run, a new docker image must be built, this will happen automatically when a pull request is merged into the `main` branch.
-You can check the progress of the build under the actions section of this repository. Builds typically take around 1-2 minutes.
+- Allure report: The full test report in HTML format, generated from the test results.
+- Logs: All logs captured from the running services and the tests themselves.
+- Screenshots: Screenshots captured during test failures.
 
-The results of the test run are made available in the portal.
+# 🔍 Accessing Artifacts in GitHub Actions
 
-## Requirements of CDP Environment Tests
+- Go to the ahwr-ui-tests repository in GitHub.
+- Click on Actions in the top menu.
+- Select the workflow run you want to inspect.
+- At the bottom, you’ll see an Artifacts section. Click the artifact you want to download (e.g., allure-report, logs, or screenshots).
+- Download the .zip file to your local machine.
+- Screenshots and logs are simple to work with in this form, though the allure report is a little different (see below).
 
-1. Your service builds as a docker container using the `.github/workflows/publish.yml`
-   The workflow tags the docker images allowing the CDP Portal to identify how the container should be run on the platform.
-   It also ensures its published to the correct docker repository.
+# 📂 Viewing Allure Report Locally
 
-2. The Dockerfile's entrypoint script should return exit code of 0 if the test suite passes or 1/>0 if it fails
+- Unzip the allure-report folder
+- Via a terminal, go into the allure-report directory (cd ~/Downloads/allure-report)
+- Run `python3 -m http.server 8080`
+- Access http://localhost:8080/ in your browser
 
-3. Test reports should be published to S3 using the script in `./bin/publish-tests.sh`
+## 🙈 Gotchas
 
-## Running on GitHub
+- We use the -auto queues that have been created in the SND2 environment. When the tests run in the pipeline, they will use the -auto queues too. If this
+  becomes an issue, we can create -pipe queues.
 
-Alternatively you can run the test suite as a GitHub workflow.
-Test runs on GitHub are not able to connect to the CDP Test environments. Instead, they run the tests agains a version of the services running in docker.
-A docker compose `compose.yml` is included as a starting point, which includes the databases (mongodb, redis) and infrastructure (localstack) pre-setup.
+- The repo has been developed to work on macOS / Linux. This means you might struggle to run it on Windows, unless you can make alterations to scripts etc.
 
-Steps:
+- Screenshots have been added to the tests, and volume in the /screenshots folder. If any errors occur, they will be visible there.
 
-1. Edit the compose.yml to include your services.
-2. Modify the scripts in docker/scripts to pre-populate the database, if required and create any localstack resources.
-3. Test the setup locally with `docker compose up` and `npm run test:github`
-4. Set up the workflow trigger in `.github/workflows/journey-tests`.
-
-By default, the provided workflow will run when triggered manually from GitHub or when triggered by another workflow.
-
-If you want to use the repository exclusively for running docker composed based test suites consider displaying the publish.yml workflow.
-
-## BrowserStack
-
-Two wdio configuration files are provided to help run the tests using BrowserStack in both a GitHub workflow (`wdio.github.browserstack.conf.js`) and from the CDP Portal (`wdio.browserstack.conf.js`).
-They can be run from npm using the `npm run test:browserstack` (for running via portal) and `npm run test:github:browserstack` (from GitHib runner).
-See the CDP Documentation for more details.
-
-## Licence
-
-THIS INFORMATION IS LICENSED UNDER THE CONDITIONS OF THE OPEN GOVERNMENT LICENCE found at:
-
-<http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3>
-
-The following attribution statement MUST be cited in your products and applications when using this information.
-
-> Contains public sector information licensed under the Open Government licence v3
-
-### About the licence
-
-The Open Government Licence (OGL) was developed by the Controller of Her Majesty's Stationery Office (HMSO) to enable
-information providers in the public sector to license the use and re-use of their information under a common open
-licence.
-
-It is designed to encourage use and re-use of information freely and flexibly, with only a few conditions.
+- Artifacts are retained only for a limited time (default 90 days in GitHub Actions). Download them if you need a permanent copy.

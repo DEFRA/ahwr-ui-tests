@@ -12,25 +12,64 @@ on:
       - ready_for_review
 
 jobs:
-  cdp-workflows:
-    name: Run Pull Request Checks
+  pr-build:
+    name: Run Journey Tests
     runs-on: ubuntu-latest
+    env:
+      MESSAGE_QUEUE_HOST: ${{ secrets.MESSAGE_QUEUE_HOST }}
+      EVENT_QUEUE_ADDRESS: ${{ secrets.EVENT_QUEUE_ADDRESS }}
+      MESSAGE_QUEUE_USER: ${{ secrets.MESSAGE_QUEUE_USER }}
+      FCP_AHWR_EVENT_QUEUE_SA_KEY: ${{ secrets.FCP_AHWR_EVENT_QUEUE_SA_KEY }}
+      AADAR_AUTHORITY_URL: ${{ secrets.AADAR_AUTHORITY_URL }}
+      AADAR_CLIENT_SECRET: ${{ secrets.AADAR_CLIENT_SECRET }}
+      AADAR_CLIENT_ID: ${{ secrets.AADAR_CLIENT_ID }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Test code and Create Test Coverage Reports
-        uses: actions/setup-node@v4
+      - name: Restore Docker cache
+        uses: actions/cache@v4
         with:
-          node-version-file: .nvmrc
-          cache: npm
-      - run: npm ci
-      - run: npm run format:check
-      - run: npm run lint
+          path: /tmp/docker-cache
+          key: docker-${{ runner.os }}-${{ github.ref }}
+          restore-keys: |
+            docker-${{ runner.os }}-
 
-# Uncomment this to run the tests in your test suite
-#  tests:
-#    name: Run Journey Tests
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: DEFRA/cdp-node-journey-test-suite-template/run-journey-tests@main
+      - name: Load cached Docker images
+        run: |
+          if [ -f /tmp/docker-cache/images.tar ]; then
+            echo "Loading cached Docker images..."
+            docker load -i /tmp/docker-cache/images.tar
+          else
+            echo "No cached image tarball found."
+          fi
+
+      - name: Run test script
+        run: ./scripts/github_run_tests.sh
+
+      - name: Save updated Docker cache
+        run: |
+          mkdir -p /tmp/docker-cache
+          docker save $(docker images -q) -o /tmp/docker-cache/images.tar
+
+      - name: Upload Allure Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report/
+
+      - name: Upload Logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: logs
+          path: logs/
+
+      - name: Upload Screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: screenshots/

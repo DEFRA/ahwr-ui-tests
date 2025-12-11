@@ -1,0 +1,185 @@
+services:
+  wdio-tests:
+    networks:
+      - ahwr-network-auto
+    image: wdio-tests:latest
+    volumes:
+      - ./package.json:/app/package.json
+      - ./wdio.conf.js:/app/wdio.conf.js
+      - ./package-lock.json:/app.package-lock.json
+      - ./screenshots:/app/screenshots
+      - ./allure-results:/app/allure-results
+      - ./allure-report:/app/allure-report
+    depends_on:
+      localstack:
+        condition: service_healthy
+      mongodb:
+        condition: service_started
+      ahwr-public-user-ui:
+        condition: service_started
+      ahwr-backoffice-ui:
+        condition: service_started
+    environment:
+      DOCKER_MODE: true
+      USE_INSTANCES: "1"
+
+  ahwr-application-backend:
+    platform: linux/amd64
+    networks:
+      - ahwr-network-auto
+    image: ahwr-application-backend:latest
+    links:
+      - "localstack:localstack"
+      - "mongodb:mongodb"
+    depends_on:
+      localstack:
+        condition: service_healthy
+      mongodb:
+        condition: service_started
+    ports:
+      - "3001:3001"
+    env_file:
+      - "fixtures/aws.env"
+    environment:
+      PORT: 3001
+      NODE_ENV: development
+      AWS_ENDPOINT_URL: http://localstack:4566
+      MONGO_URI: mongodb://mongodb:27017/
+      REMINDER_EMAIL_MAX_BATCH_SIZE: ${REMINDER_EMAIL_MAX_BATCH_SIZE:-5000}
+      USE_PRETTY_PRINT: false
+      MESSAGE_QUEUE_HOST: AnyOldString
+      FCP_AHWR_EVENT_QUEUE_SA_KEY: AnyOldString
+      MESSAGE_QUEUE_USER: AnyOldString
+      EVENT_QUEUE_ADDRESS: AnyOldString
+      APPLICATION_BACKEND_QUEUE_URL: arn:aws:sns:eu-west-2:000000000000:ahwr_application_backend_queue
+      DOCUMENT_REQUEST_TOPIC_ARN: arn:aws:sns:eu-west-2:000000000000:ahwr_document_request
+      REMINDER_REQUEST_TOPIC_ARN: arn:aws:sns:eu-west-2:000000000000:ahwr_reminder_request
+      STATUS_CHANGE_TOPIC_ARN: arn:aws:sns:eu-west-2:000000000000:ahwr_status_change
+      PAYMENT_REQUEST_TOPIC_ARN: arn:aws:sns:eu-west-2:000000000000:ahwr_payment_request
+
+  localstack:
+    image: localstack/localstack:3.0.2
+    ports:
+      - "4566:4566" # LocalStack Gateway
+      - "4510-4559:4510-4559" # external services port range
+    env_file:
+      - "fixtures/aws.env"
+    environment:
+      DEBUG: ${DEBUG:-1}
+      LS_LOG: WARN # Localstack DEBUG Level
+      SERVICES: s3,sqs,sns,firehose
+      LOCALSTACK_HOST: 127.0.0.1
+    volumes:
+      - "${TMPDIR:-/tmp}/localstack:/var/lib/localstack"
+      - ./scripts/start_localstack.sh:/etc/localstack/init/ready.d/start-localstack.sh
+      - ./fixtures:/etc/localstack/init/fixtures
+    healthcheck:
+      test: ["CMD", "curl", "localhost:4566"]
+      interval: 5s
+      start_period: 5s
+      retries: 3
+    networks:
+      - ahwr-network-auto
+
+  mongodb:
+    image: mongo:6.0.13
+    networks:
+      - ahwr-network-auto
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./fixtures/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    restart: always
+
+  ahwr-backoffice-ui:
+    platform: linux/amd64
+    networks:
+      - ahwr-network-auto
+    image: ahwr-backoffice-ui:latest
+    ports:
+      - "3002:3000"
+    depends_on:
+      - redis
+      - ahwr-application-backend
+    environment:
+      AADAR_ENABLED: false
+      AADAR_REDIRECT_URL: http://http://localhost:3000/authenticate
+      COOKIE_PASSWORD: who-likes-cookies-i-like-cookies-everybody-likes-cookies
+      REDIS_HOST: redis
+      REDIS_USERNAME: ""
+      REDIS_PASSWORD: ""
+      AHWR_SERVICE_URI: http://ahwr-backoffice-ui:3000
+      SERVICE_VERSION: ${SERVICE_VERSION:-1.0.0}
+      AHWR_APPLICATION_BACKEND_URL: http://ahwr-application-backend:3001/api
+      DISPLAY_PAGE_SIZE: 20
+      SUPER_ADMINS: ${SUPER_ADMINS}
+      AADAR_AUTHORITY_URL: AnyOldString
+      AADAR_CLIENT_SECRET: AnyOldString
+      AADAR_CLIENT_ID: AnyOldString
+      NODE_ENV: development
+
+  ahwr-public-user-ui:
+    platform: linux/amd64
+    networks:
+      - ahwr-network-auto
+    image: ahwr-public-user-ui:latest
+    ports:
+      - "3003:3000"
+    depends_on:
+      - redis
+      - ahwr-application-backend
+    environment:
+      COOKIE_PASSWORD: who-likes-cookies-i-like-cookies-everybody-likes-cookies
+      GOOGLE_TAG_MANAGER_KEY: ${GOOGLE_TAG_MANAGER_KEY}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_USERNAME: ""
+      REDIS_PASSWORD: ""
+      SERVICE_URI: http://localhost:3000
+      SERVICE_VERSION: ${SERVICE_VERSION:-1.0.0}
+      APPLICATION_API_URI: http://ahwr-application-backend:3001/api
+      DEFRA_ID_TENANT: ${DEFRA_ID_TENANT:-azdcuspoc5}
+      DEFRA_ID_POLICY: ${DEFRA_ID_POLICY:-B2C_1A_SIGNUPSIGNINSFI}
+      DEFRA_ID_REDIRECT_URI: ${DEFRA_ID_REDIRECT_URI:-http://localhost:3003/signin-oidc}
+      DEFRA_ID_JWT_ISSUER_ID: ${DEFRA_ID_JWT_ISSUER_ID:-64c9d4f5-a560-4b65-9004-6d1e5ccee51d}
+      DEFRA_ID_CLIENT_ID: ${DEFRA_ID_CLIENT_ID:-83d2b160-74ce-4356-9709-3f8da7868e35}
+      DEFRA_ID_CLIENT_SECRET: ${DEFRA_ID_CLIENT_SECRET:-changeme}
+      DEFRA_ID_SERVICE_ID: ${DEFRA_ID_SERVICE_ID:-2a672ee6-7750-ed11-bba3-000d3adf7047}
+      RPA_HOST_NAME: ${RPA_HOST_NAME:-https://dev-internal-gateway.trade.azure.defra.cloud}
+      RPA_GET_PERSON_SUMMARY_URL: ${RPA_GET_PERSON_SUMMARY_URL:-/rural-payments-vet-visits/v1/person/3337243/summary}
+      RPA_GET_ORGANISATION_PERMISSIONS_URL: ${RPA_GET_ORGANISATION_PERMISSIONS_URL:-/rural-payments-vet-visits/v1/SitiAgriApi/authorisation/organisation/organisationId/authorisation}
+      RPA_GET_ORGANISATION_URL: ${RPA_GET_ORGANISATION_URL:-/rural-payments-vet-visits/v1/organisation/organisationId}
+      RPA_GET_CPH_NUMBERS_URL: ${RPA_GET_CPH_NUMBERS_URL:-/rural-payments-vet-visits/v1/SitiAgriApi/cph/organisation/organisationId/cph-numbers}
+      APIM_OCP_SUBSCRIPTION_KEY: ${APIM_OCP_SUBSCRIPTION_KEY:-changeme}
+      APIM_HOST_NAME: ${APIM_HOST_NAME:-https://login.microsoftonline.com}
+      APIM_OAUTH_PATH: ${APIM_OAUTH_PATH:-/c9d74090-b4e6-4b04-981d-e6757a160812/oauth2/v2.0/token}
+      APIM_CLIENT_ID: ${APIM_CLIENT_ID:-changeme}
+      APIM_CLIENT_SECRET: ${APIM_CLIENT_SECRET:-changeme}
+      APIM_SCOPE: ${APIM_SCOPE:-api://dev-futuretrade-int.defra.gov.uk/.default}
+      TERMS_AND_CONDITIONS_URL: ${TERMS_AND_CONDITIONS_URL:-http://http://localhost:3000/terms/v3}
+      MULTI_SPECIES_RELEASE_DATE: ${MULTI_SPECIES_RELEASE_DATE}
+      CUSTOMER_SURVEY_CLAIM_URI: ${CUSTOMER_SURVEY_CLAIM_URI:-https://forms.office.com/e/SLKqfJQ499}
+      CUSTOMER_SURVEY_APPLY_URI: ${CUSTOMER_SURVEY_APPLY_URI:-https://forms.office.com/e/4frXv6SqvR}
+      MULTI_HERDS_RELEASE_DATE: ${MULTI_HERDS_RELEASE_DATE:-2025-05-01}
+      PRIVACY_POLICY_URI: ${PRIVACY_POLICY_URI:-https://www.gov.uk/government/publications/get-funding-to-improve-animal-health-and-welfare-privacy-notice}
+      LFS_UPDATE_ENABLED: ${LFS_UPDATE_ENABLED:-true}
+      LFS_UPDATE_URI: ${LFS_UPDATE_URI:-https://fcp-sfd-frontend.dev.cdp-int.defra.cloud/home?ssoOrgId=}
+      DOCUMENT_BUCKET_NAME: ${DOCUMENT_BUCKET_NAME:-local-ahwr-documents}
+      AWS_REGION: eu-west-2
+      MESSAGE_QUEUE_HOST: AnyOldString
+      FCP_AHWR_EVENT_QUEUE_SA_KEY: AnyOldString
+      MESSAGE_QUEUE_USER: AnyOldString
+      EVENT_QUEUE_ADDRESS: AnyOldString
+      DEV_LOGIN_ENABLED: true
+      NODE_ENV: development
+
+  redis:
+    networks:
+      - ahwr-network-auto
+    image: redis:4.0.14
+    ports:
+      - "6379:6379"
+
+networks:
+  ahwr-network-auto:
+    name: ahwr-network-auto
