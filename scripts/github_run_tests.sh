@@ -3,7 +3,6 @@ set -eo pipefail
 
 EXIT_CODE=0
 
-./scripts/cleanup_allure-results.sh || EXIT_CODE=1
 ./scripts/pull_latest_images.sh || EXIT_CODE=1
 ./scripts/build_wdio_test_image.sh || EXIT_CODE=1
 
