@@ -5,6 +5,7 @@
 - [📖 Overview](#-overview)
 - [🚀 Prerequisites](#️-prerequisites)
 - [🧪 Running Automated Tests](#-running-automated-tests)
+- [📦 Working with Pipeline Artifacts](#-Working-with-Pipeline-Artifacts)
 - [🙈 Gotchas](#-gotchas)
 
 ---
@@ -38,7 +39,7 @@ logs also get generated in the pipeline when it runs, and they can be accessed v
 - Add USE_INSTANCES=10 to your .env file if you want to run tests in parallel, to make things faster
 - You can find these values by speaking to a dev
 
-## 🧪 Running Automated Tests
+## 🧪 Running Automated Tests locally
 
 ```bash
 # Pull latest images
@@ -52,13 +53,37 @@ logs also get generated in the pipeline when it runs, and they can be accessed v
 
 ```
 
+## 📦 Working with Pipeline Artifacts
+
+When the automated tests run in the pipeline, several files are collected and uploaded as artifacts so they can be inspected after the run. These include:
+
+- Allure report: The full test report in HTML format, generated from the test results.
+- Logs: All logs captured from the running services and the tests themselves.
+- Screenshots: Screenshots captured during test failures.
+
+# 🔍 Accessing Artifacts in GitHub Actions
+
+- Go to the ahwr-ui-tests repository in GitHub.
+- Click on Actions in the top menu.
+- Select the workflow run you want to inspect.
+- At the bottom, you’ll see an Artifacts section. Click the artifact you want to download (e.g., allure-report, logs, or screenshots).
+- Download the .zip file to your local machine.
+- Screenshots and logs are simple to work with in this form, though the allure report is a little different (see below).
+
+# 📂 Viewing Allure Report Locally
+
+- Unzip the allure-report folder
+- Via a terminal, go into the allure-report directory (cd ~/Downloads/allure-report)
+- Run `python3 -m http.server 8080`
+- Access http://localhost:8080/ in your browser
+
 ## 🙈 Gotchas
 
-- We use the -auto queues that have been created in the SND2 environment. When the tests run in the pipeline, they will use the -pipe queues. This
-  is to avoid clashes where if someone still has the images running locally, they might consume the messages for someone else running them. If wanted,
-  this could be avoided by people creating their own -auto-INITIALS_HERE queues - but it likely wont be needed because its likely only 1 person is
-  working on these tests at one moment.
+- We use the -auto queues that have been created in the SND2 environment. When the tests run in the pipeline, they will use the -auto queues too. If this
+  becomes an issue, we can create -pipe queues.
 
 - The repo has been developed to work on macOS / Linux. This means you might struggle to run it on Windows, unless you can make alterations to scripts etc.
 
 - Screenshots have been added to the tests, and volume in the /screenshots folder. If any errors occur, they will be visible there.
+
+- Artifacts are retained only for a limited time (default 90 days in GitHub Actions). Download them if you need a permanent copy.
