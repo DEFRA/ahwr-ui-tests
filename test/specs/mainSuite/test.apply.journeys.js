@@ -13,7 +13,7 @@ describe("Apply journeys", async function () {
 
     await $(TERMS_AND_CONDITIONS_CHECKBOX).click();
     await clickSubmitButton();
-
+    await clickSubmitButton(); // intentional to cause error
     await verifySubmission("Application complete");
   });
 
