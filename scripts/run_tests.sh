@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -eo pipefail
 
 TEST_COMMAND="$1"
 CLAIM_COMPLIANCE_CHECK_RATIO="$2"
