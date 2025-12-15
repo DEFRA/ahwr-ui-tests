@@ -45,6 +45,7 @@ export const config = {
     ],
     comp: ["./test/specs/test.claim-compliance.journeys.js"],
     compFA: ["./test/specs/test.claim-compliance-feature-assurance.journeys.js"],
+    environment: ["./test/specs/environment/test.login.js"],
   },
   // Patterns to exclude.
   exclude: [
@@ -378,8 +379,12 @@ export const config = {
    * @param {Array.<Object>} capabilities list of capabilities details
    * @param {<Object>} results object containing test results
    */
-  // onComplete: function (exitCode, config, capabilities, results) {
-  // },
+  onComplete: function (_exitCode, _config, _capabilities, results) {
+    // !Do Not Remove! Required for test status to show correctly in portal.
+    if (results?.failed && results.failed > 0) {
+      fs.writeFileSync("FAILED", JSON.stringify(results));
+    }
+  },
   /**
    * Gets executed when a refresh happens.
    * @param {string} oldSessionId session ID of the old session

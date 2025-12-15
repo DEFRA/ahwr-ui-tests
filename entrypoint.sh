@@ -3,15 +3,7 @@
 set -e
 
 echo "run_id: $RUN_ID"
-./scripts/github_run_tests.sh
-
-npm run report:publish
-publish_exit_code=$?
-
-if [ $publish_exit_code -ne 0 ]; then
-  echo "failed to publish test results"
-  exit $publish_exit_code
-fi
+./scripts/cdp_run_tests.sh
 
 # At the end of the test run, if the suite has failed we write a file called 'FAILED'
 if [ -f FAILED ]; then
