@@ -8,6 +8,11 @@ export const DASHBOARD_SBI = "107019440";
 export const JOHNES_DISEASE = "johnes";
 export const MULTIPLE_HERDS_SBI = "123454321";
 
+// Env specific details
+export const DEFRA_ID_CRN = "1100411712";
+export const DEFRA_ID_PASSWORD = "Password456";
+export const PUBLIC_USER_UI_URL = process.env.PUBLIC_USER_UI_URL;
+
 // Below references from changelog/insert_on_hold_claim.sql
 export const ON_HOLD_AGREEMENT_REF = "IAHW-SCV6-E55L";
 export const ON_HOLD_CLAIM_REF = "REPI-UG9L-I1XP";
