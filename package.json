@@ -7,7 +7,6 @@
     "test:mainSuite": "wdio run wdio.conf.js --suite mainSuite",
     "test:comp": "wdio run wdio.conf.js --suite comp",
     "test:compFA": "wdio run wdio.conf.js --suite compFA",
-    "test:environment": "wdio run wdio.conf.js --suite environment",
     "lint": "prettier . --check && eslint",
     "lint:fix": "prettier . --write && eslint --fix",
     "hooks": "cp -r hooks/. .git/hooks/ && chmod -R +x .git/hooks && echo 'hooks copied'"
