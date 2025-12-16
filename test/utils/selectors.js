@@ -64,16 +64,6 @@ export const DATE_OF_VISIT_GO_BACK_LINK = '.govuk-link[href="/date-of-visit"]';
 
 export const GOV_RADIOS_INPUT_LABEL = "label.govuk-radios__label";
 
-export const DEFRA_ID_CRN_FIELD = "#crn";
-
-export const DEFRA_ID_PASSWORD_FIELD = "#password";
-
-export const DEFRA_ID_SIGN_IN_BUTTON = "#next";
-
-export const DEFRA_ID_SIGN_IN_CHECKBOX = '//*[@id="5633290"]';
-
-export const DEFRA_ID_CONTINUE_BUTTON = "#continueReplacement";
-
 export function getConfirmCheckDetailsSelector(value) {
   return `input[name="confirmCheckDetails"][value="${value}"]`;
 }

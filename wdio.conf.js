@@ -45,7 +45,6 @@ export const config = {
     ],
     comp: ["./test/specs/test.claim-compliance.journeys.js"],
     compFA: ["./test/specs/test.claim-compliance-feature-assurance.journeys.js"],
-    environment: ["./test/specs/environment/test.login.js"],
   },
   // Patterns to exclude.
   exclude: [
