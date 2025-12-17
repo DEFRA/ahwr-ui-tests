@@ -70,6 +70,10 @@ export function getFlaggedAgreementRowSelector(agreementReference, multipleHerdT
   return `//tr[td[contains(text(), "${agreementReference}")] and td[text()="${multipleHerdTermsValue}"]]`;
 }
 
-export function getClaimTableStatusColumnIfStatusSelector(status) {
-  return `td[data-sort-value="${status}"]`;
+export function getClaimTableStatusColumnForClaimRef(claimReference, status) {
+  return `//tr[
+     .//a[normalize-space()="${claimReference}"]
+     and
+     .//td[@data-sort-value="${status}"]
+   ]`;
 }

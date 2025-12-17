@@ -190,43 +190,6 @@ export const config = {
    * @param {Array.<Object>} capabilities list of capabilities details
    */
   onPrepare: function (config, capabilities) {
-    if (process.env.CI === "false") {
-      console.log("Skipping chmod since not running in pipeline");
-      return;
-    }
-
-    function chmodRecursive(dirPath) {
-      try {
-        fs.chmodSync(dirPath, 0o777);
-      } catch (error) {
-        console.error(`Failed to chmod ${dirPath}`, error);
-      }
-
-      const entries = fs.readdirSync(dirPath, { withFileTypes: true });
-
-      for (const entry of entries) {
-        const fullPath = path.join(dirPath, entry.name);
-
-        if (entry.isDirectory()) {
-          chmodRecursive(fullPath); // Recurse into subdirectory
-        } else {
-          try {
-            fs.chmodSync(fullPath, 0o777);
-          } catch (error) {
-            console.error(`Failed to chmod ${fullPath}`, error);
-          }
-        }
-      }
-    }
-
-    try {
-      if (fs.existsSync(projectPath)) {
-        console.log("Changing file permissions on all files under project directory:", projectPath);
-        chmodRecursive(projectPath);
-      }
-    } catch (error) {
-      console.error("Error changing file permissions on files under project directory:", error);
-    }
   },
   /**
    * Gets executed before a worker process is spawned and can be used to initialize specific service

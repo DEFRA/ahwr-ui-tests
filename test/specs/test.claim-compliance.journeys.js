@@ -4,6 +4,7 @@ import { assertClaimToBeInCheck, assertClaimToBeOnHold } from "../utils/common-a
 import { createSheepReviewClaim } from "../utils/reviews/index.js";
 
 const fillerSbis = ["106416234", "107361798", "107645299", "106258541", "107346082"];
+const claimRefs = []
 
 describe("Claim compliance checks", async function () {
   beforeEach(async () => {
@@ -11,15 +12,16 @@ describe("Claim compliance checks", async function () {
       await performDevLogin(sbi);
       const claimReference = await createSheepReviewClaim({ multipleHerdFlag: true });
       expect(claimReference).toEqual(expect.stringContaining("RESH"));
+      claimRefs.push(claimReference);
     }
   });
 
   it("sets 5th claim to in check status and others to on hold", async () => {
     await browser.url(getBackOfficeUrl());
-    assertClaimToBeInCheck(fillerSbis[4]);
+    await assertClaimToBeInCheck(claimRefs[4]);
 
-    for (const sbi of fillerSbis.slice(0, 4)) {
-      assertClaimToBeOnHold(sbi);
+    for (const claimRef of claimRefs.slice(0, 4)) {
+      await assertClaimToBeOnHold(claimRef);
     }
   });
 });
