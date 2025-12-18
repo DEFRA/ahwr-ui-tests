@@ -1,33 +1,37 @@
 import { $, expect } from "@wdio/globals";
 import {
-  getClaimSelectorFromTable,
-  getClaimTableStatusColumnIfStatusSelector,
+  getClaimTableStatusColumnForClaimRef,
 } from "./backoffice-selectors.js";
 
 export const assertClaimToBeInCheck = async (claimReference) => {
-  expect(isClaimStatusInCheck(claimReference)).toBe(true);
+  await expect(await getInCheckStatusElement(claimReference)).toHaveText(/In check/);
 };
 
 export const assertClaimToBeOnHold = async (claimReference) => {
-  expect(isClaimStatusOnHold(claimReference)).toBe(true);
+  await expect(await getOnHoldStatusElement(claimReference)).toHaveText(/On hold/);
 };
 
 export const assertAllClaimsAreInCheck = async (claimReferences) => {
-  claimReferences.forEach((claimReference) =>
-    expect(isClaimStatusInCheck(claimReference)).toBe(true),
-  );
+  for(const claimReference of claimReferences) {
+    await expect(await getInCheckStatusElement(claimReference)).toHaveText(/In check/);
+  }
 };
 
 export const assertSomeClaimsAreOnHold = async (claimReferences) => {
-  expect(claimReferences.some((claimReference) => isClaimStatusOnHold(claimReference)).toBe(true));
+  const results = await Promise.all(
+    claimReferences.map(async (ref) => {
+      const el = await getOnHoldStatusElement(ref);
+      return el.isExisting() && /On hold/.test(await el.getText());
+    })
+  );
+
+  await expect(results.some(Boolean)).toBe(true);
 };
 
-const isClaimStatusInCheck = async (claimReference) => {
-  const claimRow = $(getClaimSelectorFromTable(claimReference)).parentElement();
-  return await claimRow.$(getClaimTableStatusColumnIfStatusSelector("IN CHECK")).isDisplayed();
+const getInCheckStatusElement = async (claimReference) => {
+  return $(getClaimTableStatusColumnForClaimRef(claimReference, 'IN_CHECK'))
 };
 
-const isClaimStatusOnHold = async (claimReference) => {
-  const claimRow = $(getClaimSelectorFromTable(claimReference)).parentElement();
-  return await claimRow.$(getClaimTableStatusColumnIfStatusSelector("ON HOLD")).isDisplayed();
+const getOnHoldStatusElement = async (claimReference) => {
+  return $(getClaimTableStatusColumnForClaimRef(claimReference, 'ON_HOLD'))
 };
