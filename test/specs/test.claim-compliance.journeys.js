@@ -4,7 +4,7 @@ import { assertClaimToBeInCheck, assertClaimToBeOnHold } from "../utils/common-a
 import { createSheepReviewClaim } from "../utils/reviews/index.js";
 
 const fillerSbis = ["106416234", "107361798", "107645299", "106258541", "107346082"];
-const claimRefs = []
+const claimRefs = [];
 
 describe("Claim compliance checks", async function () {
   beforeEach(async () => {

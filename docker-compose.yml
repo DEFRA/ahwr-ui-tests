@@ -57,6 +57,7 @@ services:
       STATUS_CHANGE_TOPIC_ARN: arn:aws:sns:eu-west-2:000000000000:ahwr_status_change
       PAYMENT_REQUEST_TOPIC_ARN: arn:aws:sns:eu-west-2:000000000000:ahwr_payment_request
       CLAIM_COMPLIANCE_CHECK_RATIO: 1
+      PROCESS_ON_HOLD_SCHEDULE: "*/30 * * * *"
 
   localstack:
     image: localstack/localstack:3.0.2
