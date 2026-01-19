@@ -84,7 +84,7 @@ services:
       - ahwr-network-auto
 
   mongodb:
-    image: mongo:6.0.13
+    image: mongo:7.0.24
     networks:
       - ahwr-network-auto
     ports:

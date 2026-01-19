@@ -501,3 +501,5 @@ db.getCollection("claims").insertMany([
 
 db.createCollection("herds");
 db.createCollection("owapplications");
+
+db.getCollection("compliancecheckcount").drop();
