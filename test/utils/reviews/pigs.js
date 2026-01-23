@@ -26,6 +26,7 @@ import {
   SUBMIT_CLAIM_BUTTON,
   CLAIM_REFERENCE,
   getTestResultsSelector,
+  getTypeOfSamplesTakenSelector,
   NUMBER_OF_ORAL_FLUID_SAMPLES,
 } from "../selectors.js";
 
