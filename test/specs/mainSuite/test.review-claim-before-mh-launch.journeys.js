@@ -74,6 +74,8 @@ describe("Review claim journeys for various species before multiple herds launch
 
     await fillInputAndContinue(LABORATORY_URN, "pg-rr-534346");
 
+    await clickOnElementAndContinue(getSpeciesNumbersSelector("oral-fluid"));
+
     await fillInputAndContinue(NUMBER_OF_ORAL_FLUID_SAMPLES, "10");
 
     await clickOnElementAndContinue(getTestResultsSelector("positive"));
