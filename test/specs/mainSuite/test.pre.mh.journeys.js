@@ -73,7 +73,7 @@ describe("Journeys involving Pre-multiple herds launch claims", async function (
     // note the review is positive - important when creating pig follow ups
     const claimReference = await createPigsReviewClaim({
       enterVisitDateAndContinueFunc: enterPreMHReleaseDateAndContinue,
-      isVisitDatePrePigUpdates: true
+      isVisitDatePostPigUpdates: false
     });
 
     await approveClaim(PRE_MULTIPLE_HERD_AGREEMENT_REF, claimReference);
