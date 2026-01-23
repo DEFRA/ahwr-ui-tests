@@ -59,7 +59,9 @@ export async function createPigsReviewClaim({
   await fillInputAndContinue(VETS_NAME, "Mr Auto Test");
   await fillInputAndContinue(VET_RCVS_NUMBER, "1234567");
   await fillInputAndContinue(LABORATORY_URN, urn);
-  await clickOnElementAndContinue(getTypeOfSamplesTakenSelector("oral-fluid"));
+  if(!enterVisitDateAndContinueFunc) {
+    await clickOnElementAndContinue(getTypeOfSamplesTakenSelector("oral-fluid"));
+  }
   await fillInputAndContinue(NUMBER_OF_ORAL_FLUID_SAMPLES, "6");
   await clickOnElementAndContinue(getTestResultsSelector("positive"));
 
