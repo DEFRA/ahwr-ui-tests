@@ -26,6 +26,7 @@ import {
   SUBMIT_CLAIM_BUTTON,
   CLAIM_REFERENCE,
   getTestResultsSelector,
+  getTypeOfSamplesTakenSelector,
   NUMBER_OF_ORAL_FLUID_SAMPLES,
 } from "../selectors.js";
 
@@ -34,6 +35,7 @@ export async function createPigsReviewClaim({
   urn = "pg-rr-5343461",
   enterVisitDateAndContinueFunc = enterVisitDateAndContinue,
   isUnnamedHerdClaimPresent = false,
+  isVisitDatePostPigUpdates = true,
 } = {}) {
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("pigs"));
@@ -58,6 +60,9 @@ export async function createPigsReviewClaim({
   await fillInputAndContinue(VETS_NAME, "Mr Auto Test");
   await fillInputAndContinue(VET_RCVS_NUMBER, "1234567");
   await fillInputAndContinue(LABORATORY_URN, urn);
+  if(isVisitDatePostPigUpdates) {
+    await clickOnElementAndContinue(getTypeOfSamplesTakenSelector("oral-fluid"));
+  }
   await fillInputAndContinue(NUMBER_OF_ORAL_FLUID_SAMPLES, "6");
   await clickOnElementAndContinue(getTestResultsSelector("positive"));
 
@@ -88,6 +93,7 @@ export async function createPigsReviewForAdditionalHerd({
   await fillInputAndContinue(VETS_NAME, "Mr Auto Test");
   await fillInputAndContinue(VET_RCVS_NUMBER, "1234567");
   await fillInputAndContinue(LABORATORY_URN, urn);
+  await clickOnElementAndContinue(getTypeOfSamplesTakenSelector("oral-fluid"));
   await fillInputAndContinue(NUMBER_OF_ORAL_FLUID_SAMPLES, "6");
   await clickOnElementAndContinue(getTestResultsSelector(reviewTestResult));
 

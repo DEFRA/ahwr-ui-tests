@@ -64,6 +64,7 @@ describe("Multiple herds journeys when Pre-MH claims present", async function ()
     // note the review is positive - important when creating pig follow ups
     const claimReference = await createPigsReviewClaim({
       enterVisitDateAndContinueFunc: enterPreMHReleaseDateAndContinue,
+      isVisitDatePostPigUpdates: false
     });
     await expect($(CLAIM_REFERENCE)).toHaveText(expect.stringContaining("REPI"));
 

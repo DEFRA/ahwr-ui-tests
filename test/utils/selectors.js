@@ -131,3 +131,7 @@ export function getGeneticSequencingSelector(sequencingValue) {
 export function getElisaTestResultSelector(sequencingValue) {
   return `input[name="elisaResult"][value="${sequencingValue}"]`;
 }
+
+export function getTypeOfSamplesTakenSelector(value) {
+  return `input[name="typeOfSamplesTaken"][value="${value}"]`;
+}
