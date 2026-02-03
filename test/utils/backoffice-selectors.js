@@ -45,6 +45,7 @@ export const BO_FLAG_DELETION_NOTE = "#deletedNote";
 export const BO_SUBMIT_DELETE_FLAG_BUTTON = "button.govuk-button--warning=Delete flag";
 
 export const BO_CLAIM_SEARCH = "#searchText";
+export const BO_AGREEMENT_SEARCH = "#searchText";
 
 export const BO_SEARCH_BUTTON = ".search-button";
 

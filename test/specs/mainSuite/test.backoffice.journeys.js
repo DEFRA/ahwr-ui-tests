@@ -33,6 +33,7 @@ import {
   BO_ON_HOLD_TO_IN_CHECK_CHECKBOX,
   BO_UPDATE_ISSUES_LOG_CHECKBOX,
   BO_CLAIM_SEARCH,
+  BO_AGREEMENT_SEARCH,
   BO_SEARCH_BUTTON,
   getClaimSelectorFromTable,
   BO_HISTORY_TAB,
@@ -41,7 +42,11 @@ import {
   BACK_OFFICE_APPROVE_SBI,
   BACK_OFFICE_REJECT_SBI,
   ON_HOLD_AGREEMENT_REF,
+  ON_HOLD_SBI,
+  ON_HOLD_COMPANY,
+  ON_HOLD_STATUS,
   ON_HOLD_CLAIM_REF,
+  ON_HOLD_AGREEMENT_DATE,
 } from "../../utils/constants.js";
 import { approveClaim } from "../../utils/backoffice-common.js";
 import { createSheepReviewClaim } from "../../utils/reviews/index.js";
@@ -169,9 +174,81 @@ describe("Backoffice journeys", async function () {
     await expect(rows.length).toBeGreaterThan(0);
   });
 
-  it("can find an agreement by searching using agreement reference, business, SBI, agreement date or status and verify the the agreement details are correct.", async function () {
-    addDescription("Test not implemented yet, Jira ticket: AHWR-1314", TYPE.MARKDOWN);
-    this.skip();
+  describe("can find correct agreement", () => {
+    it("by searching using agreement reference.", async function () {
+      addDescription("Test not implemented yet, Jira ticket: AHWR-1314", TYPE.MARKDOWN);
+      await browser.url(getBackOfficeUrl());
+      await $(BO_AGREEMENTS_TAB).click();
+      await $(BO_AGREEMENT_SEARCH).setValue(ON_HOLD_AGREEMENT_REF);
+      await $(BO_SEARCH_BUTTON).click();
+      await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
+      const agreementSummary = await $$("dl.govuk-summary-list")[0];
+      const agreementReference = agreementSummary.$(
+        ".govuk-summary-list__row .govuk-summary-list__value",
+      );
+
+      expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
+    });
+
+    it("by searching using SBI.", async function () {
+      addDescription("Test not implemented yet, Jira ticket: AHWR-1314", TYPE.MARKDOWN);
+      await browser.url(getBackOfficeUrl());
+      await $(BO_AGREEMENTS_TAB).click();
+      await $(BO_AGREEMENT_SEARCH).setValue(ON_HOLD_SBI);
+      await $(BO_SEARCH_BUTTON).click();
+      await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
+      const agreementSummary = await $$("dl.govuk-summary-list")[0];
+      const agreementReference = agreementSummary.$(
+        ".govuk-summary-list__row .govuk-summary-list__value",
+      );
+
+      expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
+    });
+
+    it("by searching using business.", async function () {
+      addDescription("Test not implemented yet, Jira ticket: AHWR-1314", TYPE.MARKDOWN);
+      await browser.url(getBackOfficeUrl());
+      await $(BO_AGREEMENTS_TAB).click();
+      await $(BO_AGREEMENT_SEARCH).setValue(ON_HOLD_COMPANY);
+      await $(BO_SEARCH_BUTTON).click();
+      await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
+      const agreementSummary = await $$("dl.govuk-summary-list")[0];
+      const agreementReference = agreementSummary.$(
+        ".govuk-summary-list__row .govuk-summary-list__value",
+      );
+
+      expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
+    });
+
+    it("by searching using agreement date.", async function () {
+      addDescription("Test not implemented yet, Jira ticket: AHWR-1314", TYPE.MARKDOWN);
+      await browser.url(getBackOfficeUrl());
+      await $(BO_AGREEMENTS_TAB).click();
+      await $(BO_AGREEMENT_SEARCH).setValue(ON_HOLD_AGREEMENT_DATE);
+      await $(BO_SEARCH_BUTTON).click();
+      await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
+      const agreementSummary = await $$("dl.govuk-summary-list")[0];
+      const agreementReference = agreementSummary.$(
+        ".govuk-summary-list__row .govuk-summary-list__value",
+      );
+
+      expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
+    });
+
+    it("by searching using status.", async function () {
+      addDescription("Test not implemented yet, Jira ticket: AHWR-1314", TYPE.MARKDOWN);
+      await browser.url(getBackOfficeUrl());
+      await $(BO_AGREEMENTS_TAB).click();
+      await $(BO_AGREEMENT_SEARCH).setValue(ON_HOLD_STATUS);
+      await $(BO_SEARCH_BUTTON).click();
+      await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
+      const agreementSummary = await $$("dl.govuk-summary-list")[0];
+      const agreementReference = agreementSummary.$(
+        ".govuk-summary-list__row .govuk-summary-list__value",
+      );
+
+      expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
+    });
   });
 
   it("can find a claim by searching using visit type, SBI, claim date or status and verify the claim details are correct.", async function () {
