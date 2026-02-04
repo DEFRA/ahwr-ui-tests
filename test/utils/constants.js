@@ -15,6 +15,10 @@ export const ON_HOLD_SBI = "104215119";
 export const ON_HOLD_STATUS = "AGREED";
 export const ON_HOLD_COMPANY = "Mr A Test Farmer";
 export const ON_HOLD_AGREEMENT_DATE = "26/03/2025";
+export const ON_HOLD_CLAIM_STATUS = "Rejected";
+export const ON_HOLD_CLAIM_TYPE = "REVIEW";
+export const ON_HOLD_CLAIM_DATE = "27/03/2025";
+export const ON_HOLD_HERD_TYPE = "Beef cattle";
 
 // Below references from changelog/insert_mh_application.sql
 export const MULTIPLE_HERD_AGREEMENT_REF = "IAHW-KH2H-WNA1";
