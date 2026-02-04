@@ -126,7 +126,7 @@ services:
       AHWR_DOCUMENT_GENERATOR_URL: http://ahwr-document-generator-backend:3001/api
       AHWR_COMMS_PROXY_URL: http://ahwr-sfd-comms-proxy:3001/api
       DISPLAY_PAGE_SIZE: 20
-      SUPER_ADMINS: ${SUPER_ADMINS}
+      SUPER_ADMINS: ${SUPER_ADMINS:-developer+super@defra.gov.uk}
       AADAR_AUTHORITY_URL: AnyOldString
       AADAR_CLIENT_SECRET: AnyOldString
       AADAR_CLIENT_ID: AnyOldString

@@ -318,8 +318,61 @@ describe("Backoffice journeys", async function () {
     });
   });
 
-  it("can use the option to exempt an agreement from PII redaction — that is, to toggle the exemption flag ON or OFF", async function () {
-    addDescription("Test not implemented yet, Jira ticket: AHWR-1314", TYPE.MARKDOWN);
-    this.skip();
+  describe("can use the option to exempt an agreement from PII redaction", () => {
+    beforeEach(async () => {
+      await swapBackOfficeUser("super");
+    });
+
+    afterEach(async () => {
+      await swapBackOfficeUser("Admin");
+    });
+
+    it("toggle OFF", async function () {
+      await browser.url(getBackOfficeUrl());
+      await $(BO_AGREEMENTS_TAB).click();
+      await $(BO_AGREEMENT_SEARCH).setValue(ON_HOLD_AGREEMENT_REF);
+      await $(BO_SEARCH_BUTTON).click();
+      await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
+
+      await $("dt*=Eligible for automated data redaction")
+        .parentElement()
+        .$(".govuk-summary-list__actions a")
+        .click();
+
+      // We select No in the form that has appeared
+      await $("#eligiblePiiRedaction-2").click();
+      await $("#note").setValue("Setting to no");
+      await $('button[type="submit"]').click();
+
+      const eligibleValue = $("dt*=Eligible for automated data redaction")
+        .parentElement()
+        .$(".govuk-summary-list__value p");
+
+      expect(eligibleValue).toHaveText("No");
+    });
+
+    it("toggle ON", async function () {
+      await browser.url(getBackOfficeUrl());
+      await $(BO_AGREEMENTS_TAB).click();
+      await $(BO_AGREEMENT_SEARCH).setValue(ON_HOLD_AGREEMENT_REF);
+      await $(BO_SEARCH_BUTTON).click();
+      await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
+
+      await $("dt*=Eligible for automated data redaction")
+        .parentElement()
+        .$(".govuk-summary-list__actions a")
+        .click();
+
+      // We select No in the form that has appeared
+      await $("#eligiblePiiRedaction").click();
+      await $("#note").setValue("Setting to yes");
+      await $('button[type="submit"]').click();
+
+      const eligibleValue = $("dt*=Eligible for automated data redaction")
+        .parentElement()
+        .$(".govuk-summary-list__value p");
+
+      expect(eligibleValue).toHaveText("Yes");
+    });
   });
 });
