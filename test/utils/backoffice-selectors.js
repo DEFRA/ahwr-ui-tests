@@ -61,6 +61,9 @@ export const BO_PII_NO_RADIO = "#eligiblePiiRedaction-2";
 export const BO_PII_NOTE = "#note";
 export const BO_PII_SUBMIT_BUTTON = 'button[type="submit"]';
 
+export const BO_AGREEMENT_LIST = "dl.govuk-summary-list";
+export const BO_AGREEMENT_ROW_VALUE = ".govuk-summary-list__row .govuk-summary-list__value";
+
 export function getClaimSelectorFromTable(claimReference) {
   return `a[href*="${claimReference}"]`;
 }
