@@ -36,6 +36,12 @@ import {
   BO_SEARCH_BUTTON,
   getClaimSelectorFromTable,
   BO_HISTORY_TAB,
+  BO_PII_TEXT,
+  BO_PII_CHANGE_BUTTON,
+  BO_PII_SUBMIT_BUTTON,
+  BO_PII_YES_RADIO,
+  BO_PII_NO_RADIO,
+  BO_PII_NOTE,
 } from "../../utils/backoffice-selectors.js";
 import {
   BACK_OFFICE_APPROVE_SBI,
@@ -336,20 +342,14 @@ describe("Backoffice journeys", async function () {
       await $(BO_SEARCH_BUTTON).click();
       await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
 
-      await $("dt*=Eligible for automated data redaction")
-        .parentElement()
-        .$(".govuk-summary-list__actions a")
-        .click();
+      await $(BO_PII_CHANGE_BUTTON).click();
 
       // We select No in the form that has appeared
-      await $("#eligiblePiiRedaction-2").click();
-      await $("#note").setValue("Setting to no");
-      await $('button[type="submit"]').click();
+      await $(BO_PII_NO_RADIO).click();
+      await $(BO_PII_NOTE).setValue("Setting to no");
+      await $(BO_PII_SUBMIT_BUTTON).click();
 
-      const eligibleValue = $("dt*=Eligible for automated data redaction")
-        .parentElement()
-        .$(".govuk-summary-list__value p");
-
+      const eligibleValue = $(BO_PII_TEXT);
       expect(eligibleValue).toHaveText("No");
     });
 
@@ -360,20 +360,14 @@ describe("Backoffice journeys", async function () {
       await $(BO_SEARCH_BUTTON).click();
       await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
 
-      await $("dt*=Eligible for automated data redaction")
-        .parentElement()
-        .$(".govuk-summary-list__actions a")
-        .click();
+      await $(BO_PII_CHANGE_BUTTON).click();
 
       // We select No in the form that has appeared
-      await $("#eligiblePiiRedaction").click();
-      await $("#note").setValue("Setting to yes");
-      await $('button[type="submit"]').click();
+      await $(BO_PII_YES_RADIO).click();
+      await $(BO_PII_NOTE).setValue("Setting to yes");
+      await $(BO_PII_SUBMIT_BUTTON).click();
 
-      const eligibleValue = $("dt*=Eligible for automated data redaction")
-        .parentElement()
-        .$(".govuk-summary-list__value p");
-
+      const eligibleValue = $(BO_PII_TEXT);
       expect(eligibleValue).toHaveText("Yes");
     });
   });
