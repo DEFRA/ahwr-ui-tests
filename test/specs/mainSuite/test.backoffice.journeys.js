@@ -1,5 +1,4 @@
 import { expect, browser, $, $$ } from "@wdio/globals";
-import { addDescription, TYPE } from "@wdio/allure-reporter";
 import {
   fillInput,
   createAgreement,
@@ -320,6 +319,9 @@ describe("Backoffice journeys", async function () {
 
   describe("can use the option to exempt an agreement from PII redaction", () => {
     beforeEach(async () => {
+      // Only super users currently can change
+      // This user (that gets converted to developer+super@defra.gov.uk
+      // Is given super admin in the docker.composer.yml
       await swapBackOfficeUser("super");
     });
 
