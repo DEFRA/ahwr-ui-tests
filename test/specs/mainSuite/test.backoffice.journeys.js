@@ -1,5 +1,4 @@
 import { expect, browser, $, $$ } from "@wdio/globals";
-import { addDescription, TYPE } from "@wdio/allure-reporter";
 import {
   fillInput,
   createAgreement,
@@ -33,15 +32,31 @@ import {
   BO_ON_HOLD_TO_IN_CHECK_CHECKBOX,
   BO_UPDATE_ISSUES_LOG_CHECKBOX,
   BO_CLAIM_SEARCH,
+  BO_AGREEMENT_SEARCH,
   BO_SEARCH_BUTTON,
   getClaimSelectorFromTable,
   BO_HISTORY_TAB,
+  BO_PII_TEXT,
+  BO_PII_CHANGE_BUTTON,
+  BO_PII_SUBMIT_BUTTON,
+  BO_PII_YES_RADIO,
+  BO_PII_NO_RADIO,
+  BO_PII_NOTE,
+  BO_AGREEMENT_LIST,
+  BO_AGREEMENT_ROW_VALUE,
 } from "../../utils/backoffice-selectors.js";
 import {
   BACK_OFFICE_APPROVE_SBI,
   BACK_OFFICE_REJECT_SBI,
   ON_HOLD_AGREEMENT_REF,
+  ON_HOLD_SBI,
+  ON_HOLD_COMPANY,
+  ON_HOLD_STATUS,
   ON_HOLD_CLAIM_REF,
+  ON_HOLD_AGREEMENT_DATE,
+  ON_HOLD_CLAIM_DATE,
+  ON_HOLD_CLAIM_STATUS,
+  ON_HOLD_HERD_TYPE,
 } from "../../utils/constants.js";
 import { approveClaim } from "../../utils/backoffice-common.js";
 import { createSheepReviewClaim } from "../../utils/reviews/index.js";
@@ -156,10 +171,8 @@ describe("Backoffice journeys", async function () {
     await $(BO_CLAIM_SEARCH).setValue(ON_HOLD_CLAIM_REF);
     await $(BO_SEARCH_BUTTON).click();
     await $(getClaimSelectorFromTable(ON_HOLD_CLAIM_REF)).click();
-    const agreementSummary = await $$("dl.govuk-summary-list")[0];
-    const agreementReference = agreementSummary.$(
-      ".govuk-summary-list__row .govuk-summary-list__value",
-    );
+    const agreementSummary = await $$(BO_AGREEMENT_LIST)[0];
+    const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
 
     expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
 
@@ -169,18 +182,173 @@ describe("Backoffice journeys", async function () {
     await expect(rows.length).toBeGreaterThan(0);
   });
 
-  it("can find an agreement by searching using agreement reference, business, SBI, agreement date or status and verify the the agreement details are correct.", async function () {
-    addDescription("Test not implemented yet, Jira ticket: AHWR-1314", TYPE.MARKDOWN);
-    this.skip();
+  describe("can find correct agreement", () => {
+    it("by searching using agreement reference.", async function () {
+      await browser.url(getBackOfficeUrl());
+      await $(BO_AGREEMENTS_TAB).click();
+      await $(BO_AGREEMENT_SEARCH).setValue(ON_HOLD_AGREEMENT_REF);
+      await $(BO_SEARCH_BUTTON).click();
+      await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
+      const agreementSummary = await $$(BO_AGREEMENT_LIST)[0];
+      const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
+
+      expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
+    });
+
+    it("by searching using SBI.", async function () {
+      await browser.url(getBackOfficeUrl());
+      await $(BO_AGREEMENTS_TAB).click();
+      await $(BO_AGREEMENT_SEARCH).setValue(ON_HOLD_SBI);
+      await $(BO_SEARCH_BUTTON).click();
+      await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
+      const agreementSummary = await $$(BO_AGREEMENT_LIST)[0];
+      const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
+
+      expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
+    });
+
+    it("by searching using business.", async function () {
+      await browser.url(getBackOfficeUrl());
+      await $(BO_AGREEMENTS_TAB).click();
+      await $(BO_AGREEMENT_SEARCH).setValue(ON_HOLD_COMPANY);
+      await $(BO_SEARCH_BUTTON).click();
+      await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
+      const agreementSummary = await $$(BO_AGREEMENT_LIST)[0];
+      const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
+
+      expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
+    });
+
+    it("by searching using agreement date.", async function () {
+      await browser.url(getBackOfficeUrl());
+      await $(BO_AGREEMENTS_TAB).click();
+      await $(BO_AGREEMENT_SEARCH).setValue(ON_HOLD_AGREEMENT_DATE);
+      await $(BO_SEARCH_BUTTON).click();
+      await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
+      const agreementSummary = await $$(BO_AGREEMENT_LIST)[0];
+      const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
+
+      expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
+    });
+
+    it("by searching using status.", async function () {
+      await browser.url(getBackOfficeUrl());
+      await $(BO_AGREEMENTS_TAB).click();
+      await $(BO_AGREEMENT_SEARCH).setValue(ON_HOLD_STATUS);
+      await $(BO_SEARCH_BUTTON).click();
+      await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
+      const agreementSummary = await $$(BO_AGREEMENT_LIST)[0];
+      const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
+
+      expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
+    });
   });
 
-  it("can find a claim by searching using visit type, SBI, claim date or status and verify the claim details are correct.", async function () {
-    addDescription("Test not implemented yet, Jira ticket: AHWR-1314", TYPE.MARKDOWN);
-    this.skip();
+  describe("can find a claim", () => {
+    it("by searching using claim reference.", async function () {
+      await browser.url(getBackOfficeUrl());
+      await $(BO_CLAIM_SEARCH).setValue(ON_HOLD_CLAIM_REF);
+      await $(BO_SEARCH_BUTTON).click();
+      await $(getClaimSelectorFromTable(ON_HOLD_CLAIM_REF)).click();
+      const agreementSummary = await $$(BO_AGREEMENT_LIST)[0];
+      const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
+
+      expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
+    });
+
+    it("by searching using SBI.", async function () {
+      await browser.url(getBackOfficeUrl());
+      await $(BO_CLAIM_SEARCH).setValue(ON_HOLD_SBI);
+      await $(BO_SEARCH_BUTTON).click();
+      await $(getClaimSelectorFromTable(ON_HOLD_CLAIM_REF)).click();
+      const agreementSummary = await $$(BO_AGREEMENT_LIST)[0];
+      const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
+
+      expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
+    });
+
+    it("by searching using herd type.", async function () {
+      await browser.url(getBackOfficeUrl());
+      await $(BO_CLAIM_SEARCH).setValue(ON_HOLD_HERD_TYPE);
+      await $(BO_SEARCH_BUTTON).click();
+      await $(getClaimSelectorFromTable(ON_HOLD_CLAIM_REF)).click();
+      const agreementSummary = await $$(BO_AGREEMENT_LIST)[0];
+      const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
+
+      expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
+    });
+
+    it("by searching using claim date.", async function () {
+      await browser.url(getBackOfficeUrl());
+      await $(BO_CLAIM_SEARCH).setValue(ON_HOLD_CLAIM_DATE);
+      await $(BO_SEARCH_BUTTON).click();
+      await $(getClaimSelectorFromTable(ON_HOLD_CLAIM_REF)).click();
+      const agreementSummary = await $$(BO_AGREEMENT_LIST)[0];
+      const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
+
+      expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
+    });
+
+    it("by searching using status.", async function () {
+      await browser.url(getBackOfficeUrl());
+      // Be aware that as part of other tests, the status
+      // was changed to Rejected
+      await $(BO_CLAIM_SEARCH).setValue(ON_HOLD_CLAIM_STATUS);
+      await $(BO_SEARCH_BUTTON).click();
+      await $(getClaimSelectorFromTable(ON_HOLD_CLAIM_REF)).click();
+      const agreementSummary = await $$(BO_AGREEMENT_LIST)[0];
+      const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
+
+      expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
+    });
   });
 
-  it("can use the option to exempt an agreement from PII redaction — that is, to toggle the exemption flag ON or OFF", async function () {
-    addDescription("Test not implemented yet, Jira ticket: AHWR-1314", TYPE.MARKDOWN);
-    this.skip();
+  describe("can use the option to exempt an agreement from PII redaction", () => {
+    beforeEach(async () => {
+      // Only super users currently can change
+      // This user (that gets converted to developer+super@defra.gov.uk
+      // Is given super admin in the docker.composer.yml
+      await swapBackOfficeUser("super");
+    });
+
+    afterEach(async () => {
+      await swapBackOfficeUser("Admin");
+    });
+
+    it("toggle OFF", async function () {
+      await browser.url(getBackOfficeUrl());
+      await $(BO_AGREEMENTS_TAB).click();
+      await $(BO_AGREEMENT_SEARCH).setValue(ON_HOLD_AGREEMENT_REF);
+      await $(BO_SEARCH_BUTTON).click();
+      await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
+
+      await $(BO_PII_CHANGE_BUTTON).click();
+
+      // We select No in the form that has appeared
+      await $(BO_PII_NO_RADIO).click();
+      await $(BO_PII_NOTE).setValue("Setting to no");
+      await $(BO_PII_SUBMIT_BUTTON).click();
+
+      const eligibleValue = $(BO_PII_TEXT);
+      expect(eligibleValue).toHaveText("No");
+    });
+
+    it("toggle ON", async function () {
+      await browser.url(getBackOfficeUrl());
+      await $(BO_AGREEMENTS_TAB).click();
+      await $(BO_AGREEMENT_SEARCH).setValue(ON_HOLD_AGREEMENT_REF);
+      await $(BO_SEARCH_BUTTON).click();
+      await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
+
+      await $(BO_PII_CHANGE_BUTTON).click();
+
+      // We select No in the form that has appeared
+      await $(BO_PII_YES_RADIO).click();
+      await $(BO_PII_NOTE).setValue("Setting to yes");
+      await $(BO_PII_SUBMIT_BUTTON).click();
+
+      const eligibleValue = $(BO_PII_TEXT);
+      expect(eligibleValue).toHaveText("Yes");
+    });
   });
 });

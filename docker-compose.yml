@@ -24,6 +24,8 @@ services:
       USE_INSTANCES: "1"
 
   ahwr-application-backend:
+    container_name: ahwr-application-backend-journey-tests
+    hostname: ahwr-application-backend
     platform: linux/amd64
     networks:
       - ahwr-network-auto
@@ -37,7 +39,7 @@ services:
       mongodb:
         condition: service_started
     ports:
-      - "3001:3001"
+      - "4001:3001"
     env_file:
       - "fixtures/aws.env"
     environment:
@@ -60,10 +62,12 @@ services:
       PROCESS_ON_HOLD_SCHEDULE: "*/30 * * * *"
 
   localstack:
+    container_name: localstack-journey-tests
+    hostname: localstack
     image: localstack/localstack:3.0.2
     ports:
-      - "4566:4566" # LocalStack Gateway
-      - "4510-4559:4510-4559" # external services port range
+      - "5566:4566" # LocalStack Gateway
+      - "5510-5559:4510-4559" # external services port range
     env_file:
       - "fixtures/aws.env"
     environment:
@@ -84,22 +88,26 @@ services:
       - ahwr-network-auto
 
   mongodb:
+    container_name: mongodb-journey-tests
+    hostname: mongodb
     image: mongo:7.0.24
     networks:
       - ahwr-network-auto
     ports:
-      - "27017:27017"
+      - "28017:27017"
     volumes:
       - ./fixtures/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
     restart: always
 
   ahwr-backoffice-ui:
+    container_name: ahwr-backoffice-ui-journey-tests
+    hostname: ahwr-backoffice-ui
     platform: linux/amd64
     networks:
       - ahwr-network-auto
     image: ahwr-backoffice-ui:latest
     ports:
-      - "3002:3000"
+      - "4002:3000"
     depends_on:
       - redis
       - ahwr-application-backend
@@ -118,19 +126,21 @@ services:
       AHWR_DOCUMENT_GENERATOR_URL: http://ahwr-document-generator-backend:3001/api
       AHWR_COMMS_PROXY_URL: http://ahwr-sfd-comms-proxy:3001/api
       DISPLAY_PAGE_SIZE: 20
-      SUPER_ADMINS: ${SUPER_ADMINS}
+      SUPER_ADMINS: ${SUPER_ADMINS:-developer+super@defra.gov.uk}
       AADAR_AUTHORITY_URL: AnyOldString
       AADAR_CLIENT_SECRET: AnyOldString
       AADAR_CLIENT_ID: AnyOldString
       NODE_ENV: development
 
   ahwr-public-user-ui:
+    container_name: ahwr-public-user-ui-journey-tests
+    hostname: ahwr-public-user-ui
     platform: linux/amd64
     networks:
       - ahwr-network-auto
     image: ahwr-public-user-ui:latest
     ports:
-      - "3003:3000"
+      - "4003:3000"
     depends_on:
       - redis
       - ahwr-application-backend
@@ -180,11 +190,13 @@ services:
       NODE_ENV: development
 
   redis:
+    container_name: redis-journey-tests
+    hostname: redis
     networks:
       - ahwr-network-auto
     image: redis:4.0.14
     ports:
-      - "6379:6379"
+      - "6479:6379"
 
 networks:
   ahwr-network-auto:

@@ -26,11 +26,8 @@ logs also get generated in the pipeline when it runs, and they can be accessed v
 
 ## 🚀 Prerequisites
 
-- macOS (this repo has been developed on a Macbook laptop, so if you are running Windows it probably needs some changes to get it to work)
-- Node version 20.18.1
+- Node version 22.21.1
 - NVM (Node Version manager)
-- Azure login for SND2 tenant
-- Make sure you are on the VPN
 - Docker
 - Create a .env file in the root of the repo
 - Make sure you have MESSAGE_QUEUE_PASSWORD, MESSAGE_QUEUE_SUFFIX and APPLICATIONINSIGHTS_CONNECTION_STRING in your .env file
@@ -40,6 +37,11 @@ logs also get generated in the pipeline when it runs, and they can be accessed v
 - You can find these values by speaking to a dev
 
 ## 🧪 Running Automated Tests locally
+
+To run the whole thing in a single go
+```bash
+./scripts/github_run_tests.sh
+```
 
 ```bash
 # Pull latest images
@@ -51,6 +53,8 @@ logs also get generated in the pipeline when it runs, and they can be accessed v
 # Run main suite tests
 ./scripts/run_tests.sh mainSuite
 
+# Run compliance suite
+./scripts/run_tests.sh comp 5
 ```
 
 ## 📦 Working with Pipeline Artifacts
@@ -87,3 +91,5 @@ When the automated tests run in the pipeline, several files are collected and up
 - Screenshots have been added to the tests, and volume in the /screenshots folder. If any errors occur, they will be visible there.
 
 - Artifacts are retained only for a limited time (default 90 days in GitHub Actions). Download them if you need a permanent copy.
+
+- If there is any failure on the main suite, `docker compose down` is never called, and the comp suite fails too. You will need to run `docker compose down` to remove all the docker setup before trying the tests again.

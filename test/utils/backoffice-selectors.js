@@ -45,10 +45,24 @@ export const BO_FLAG_DELETION_NOTE = "#deletedNote";
 export const BO_SUBMIT_DELETE_FLAG_BUTTON = "button.govuk-button--warning=Delete flag";
 
 export const BO_CLAIM_SEARCH = "#searchText";
+export const BO_AGREEMENT_SEARCH = "#searchText";
 
 export const BO_SEARCH_BUTTON = ".search-button";
 
 export const BO_HISTORY_TAB = "#tab_history";
+
+export const BO_PII_ROW_SELECTOR = "dt*=Eligible for automated data redaction";
+export const BO_PII_CHANGE_BUTTON =
+  '//dt[contains(text(), "Eligible for automated data redaction")]/following-sibling::dd[@class="govuk-summary-list__actions"]//a';
+export const BO_PII_TEXT =
+  '//dt[contains(text(), "Eligible for automated data redaction")]/following-sibling::dd[@class="govuk-summary-list__value"]//p';
+export const BO_PII_YES_RADIO = "#eligiblePiiRedaction";
+export const BO_PII_NO_RADIO = "#eligiblePiiRedaction-2";
+export const BO_PII_NOTE = "#note";
+export const BO_PII_SUBMIT_BUTTON = 'button[type="submit"]';
+
+export const BO_AGREEMENT_LIST = "dl.govuk-summary-list";
+export const BO_AGREEMENT_ROW_VALUE = ".govuk-summary-list__row .govuk-summary-list__value";
 
 export function getClaimSelectorFromTable(claimReference) {
   return `a[href*="${claimReference}"]`;
