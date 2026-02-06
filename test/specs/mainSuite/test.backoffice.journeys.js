@@ -189,7 +189,7 @@ describe("Backoffice journeys", async function () {
       await $(BO_AGREEMENT_SEARCH).setValue(ON_HOLD_AGREEMENT_REF);
       await $(BO_SEARCH_BUTTON).click();
       await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
-      const agreementSummary = await $$(BO_AGREEMENT_LIST)[0];
+      const agreementSummary = $$(BO_AGREEMENT_LIST)[0];
       const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
 
       expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
@@ -201,7 +201,7 @@ describe("Backoffice journeys", async function () {
       await $(BO_AGREEMENT_SEARCH).setValue(ON_HOLD_SBI);
       await $(BO_SEARCH_BUTTON).click();
       await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
-      const agreementSummary = await $$(BO_AGREEMENT_LIST)[0];
+      const agreementSummary = $$(BO_AGREEMENT_LIST)[0];
       const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
 
       expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
@@ -213,7 +213,7 @@ describe("Backoffice journeys", async function () {
       await $(BO_AGREEMENT_SEARCH).setValue(ON_HOLD_COMPANY);
       await $(BO_SEARCH_BUTTON).click();
       await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
-      const agreementSummary = await $$(BO_AGREEMENT_LIST)[0];
+      const agreementSummary = $$(BO_AGREEMENT_LIST)[0];
       const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
 
       expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
@@ -225,7 +225,7 @@ describe("Backoffice journeys", async function () {
       await $(BO_AGREEMENT_SEARCH).setValue(ON_HOLD_AGREEMENT_DATE);
       await $(BO_SEARCH_BUTTON).click();
       await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
-      const agreementSummary = await $$(BO_AGREEMENT_LIST)[0];
+      const agreementSummary = $$(BO_AGREEMENT_LIST)[0];
       const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
 
       expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
@@ -237,7 +237,7 @@ describe("Backoffice journeys", async function () {
       await $(BO_AGREEMENT_SEARCH).setValue(ON_HOLD_STATUS);
       await $(BO_SEARCH_BUTTON).click();
       await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
-      const agreementSummary = await $$(BO_AGREEMENT_LIST)[0];
+      const agreementSummary = $$(BO_AGREEMENT_LIST)[0];
       const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
 
       expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
@@ -250,7 +250,7 @@ describe("Backoffice journeys", async function () {
       await $(BO_CLAIM_SEARCH).setValue(ON_HOLD_CLAIM_REF);
       await $(BO_SEARCH_BUTTON).click();
       await $(getClaimSelectorFromTable(ON_HOLD_CLAIM_REF)).click();
-      const agreementSummary = await $$(BO_AGREEMENT_LIST)[0];
+      const agreementSummary = $$(BO_AGREEMENT_LIST)[0];
       const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
 
       expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
@@ -261,7 +261,7 @@ describe("Backoffice journeys", async function () {
       await $(BO_CLAIM_SEARCH).setValue(ON_HOLD_SBI);
       await $(BO_SEARCH_BUTTON).click();
       await $(getClaimSelectorFromTable(ON_HOLD_CLAIM_REF)).click();
-      const agreementSummary = await $$(BO_AGREEMENT_LIST)[0];
+      const agreementSummary = $$(BO_AGREEMENT_LIST)[0];
       const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
 
       expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
@@ -272,7 +272,7 @@ describe("Backoffice journeys", async function () {
       await $(BO_CLAIM_SEARCH).setValue(ON_HOLD_HERD_TYPE);
       await $(BO_SEARCH_BUTTON).click();
       await $(getClaimSelectorFromTable(ON_HOLD_CLAIM_REF)).click();
-      const agreementSummary = await $$(BO_AGREEMENT_LIST)[0];
+      const agreementSummary = $$(BO_AGREEMENT_LIST)[0];
       const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
 
       expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
@@ -283,7 +283,7 @@ describe("Backoffice journeys", async function () {
       await $(BO_CLAIM_SEARCH).setValue(ON_HOLD_CLAIM_DATE);
       await $(BO_SEARCH_BUTTON).click();
       await $(getClaimSelectorFromTable(ON_HOLD_CLAIM_REF)).click();
-      const agreementSummary = await $$(BO_AGREEMENT_LIST)[0];
+      const agreementSummary = $$(BO_AGREEMENT_LIST)[0];
       const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
 
       expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
@@ -296,7 +296,7 @@ describe("Backoffice journeys", async function () {
       await $(BO_CLAIM_SEARCH).setValue(ON_HOLD_CLAIM_STATUS);
       await $(BO_SEARCH_BUTTON).click();
       await $(getClaimSelectorFromTable(ON_HOLD_CLAIM_REF)).click();
-      const agreementSummary = await $$(BO_AGREEMENT_LIST)[0];
+      const agreementSummary = $$(BO_AGREEMENT_LIST)[0];
       const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
 
       expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
