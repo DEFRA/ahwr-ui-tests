@@ -60,6 +60,10 @@ services:
       PAYMENT_REQUEST_TOPIC_ARN: arn:aws:sns:eu-west-2:000000000000:ahwr_payment_request
       CLAIM_COMPLIANCE_CHECK_RATIO: 1
       PROCESS_ON_HOLD_SCHEDULE: "*/30 * * * *"
+      PUBLIC_UI_API_KEY: dbd47daf-2711-4cb6-b733-0bd60fdb3ce6
+      APPLICATION_BACKEND_API_KEY: dbd47daf-2711-4cb6-b733-0bd60fdb3ce6
+      BACKOFFICE_UI_API_KEY: 446dcdbe-e02c-4d16-a266-001bbbd5f089
+      MESSAGE_GENERATOR_API_KEY: fab78725-3037-45ed-ad2e-28cd86e70ff8
 
   localstack:
     container_name: localstack-journey-tests
@@ -90,7 +94,7 @@ services:
   mongodb:
     container_name: mongodb-journey-tests
     hostname: mongodb
-    image: mongo:7.0.24
+    image: mongo:7.0.28
     networks:
       - ahwr-network-auto
     ports:
@@ -131,6 +135,7 @@ services:
       AADAR_CLIENT_SECRET: AnyOldString
       AADAR_CLIENT_ID: AnyOldString
       NODE_ENV: development
+      BACKOFFICE_UI_API_KEY: 446dcdbe-e02c-4d16-a266-001bbbd5f089
 
   ahwr-public-user-ui:
     container_name: ahwr-public-user-ui-journey-tests
@@ -188,6 +193,7 @@ services:
       EVENT_QUEUE_ADDRESS: AnyOldString
       DEV_LOGIN_ENABLED: true
       NODE_ENV: development
+      PUBLIC_UI_API_KEY: dbd47daf-2711-4cb6-b733-0bd60fdb3ce6
 
   redis:
     container_name: redis-journey-tests
