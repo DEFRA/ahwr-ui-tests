@@ -28,7 +28,7 @@ import {
   getTestResultsSelector,
 } from "../selectors.js";
 
-export async function createBeefReviewClaim({
+export async function createBeefReviewClaimWithoutApproval({
   testResult = "positive",
   isUnnamedHerdClaimPresent = false,
   urn = "bc-rr-5343461",
@@ -55,6 +55,10 @@ export async function createBeefReviewClaim({
   await fillInputAndContinue(VET_RCVS_NUMBER, "1234567");
   await fillInputAndContinue(LABORATORY_URN, urn);
   await clickOnElementAndContinue(getTestResultsSelector(testResult));
+}
+
+export async function createBeefReviewClaim(data) {
+  createBeefReviewClaimWithoutApproval(data);
 
   await $(SUBMIT_CLAIM_BUTTON).click();
   await verifySubmission("Claim complete");

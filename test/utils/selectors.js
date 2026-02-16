@@ -1,5 +1,9 @@
 export const SBI = "#sbi";
 
+// In some we have id, in some we don't
+//export const BACK_LINK = "#back";
+export const BACK_LINK = ".govuk-back-link";
+
 export const TERMS_AND_CONDITIONS_CHECKBOX = "#terms";
 
 export const CLAIMS_MAIN_HEADING_SELECTOR = "#main-content h1.govuk-heading-l";
