@@ -14,6 +14,7 @@ import {
   TERMS_AND_CONDITIONS_CHECKBOX,
   GOV_RADIOS_INPUT_LABEL,
   getConfirmCheckDetailsSelector,
+  BACK_LINK,
 } from "./selectors.js";
 
 function getDevSignInUrl() {
@@ -40,6 +41,10 @@ export function getBackOfficeUrl() {
 
 export async function clickSubmitButton() {
   await $(SUBMIT_BUTTON).click();
+}
+
+export async function clickBackButton() {
+  await $(BACK_LINK).click();
 }
 
 export async function fillAndSubmitSBI(sbi) {
