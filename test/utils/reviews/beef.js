@@ -32,11 +32,12 @@ export async function createBeefReviewClaimWithoutApproval({
   testResult = "positive",
   isUnnamedHerdClaimPresent = false,
   urn = "bc-rr-5343461",
+  dateReview = undefined,
 } = {}) {
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("beef"));
   await clickOnElementAndContinue(getTypeOfReviewSelector("review"));
-  await enterVisitDateAndContinue();
+  await enterVisitDateAndContinue(dateReview);
 
   await fillInputAndContinue(HERD_NAME, "Legacy Beef Herd");
   await fillInputAndContinue(HERD_CPH, "33/123/1234");

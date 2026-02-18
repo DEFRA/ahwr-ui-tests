@@ -1,4 +1,4 @@
-import { $ } from "@wdio/globals";
+import { $, browser } from "@wdio/globals";
 import {
   clickStartNewClaimButton,
   clickOnElementAndContinue,
@@ -32,6 +32,26 @@ import {
   HERD_CPH,
   OTHER_HERDS_ON_SBI_NO,
 } from "../multiple-herd-selectors.js";
+
+export async function createBeefFollowUp({ dateFollowUp = undefined }) {
+  await clickStartNewClaimButton();
+  await clickOnElementAndContinue(getTypeOfLivestockSelector("beef"));
+  await clickOnElementAndContinue(getTypeOfReviewSelector("endemics"));
+  await enterVisitDateAndContinue(dateFollowUp);
+
+  await clickOnElementAndContinue("#herdSelected");
+  await clickContinueButton();
+
+  await clickOnElementAndContinue(getSpeciesNumbersSelector("yes"));
+  await fillInputAndContinue(VETS_NAME, "Mr Auto Test");
+  await fillInputAndContinue(VET_RCVS_NUMBER, "1234567");
+  await clickOnElementAndContinue(getPiHuntForBvdDoneSelector("yes"));
+  await clickOnElementAndContinue(getPiHuntDoneForAllCattleSelector("yes"));
+  await enterWhenTestingWasCarriedOutAndContinue("whenTheVetVisitedTheFarmToCarryOutTheReview");
+  await fillInputAndContinue(LABORATORY_URN, "bc-fu-521346");
+  await clickOnElementAndContinue(getTestResultsSelector("positive"));
+  await clickOnElementAndContinue(getBiosecuritySelector("yes"));
+}
 
 export async function createMultipleHerdBeefFollowUpForFirstHerd({
   isUnnamedHerdClaimPresent = false,

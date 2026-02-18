@@ -15,6 +15,7 @@ import {
   GOV_RADIOS_INPUT_LABEL,
   getConfirmCheckDetailsSelector,
   BACK_LINK,
+  MANAGE_YOUR_CLAIMS_LINK,
 } from "./selectors.js";
 
 function getDevSignInUrl() {
@@ -47,6 +48,10 @@ export async function clickBackButton() {
   await $(BACK_LINK).click();
 }
 
+export async function clickManagerYourClaims() {
+  await $(MANAGE_YOUR_CLAIMS_LINK).click();
+}
+
 export async function fillAndSubmitSBI(sbi) {
   await $(SBI).setValue(sbi);
   await clickSubmitButton();
@@ -59,11 +64,11 @@ export async function performDevLogin(sbi) {
   await clickSubmitButton();
 }
 
-export async function enterVisitDateAndContinue() {
-  const today = new Date();
-  const day = today.getDate().toString().padStart(2, "0");
-  const month = (today.getMonth() + 1).toString().padStart(2, "0");
-  const year = today.getFullYear().toString();
+export async function enterVisitDateAndContinue(dateToUse) {
+  const baseDate = dateToUse || new Date();
+  const day = baseDate.getDate().toString().padStart(2, "0");
+  const month = (baseDate.getMonth() + 1).toString().padStart(2, "0");
+  const year = baseDate.getFullYear().toString();
 
   await $(VISIT_DATE_DAY).setValue(day);
   await $(VISIT_DATE_MONTH).setValue(month);
