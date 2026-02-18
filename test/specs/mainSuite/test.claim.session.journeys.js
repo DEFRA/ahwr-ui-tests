@@ -1,4 +1,4 @@
-import { clickManagerYourClaims, performDevLogin } from "../../utils/common.js";
+import { performDevLogin } from "../../utils/common.js";
 import { addDescription, TYPE } from "@wdio/allure-reporter";
 import { clickBackButton } from "../../utils/common";
 import { AGREEMENT_REF, CLAIM_JOURNEY_SBI } from "../../utils/constants.js";
