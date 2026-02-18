@@ -138,6 +138,7 @@ describe("Backoffice journeys", async function () {
     await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
     await $(getViewClaimLinkSelector(ON_HOLD_CLAIM_REF)).click();
 
+    await $(BO_MOVE_TO_IN_CHECK_BUTTON).waitForDisplayed();
     await $(BO_MOVE_TO_IN_CHECK_BUTTON).click();
     await $(BO_ON_HOLD_TO_IN_CHECK_CHECKBOX).click();
     await $(BO_UPDATE_ISSUES_LOG_CHECKBOX).click();
