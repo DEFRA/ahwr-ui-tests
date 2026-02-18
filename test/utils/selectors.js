@@ -84,6 +84,10 @@ export function getWhenTestingWasCarriedOutSelector(value) {
   return `input[name="whenTestingWasCarriedOut"][value="${value}"]`;
 }
 
+export function getWhenTestingWasCarriedOutSelector2(value) {
+  return `input[name="whenTestingWasCarriedOut"][value="${value}"]`;
+}
+
 export function getSpeciesNumbersSelector(value) {
   return `input[name="speciesNumbers"][value="${value}"]`;
 }

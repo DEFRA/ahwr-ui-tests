@@ -71,11 +71,12 @@ export async function createBeefReviewForAdditionalHerd({
   herd = "Beef additional herd 1",
   reviewTestResult = "positive",
   urn = "bc-rr-534351",
+  dateReview = undefined,
 } = {}) {
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("beef"));
   await clickOnElementAndContinue(getTypeOfReviewSelector("review"));
-  await enterVisitDateAndContinue();
+  await enterVisitDateAndContinue(dateReview);
   await clickOnElementAndContinue(getSelectHerdSelector("a different"));
   await fillInputAndContinue(HERD_NAME, herd);
   await fillInputAndContinue(HERD_CPH, "22/333/4444");
