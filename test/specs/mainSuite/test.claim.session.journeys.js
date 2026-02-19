@@ -1,21 +1,35 @@
 import { performDevLogin } from "../../utils/common.js";
-import { addDescription, TYPE } from "@wdio/allure-reporter";
-import { clickBackButton } from "../../utils/common";
+import {
+  clickBackButton,
+  clickOnElementAndContinue,
+  clickContinueButton,
+  fillInputAndContinue,
+  enterWhenTestingWasCarriedOutAndContinue,
+} from "../../utils/common";
 import { AGREEMENT_REF, CLAIM_JOURNEY_SBI } from "../../utils/constants.js";
 import {
   createBeefReviewClaim,
   createBeefReviewClaimWithoutApproval,
+  createBeefReviewForAdditionalHerd,
 } from "../../utils/reviews/beef.js";
 import { createBeefFollowUp } from "../../utils/follow-ups/beef.js";
 import { approveClaim } from "../../utils/backoffice-common.js";
+import {
+  getBiosecuritySelector,
+  getPiHuntForBvdDoneSelector,
+  getPiHuntDoneForAllCattleSelector,
+  getSpeciesNumbersSelector,
+  getTestResultsSelector,
+  getWhenTestingWasCarriedOutSelector,
+  getWhenTestingWasCarriedOutSelector2,
+  DATE_OF_VISIT_GO_BACK_LINK,
+  VETS_NAME,
+  VET_RCVS_NUMBER,
+  LABORATORY_URN,
+} from "../../utils/selectors.js";
 
 describe("Claim session and back navigation journeys", () => {
-  it("can clear the input field data when the user selects a different herd from the originally selected one for a follow-up journey", async function () {
-    addDescription("Test not implemented yet, Jira ticket: AHWR-1054", TYPE.MARKDOWN);
-    this.skip();
-  });
-
-  describe("beef review journey", () => {
+  describe("beef journey", () => {
     const expectGoBack = async (expected_url) => {
       await clickBackButton();
       const url = await browser.getUrl();
@@ -86,6 +100,61 @@ describe("Claim session and back navigation journeys", () => {
       await expectGoBack("/which-type-of-review");
       await expectGoBack("/which-species");
       await expectGoBack("/vet-visits");
+    });
+
+    // This assumes the above has worked, therefore
+    it("can clear the input field data when the user selects a different herd from the originally selected one for a follow-up journey", async function () {
+      const dateReview = new Date(2026, 0, 2);
+      const dateFollowUp = new Date(2026, 1, 2);
+      await performDevLogin(CLAIM_JOURNEY_SBI);
+      const claimReference = await createBeefReviewForAdditionalHerd({ dateReview });
+      await approveClaim(AGREEMENT_REF, claimReference);
+
+      await performDevLogin(CLAIM_JOURNEY_SBI);
+
+      await createBeefFollowUp({ dateFollowUp });
+
+      await $(DATE_OF_VISIT_GO_BACK_LINK).click();
+      await clickContinueButton();
+      await clickOnElementAndContinue("#herdSelected-2");
+      await clickContinueButton();
+
+      await expect($(getSpeciesNumbersSelector("yes"))).not.toBeSelected();
+      await expect($(getSpeciesNumbersSelector("no"))).not.toBeSelected();
+      await clickOnElementAndContinue(getSpeciesNumbersSelector("yes"));
+
+      await expect($(VETS_NAME)).toHaveValue("");
+      await fillInputAndContinue(VETS_NAME, "Mr Auto Test");
+
+      await expect($(VET_RCVS_NUMBER)).toHaveValue("");
+      await fillInputAndContinue(VET_RCVS_NUMBER, "1234567");
+
+      await expect($(getPiHuntForBvdDoneSelector("yes"))).not.toBeSelected();
+      await expect($(getPiHuntForBvdDoneSelector("no"))).not.toBeSelected();
+      await clickOnElementAndContinue(getPiHuntForBvdDoneSelector("yes"));
+
+      await expect($(getPiHuntDoneForAllCattleSelector("yes"))).not.toBeSelected();
+      await expect($(getPiHuntDoneForAllCattleSelector("no"))).not.toBeSelected();
+      await clickOnElementAndContinue(getPiHuntDoneForAllCattleSelector("yes"));
+
+      await expect(
+        $(getWhenTestingWasCarriedOutSelector("whenTheVetVisitedTheFarmToCarryOutTheReview")),
+      ).not.toBeSelected();
+      await expect(
+        $(getWhenTestingWasCarriedOutSelector2("whenTheVetVisitedTheFarmToCarryOutTheReview")),
+      ).not.toBeSelected();
+      await enterWhenTestingWasCarriedOutAndContinue("whenTheVetVisitedTheFarmToCarryOutTheReview");
+
+      await expect($(LABORATORY_URN)).toHaveValue("");
+      await fillInputAndContinue(LABORATORY_URN, "bc-fu-521346");
+
+      await expect($(getTestResultsSelector("positive"))).not.toBeSelected();
+      await expect($(getTestResultsSelector("negative"))).not.toBeSelected();
+      await clickOnElementAndContinue(getTestResultsSelector("positive"));
+
+      await expect($(getBiosecuritySelector("yes"))).not.toBeSelected();
+      await expect($(getBiosecuritySelector("no"))).not.toBeSelected();
+      await clickOnElementAndContinue(getBiosecuritySelector("yes"));
     });
   });
 });
