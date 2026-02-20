@@ -112,6 +112,8 @@ describe("Backoffice journeys", async function () {
   });
 
   it("creates and deletes a flag for an agreement", async () => {
+    await swapBackOfficeUser("super");
+
     // Agreement flag creation
     await browser.url(getBackOfficeUrl());
     await $(BO_FLAGS_TAB).click();
