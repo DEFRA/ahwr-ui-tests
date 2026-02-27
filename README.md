@@ -38,6 +38,16 @@ logs also get generated in the pipeline when it runs, and they can be accessed v
 
 ## 🧪 Running Automated Tests locally
 
+### Setup Environment variables
+
+The environment variables are setup on github actions. Those variables will be used by the backend and the public user ui. For local you will have them under `.env`
+
+The `MESSAGE_QUEUE_HOST` comes from Azure Service Bus. We are using the dev service bus instance, where there is a queue already created for use on CI, but you will need your own specific one for local development. The `EVENT_QUEUE_ADDRESS` follows the schema "ffc-ahwr-event-{your initials}". 
+
+The `MESSAGE_QUEUE_USER` will be "RootManageSharedAccessKey". You can find the key needed to be used under Settings->Shared access policies. You will set that up under `FCP_AHWR_EVENT_QUEUE_SA_KEY`
+
+### Commands
+
 To run the whole thing in a single go
 ```bash
 ./scripts/github_run_tests.sh
