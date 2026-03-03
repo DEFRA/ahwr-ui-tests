@@ -126,7 +126,4 @@ docker image ls --format "{{.Repository}}" \
 docker exec -i --user root "$WDIO_CONTAINER" npm run test:"$TEST_COMMAND" | tee "$LOG_DIR/wdio_test_output.log"
 EXIT_CODE=${PIPESTATUS[0]}
 
-echo "🛑 Stopping services..."
-docker compose down
-
 exit $EXIT_CODE

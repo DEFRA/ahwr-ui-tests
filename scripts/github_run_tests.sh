@@ -7,7 +7,9 @@ EXIT_CODE=0
 ./scripts/build_wdio_test_image.sh || EXIT_CODE=1
 
 ./scripts/run_tests.sh mainSuite || EXIT_CODE=1
+./scripts/teardown.sh
 ./scripts/run_tests.sh comp 5 || EXIT_CODE=1
+./scripts/teardown.sh
 
 ./scripts/generate_allure_report.sh || EXIT_CODE=1
 
