@@ -64,7 +64,7 @@ export async function createMultipleHerdPigsFollowUpForFirstHerd({
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("pigs"));
   await clickOnElementAndContinue(getTypeOfReviewSelector("endemics"));
-  await enterVisitDateAndContinue();
+  await enterVisitDateAndContinue(new Date("2025-07-01"));
 
   if (isUnnamedHerdClaimPresent) {
     await fillInputAndContinue(HERD_NAME, "Puddle of Piglets Herd");

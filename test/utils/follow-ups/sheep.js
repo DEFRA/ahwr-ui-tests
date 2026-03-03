@@ -52,7 +52,7 @@ export async function createMultipleHerdSheepFollowUp({ isUnnamedHerdClaimPresen
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("sheep"));
   await clickOnElementAndContinue(getTypeOfReviewSelector("endemics"));
-  await enterVisitDateAndContinue();
+  await enterVisitDateAndContinue(new Date("2025-07-01"));
 
   if (isUnnamedHerdClaimPresent) {
     await fillInputAndContinue(HERD_NAME, "Breeding flock");
