@@ -110,7 +110,7 @@ describe("Multiple herd sheep claim journeys", async function () {
 
     await performDevLogin(MULTIPLE_HERDS_SBI);
 
-    await createMultipleHerdSheepFollowUp();
+    await createMultipleHerdSheepFollowUp({visitDate: new Date()});
 
     await expect($(CLAIM_REFERENCE)).toHaveText(expect.stringContaining("FUSH"));
   });

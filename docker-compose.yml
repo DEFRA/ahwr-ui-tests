@@ -64,6 +64,7 @@ services:
       APPLICATION_BACKEND_API_KEY: dbd47daf-2711-4cb6-b733-0bd60fdb3ce6
       BACKOFFICE_UI_API_KEY: 446dcdbe-e02c-4d16-a266-001bbbd5f089
       MESSAGE_GENERATOR_API_KEY: fab78725-3037-45ed-ad2e-28cd86e70ff8
+      ENABLE_AUDIT_EVENTS: false
 
   localstack:
     container_name: localstack-journey-tests
@@ -77,7 +78,7 @@ services:
     environment:
       DEBUG: ${DEBUG:-1}
       LS_LOG: WARN # Localstack DEBUG Level
-      SERVICES: s3,sqs,sns,firehose
+      SERVICES: s3,sqs,sns
       LOCALSTACK_HOST: 127.0.0.1
     volumes:
       - "${TMPDIR:-/tmp}/localstack:/var/lib/localstack"

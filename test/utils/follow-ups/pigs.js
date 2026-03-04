@@ -60,11 +60,12 @@ export async function createPreMultipleHerdPigsFollowUp(urn = "pg-fc-5343462") {
 export async function createMultipleHerdPigsFollowUpForFirstHerd({
   isUnnamedHerdClaimPresent = false,
   urn = "pg-fc-5343461",
+  visitDate = new Date("2025-07-01"),
 } = {}) {
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("pigs"));
   await clickOnElementAndContinue(getTypeOfReviewSelector("endemics"));
-  await enterVisitDateAndContinue();
+  await enterVisitDateAndContinue(visitDate);
 
   if (isUnnamedHerdClaimPresent) {
     await fillInputAndContinue(HERD_NAME, "Puddle of Piglets Herd");
@@ -103,11 +104,12 @@ export async function createMultipleHerdPigsFollowUpForAdditionalHerd({
   vaccinationStatus = "vaccinated",
   pcrTestResult = "positive",
   elisaTestResult = "positive",
+  visitDate = new Date("2026-02-02"),
 } = {}) {
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("pigs"));
   await clickOnElementAndContinue(getTypeOfReviewSelector("endemics"));
-  await enterVisitDateAndContinue();
+  await enterVisitDateAndContinue(visitDate);
 
   await selectHerdAndContinue(herdName);
 

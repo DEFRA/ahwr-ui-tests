@@ -31,7 +31,7 @@
     "@wdio/mocha-framework": "9.9.0",
     "@wdio/spec-reporter": "9.9.0",
     "@wdio/allure-reporter": "9.9.0",
-    "undici": ">=6.21.2"
+    "undici": "7.18.2"
   },
   "devDependencies": {
     "eslint": "^9.22.0",

@@ -48,6 +48,7 @@ else
   AADAR_AUTHORITY_URL=$(grep -E '^AADAR_AUTHORITY_URL=' "$ENV_FILE" | cut -d '=' -f2-)
   AADAR_CLIENT_SECRET=$(grep -E '^AADAR_CLIENT_SECRET=' "$ENV_FILE" | cut -d '=' -f2-)
   AADAR_CLIENT_ID=$(grep -E '^AADAR_CLIENT_ID=' "$ENV_FILE" | cut -d '=' -f2-)
+  CLEANUP_FIRST=$(grep -E '^CLEANUP_FIRST=' "$ENV_FILE" | cut -d '=' -f2-)
 fi
 
 REQUIRED_VARS=(
@@ -67,7 +68,7 @@ for VAR in "${REQUIRED_VARS[@]}"; do
   fi
 done
 
-if [[ "$CLEANUP_FIRST" == "true" ]]; then
+if [[ "$CLEANUP_FIRST" == "true" ]] && [[ "$TEST_COMMAND" == "mainSuite" ]]; then
   echo "🧹 Cleaning up previous outputs..."
   ./scripts/cleanup_outputs.sh
 fi
@@ -105,7 +106,7 @@ if [ -z "$WDIO_CONTAINER" ]; then
   exit 1
 fi
 
-echo "🧪 Running WDIO tests: "$TEST_COMMAND""
+echo "🧪 Running WDIO tests: $TEST_COMMAND"
 
 LOG_DIR="logs"
 if [[ "$TEST_COMMAND" == "comp" ]]; then
