@@ -68,7 +68,7 @@ for VAR in "${REQUIRED_VARS[@]}"; do
   fi
 done
 
-if [[ "$CLEANUP_FIRST" == "true" ]]; then
+if [[ "$CLEANUP_FIRST" == "true" ]] && [[ "$TEST_COMMAND" == "mainSuite" ]]; then
   echo "🧹 Cleaning up previous outputs..."
   ./scripts/cleanup_outputs.sh
 fi

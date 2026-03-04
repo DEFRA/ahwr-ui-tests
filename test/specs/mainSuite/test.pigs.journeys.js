@@ -47,6 +47,7 @@ describe("Multiple herds pigs claim journeys", async function () {
       herd: herdName,
       reviewTestResult: "positive",
       urn: "pg-rr-5343463",
+      visitDate: new Date("2026-02-02")
     });
 
     expect(claimReference).toEqual(expect.stringContaining("REPI"));

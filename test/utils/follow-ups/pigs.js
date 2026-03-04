@@ -104,11 +104,12 @@ export async function createMultipleHerdPigsFollowUpForAdditionalHerd({
   vaccinationStatus = "vaccinated",
   pcrTestResult = "positive",
   elisaTestResult = "positive",
+  visitDate = new Date("2026-02-02"),
 } = {}) {
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("pigs"));
   await clickOnElementAndContinue(getTypeOfReviewSelector("endemics"));
-  await enterVisitDateAndContinue();
+  await enterVisitDateAndContinue(visitDate);
 
   await selectHerdAndContinue(herdName);
 

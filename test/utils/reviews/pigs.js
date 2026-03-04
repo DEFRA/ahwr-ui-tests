@@ -76,7 +76,7 @@ export async function createPigsReviewForAdditionalHerd({
   herd = "Pigs additional herd 1",
   reviewTestResult = "positive",
   urn = "pg-rr-5343462",
-  visitDate = new Date("2025-07-02"),
+  visitDate = new Date("2026-02-01"),
 } = {}) {
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("pigs"));
