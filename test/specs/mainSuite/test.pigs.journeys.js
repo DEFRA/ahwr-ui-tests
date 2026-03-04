@@ -1,5 +1,5 @@
 import { expect, $ } from "@wdio/globals";
-import { performDevLogin } from "../../utils/common.js";
+import { enterVisitDateAndContinue, performDevLogin } from "../../utils/common.js";
 import { CLAIM_REFERENCE } from "../../utils/selectors.js";
 import { MULTIPLE_HERDS_SBI, MULTIPLE_HERD_AGREEMENT_REF } from "../../utils/constants.js";
 import { approveClaim } from "../../utils/backoffice-common.js";
@@ -21,6 +21,7 @@ describe("Multiple herds pigs claim journeys", async function () {
     claimReference = await createPigsReviewClaim({
       multipleHerdFlag: true,
       reviewTestResult: "positive",
+      enterVisitDateAndContinueFunc: async () => { await enterVisitDateAndContinue(new Date("2026-01-22"))},
     });
 
     expect(claimReference).toEqual(expect.stringContaining("REPI"));
@@ -32,7 +33,7 @@ describe("Multiple herds pigs claim journeys", async function () {
 
     await performDevLogin(MULTIPLE_HERDS_SBI);
 
-    await createMultipleHerdPigsFollowUpForFirstHerd({ urn: "pg-fc-5343463" });
+    await createMultipleHerdPigsFollowUpForFirstHerd({ urn: "pg-fc-5343463", visitDate: new Date("2026-02-02") });
 
     await expect($(CLAIM_REFERENCE)).toHaveText(expect.stringContaining("FUPI"));
   });

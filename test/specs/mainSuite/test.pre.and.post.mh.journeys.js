@@ -85,7 +85,7 @@ describe("Multiple herds journeys when Pre-MH claims present", async function ()
     await clickStartNewClaimButton();
     await clickOnElementAndContinue(getTypeOfLivestockSelector("pigs"));
     await clickOnElementAndContinue(getTypeOfReviewSelector("review"));
-    await enterVisitDateAndContinue();
+    await enterVisitDateAndContinue(new Date("2025-07-02"));
     await clickOnElementAndContinue(PREVIOUSLY_CLAIMED_YES_ON_SELECT_THE_HERD_PAGE);
 
     await expect($(CLAIMS_MAIN_HEADING_SELECTOR)).toHaveText(
