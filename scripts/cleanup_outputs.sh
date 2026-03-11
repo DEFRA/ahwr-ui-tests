@@ -1,7 +1,7 @@
 #!/bin/bash
 
 rm -rf ./logs/*
-rm -rf ./logsMH/*
 rm -rf ./logsComp/*
 rm -rf ./logsCompFA/*
+rm -rf ./logsPoultry/*
 rm -rf ./screenshots/*

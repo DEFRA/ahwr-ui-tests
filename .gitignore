@@ -2,9 +2,9 @@ node_modules
 .idea
 .env
 logs
-logsMH
 logsComp
 logsCompFA
+logsPoultry
 screenshots/*
 test/.DS_Store
 .DS_Store
@@ -12,3 +12,4 @@ allure-report
 allure-results
 merged-allure-results
 FAILED
+.vscode/
