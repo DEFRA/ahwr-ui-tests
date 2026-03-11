@@ -195,6 +195,8 @@ services:
       DEV_LOGIN_ENABLED: true
       NODE_ENV: development
       PUBLIC_UI_API_KEY: dbd47daf-2711-4cb6-b733-0bd60fdb3ce6
+      ENABLE_AUDIT_EVENTS: false
+      POULTRY_ENABLED: ${POULTRY_ENABLED:-false}
 
   redis:
     container_name: redis-journey-tests
