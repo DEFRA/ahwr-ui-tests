@@ -7,6 +7,7 @@ export const BACK_OFFICE_ON_HOLD_SBI = "104215119";
 export const DASHBOARD_SBI = "107019440";
 export const JOHNES_DISEASE = "johnes";
 export const MULTIPLE_HERDS_SBI = "123454321";
+export const POULTRY_SBI = "120810710";
 
 export const CLAIM_JOURNEY_SBI = "107346087";
 export const AGREEMENT_REF = "IAHW-KH2H-WNA7";

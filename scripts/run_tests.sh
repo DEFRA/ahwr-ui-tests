@@ -6,7 +6,7 @@ TEST_COMMAND="$1"
 CLAIM_COMPLIANCE_CHECK_RATIO="$2"
 
 if [ -z "$TEST_COMMAND" ]; then
-  echo "❌ Error: No test command provided. Usage: ./run-tests.sh <mainSuite|comp|compFA>"
+  echo "❌ Error: No test command provided. Usage: ./run-tests.sh <mainSuite|comp|compFA|poultry>"
   exit 1
 fi
 
@@ -16,8 +16,10 @@ elif [[ "$TEST_COMMAND" == "comp" ]]; then
   echo "No environment overrides required for test command comp"
 elif [[ "$TEST_COMMAND" == "compFA" ]]; then
   FEATURE_ASSURANCE_ENABLED="true"
+elif [[ "$TEST_COMMAND" == "poultry" ]]; then
+  POULTRY_ENABLED=true
 else
-  echo "❌ Invalid TEST_COMMAND: $TEST_COMMAND (expected 'mainSuite' or 'comp' or 'compFA')"
+  echo "❌ Invalid TEST_COMMAND: $TEST_COMMAND (expected 'mainSuite' or 'comp' or 'compFA' or 'poultry')"
   exit 1
 fi
 
@@ -96,6 +98,9 @@ fi
 if [[ -n "${FEATURE_ASSURANCE_ENABLED:-}" ]]; then
   SED_ARGS+=(-e "s|(FEATURE_ASSURANCE_ENABLED:).*|\1 ${FEATURE_ASSURANCE_ENABLED}|g")
 fi
+if [[ -n "${POULTRY_ENABLED:-}" ]]; then
+  SED_ARGS+=(-e "s|(POULTRY_ENABLED:).*|\1 ${POULTRY_ENABLED}|g")
+fi
 
 sed -E "${SED_ARGS[@]}" docker-compose.yml | docker compose -f - up -d
 
@@ -113,6 +118,8 @@ if [[ "$TEST_COMMAND" == "comp" ]]; then
   LOG_DIR="logsComp"
 elif [[ "$TEST_COMMAND" == "compFA" ]]; then
   LOG_DIR="logsCompFA"
+elif [[ "$TEST_COMMAND" == "poultry" ]]; then
+  LOG_DIR="logsPoultry"
 fi
 
 mkdir -p "$LOG_DIR"

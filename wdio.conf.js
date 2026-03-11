@@ -45,6 +45,7 @@ export const config = {
     ],
     comp: ["./test/specs/test.claim-compliance.journeys.js"],
     compFA: ["./test/specs/test.claim-compliance-feature-assurance.journeys.js"],
+    poultry: ["./test/specs/test.poultry.journeys.js"],    
   },
   // Patterns to exclude.
   exclude: [
