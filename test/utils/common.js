@@ -139,10 +139,13 @@ export async function selectHerdAndContinue(herdName) {
   await clickContinueButton();
 }
 
-export async function verifySubmission(expectedText, applicationType = "IAHW") {
+export async function verifySubmission(expectedText) {
   const title = $(SUBMISSION_PANEL_TITLE);
-  const applicationReference = $(AGREEMENT_REFERENCE_SELECTOR);
   await expect(title).toHaveText(expect.stringContaining(expectedText));
+}
+
+export async function verifyApplicationType(applicationType = "IAHW") {
+  const applicationReference = $(AGREEMENT_REFERENCE_SELECTOR);
   await expect(applicationReference).toHaveText(expect.stringContaining(applicationType));
 }
 

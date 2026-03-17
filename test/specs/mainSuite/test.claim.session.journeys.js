@@ -1,11 +1,13 @@
-import { performDevLogin } from "../../utils/common.js";
+import { $, browser, expect } from "@wdio/globals";
+
 import {
+  performDevLogin,
   clickBackButton,
   clickOnElementAndContinue,
   clickContinueButton,
   fillInputAndContinue,
   enterWhenTestingWasCarriedOutAndContinue,
-} from "../../utils/common";
+} from "../../utils/common.js";
 import { AGREEMENT_REF, CLAIM_JOURNEY_SBI } from "../../utils/constants.js";
 import {
   createBeefReviewClaim,
@@ -30,10 +32,10 @@ import {
 
 describe("Claim session and back navigation journeys", () => {
   describe("beef journey", () => {
-    const expectGoBack = async (expected_url) => {
+    const expectGoBack = async (expectedUrl) => {
       await clickBackButton();
       const url = await browser.getUrl();
-      expect(url).toContain(expected_url);
+      expect(url).toContain(expectedUrl);
     };
 
     it("can successfully navigate back from the check-answers page to the which-species page for a review claim journey", async function () {

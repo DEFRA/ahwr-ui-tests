@@ -1,5 +1,11 @@
 import { $ } from "@wdio/globals";
-import { clickSubmitButton, verifySubmission, performDevLogin, selectFundingType } from "../../utils/common.js";
+import {
+  clickSubmitButton,
+  verifySubmission,
+  performDevLogin,
+  selectFundingType,
+  verifyApplicationType,
+} from "../../utils/common.js";
 import { TERMS_AND_CONDITIONS_CHECKBOX } from "../../utils/selectors.js";
 import { POULTRY_SBI } from "../../utils/constants.js";
 
@@ -13,6 +19,7 @@ describe("Apply journeys for poultry", async function () {
 
     await $(TERMS_AND_CONDITIONS_CHECKBOX).click();
     await clickSubmitButton();
-    await verifySubmission("Application complete", "POUL");
+    await verifySubmission("Application complete");
+    await verifyApplicationType("POUL");
   });
 });
