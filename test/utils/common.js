@@ -16,6 +16,7 @@ import {
   getConfirmCheckDetailsSelector,
   BACK_LINK,
   MANAGE_YOUR_CLAIMS_LINK,
+  getSelectFundingTypeSelector,
 } from "./selectors.js";
 
 function getDevSignInUrl() {
@@ -38,6 +39,11 @@ export function getBackOfficeUrl() {
   }
 
   return localhostBackOfficeClaimsPage;
+}
+
+export async function selectFundingType(fundingType) {
+  await $(getSelectFundingTypeSelector(fundingType)).click();
+  await $(CONTINUE_BUTTON).click();
 }
 
 export async function clickSubmitButton() {
@@ -133,9 +139,11 @@ export async function selectHerdAndContinue(herdName) {
   await clickContinueButton();
 }
 
-export async function verifySubmission(expectedText) {
+export async function verifySubmission(expectedText, applicationType = "IAHW") {
   const title = $(SUBMISSION_PANEL_TITLE);
+  const applicationReference = $(AGREEMENT_REFERENCE_SELECTOR);
   await expect(title).toHaveText(expect.stringContaining(expectedText));
+  await expect(applicationReference).toHaveText(expect.stringContaining(applicationType));
 }
 
 export async function clickContinueButton() {

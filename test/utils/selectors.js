@@ -68,6 +68,10 @@ export const DATE_OF_VISIT_GO_BACK_LINK = '.govuk-link[href="/date-of-visit"]';
 
 export const GOV_RADIOS_INPUT_LABEL = "label.govuk-radios__label";
 
+export function getSelectFundingTypeSelector(value) {
+  return `input[value="${value}"]`;
+}
+
 export function getConfirmCheckDetailsSelector(value) {
   return `input[name="confirmCheckDetails"][value="${value}"]`;
 }
