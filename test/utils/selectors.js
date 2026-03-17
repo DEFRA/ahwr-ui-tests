@@ -1,7 +1,7 @@
 export const SBI = "#sbi";
 
 // In some we have id, in some we don't
-//export const BACK_LINK = "#back";
+// export const BACK_LINK = "#back";
 export const BACK_LINK = ".govuk-back-link";
 
 export const TERMS_AND_CONDITIONS_CHECKBOX = "#terms";
@@ -67,6 +67,10 @@ export const EXTERNAL_GOV_LINK = '.govuk-link[rel="external"]';
 export const DATE_OF_VISIT_GO_BACK_LINK = '.govuk-link[href="/date-of-visit"]';
 
 export const GOV_RADIOS_INPUT_LABEL = "label.govuk-radios__label";
+
+export function getSelectFundingTypeSelector(value) {
+  return `input[value="${value}"]`;
+}
 
 export function getConfirmCheckDetailsSelector(value) {
   return `input[name="confirmCheckDetails"][value="${value}"]`;

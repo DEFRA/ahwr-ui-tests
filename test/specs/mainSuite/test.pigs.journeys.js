@@ -21,7 +21,9 @@ describe("Multiple herds pigs claim journeys", async function () {
     claimReference = await createPigsReviewClaim({
       multipleHerdFlag: true,
       reviewTestResult: "positive",
-      enterVisitDateAndContinueFunc: async () => { await enterVisitDateAndContinue(new Date("2026-01-22"))},
+      enterVisitDateAndContinueFunc: async () => {
+        await enterVisitDateAndContinue(new Date("2026-01-22"));
+      },
     });
 
     expect(claimReference).toEqual(expect.stringContaining("REPI"));
@@ -33,7 +35,10 @@ describe("Multiple herds pigs claim journeys", async function () {
 
     await performDevLogin(MULTIPLE_HERDS_SBI);
 
-    await createMultipleHerdPigsFollowUpForFirstHerd({ urn: "pg-fc-5343463", visitDate: new Date("2026-02-02") });
+    await createMultipleHerdPigsFollowUpForFirstHerd({
+      urn: "pg-fc-5343463",
+      visitDate: new Date("2026-02-02"),
+    });
 
     await expect($(CLAIM_REFERENCE)).toHaveText(expect.stringContaining("FUPI"));
   });
@@ -47,7 +52,7 @@ describe("Multiple herds pigs claim journeys", async function () {
       herd: herdName,
       reviewTestResult: "positive",
       urn: "pg-rr-5343463",
-      visitDate: new Date("2026-02-02")
+      visitDate: new Date("2026-02-02"),
     });
 
     expect(claimReference).toEqual(expect.stringContaining("REPI"));

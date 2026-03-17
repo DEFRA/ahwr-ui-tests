@@ -50,7 +50,7 @@ export async function createPreMultipleHerdSheepFollowUp() {
 
 export async function createMultipleHerdSheepFollowUp({
   isUnnamedHerdClaimPresent = false,
-  visitDate = new Date("2025-07-01")
+  visitDate = new Date("2025-07-01"),
 } = {}) {
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("sheep"));
