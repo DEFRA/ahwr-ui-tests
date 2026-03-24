@@ -22,7 +22,7 @@ export const ON_HOLD_COMPANY = "Mr A Test Farmer";
 export const ON_HOLD_AGREEMENT_DATE = "26/03/2025";
 export const ON_HOLD_CLAIM_STATUS = "Rejected";
 export const ON_HOLD_CLAIM_TYPE = "REVIEW";
-export const ON_HOLD_CLAIM_DATE = "27/03/2025";
+export const ON_HOLD_CLAIM_DATE = new Date(Date.now() - 60 * 60 * 1000).toLocaleDateString("en-GB");
 export const ON_HOLD_HERD_TYPE = "Beef cattle";
 
 // Below references from changelog/insert_mh_application.sql
