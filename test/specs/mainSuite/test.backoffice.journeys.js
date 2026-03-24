@@ -250,59 +250,57 @@ describe("Backoffice journeys", async function () {
   describe("can find a claim", () => {
     it("by searching using claim reference.", async function () {
       await browser.url(getBackOfficeUrl());
-      await $(BO_CLAIM_SEARCH).setValue(ON_HOLD_CLAIM_REF);
+      await $(BO_CLAIM_SEARCH).setValue(SEARCH_CLAIM_REF);
       await $(BO_SEARCH_BUTTON).click();
-      await $(getClaimSelectorFromTable(ON_HOLD_CLAIM_REF)).click();
+      await $(getClaimSelectorFromTable(SEARCH_CLAIM_REF)).click();
       const agreementSummary = $$(BO_AGREEMENT_LIST)[0];
       const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
 
-      expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
+      expect(agreementReference).toHaveText(SEARCH_AGREEMENT_REF);
     });
 
     it("by searching using SBI.", async function () {
       await browser.url(getBackOfficeUrl());
-      await $(BO_CLAIM_SEARCH).setValue(ON_HOLD_SBI);
+      await $(BO_CLAIM_SEARCH).setValue(SEARCH_SBI);
       await $(BO_SEARCH_BUTTON).click();
-      await $(getClaimSelectorFromTable(ON_HOLD_CLAIM_REF)).click();
+      await $(getClaimSelectorFromTable(SEARCH_CLAIM_REF)).click();
       const agreementSummary = $$(BO_AGREEMENT_LIST)[0];
       const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
 
-      expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
+      expect(agreementReference).toHaveText(SEARCH_AGREEMENT_REF);
     });
 
     it("by searching using herd type.", async function () {
       await browser.url(getBackOfficeUrl());
-      await $(BO_CLAIM_SEARCH).setValue(ON_HOLD_HERD_TYPE);
+      await $(BO_CLAIM_SEARCH).setValue(SEARCH_HERD_TYPE);
       await $(BO_SEARCH_BUTTON).click();
-      await $(getClaimSelectorFromTable(ON_HOLD_CLAIM_REF)).click();
+      await $(getClaimSelectorFromTable(SEARCH_CLAIM_REF)).click();
       const agreementSummary = $$(BO_AGREEMENT_LIST)[0];
       const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
 
-      expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
+      expect(agreementReference).toHaveText(SEARCH_AGREEMENT_REF);
     });
 
     it("by searching using claim date.", async function () {
       await browser.url(getBackOfficeUrl());
-      await $(BO_CLAIM_SEARCH).setValue(ON_HOLD_CLAIM_DATE);
+      await $(BO_CLAIM_SEARCH).setValue(SEARCH_CLAIM_DATE);
       await $(BO_SEARCH_BUTTON).click();
-      await $(getClaimSelectorFromTable(ON_HOLD_CLAIM_REF)).click();
+      await $(getClaimSelectorFromTable(SEARCH_CLAIM_REF)).click();
       const agreementSummary = $$(BO_AGREEMENT_LIST)[0];
       const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
 
-      expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
+      expect(agreementReference).toHaveText(SEARCH_AGREEMENT_REF);
     });
 
     it("by searching using status.", async function () {
       await browser.url(getBackOfficeUrl());
-      // Be aware that as part of other tests, the status
-      // was changed to Rejected
-      await $(BO_CLAIM_SEARCH).setValue(ON_HOLD_CLAIM_STATUS);
+      await $(BO_CLAIM_SEARCH).setValue(SEARCH_CLAIM_STATUS);
       await $(BO_SEARCH_BUTTON).click();
-      await $(getClaimSelectorFromTable(ON_HOLD_CLAIM_REF)).click();
+      await $(getClaimSelectorFromTable(SEARCH_CLAIM_REF)).click();
       const agreementSummary = $$(BO_AGREEMENT_LIST)[0];
       const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
 
-      expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
+      expect(agreementReference).toHaveText(SEARCH_AGREEMENT_REF);
     });
   });
 

@@ -13,7 +13,6 @@ export const POULTRY_SBI = "120810710";
 export const CLAIM_JOURNEY_SBI = "107346087";
 export const AGREEMENT_REF = "IAHW-KH2H-WNA7";
 
-// Below references from changelog/insert_on_hold_claim.sql
 export const ON_HOLD_AGREEMENT_REF = "IAHW-SCV6-E55L";
 export const ON_HOLD_CLAIM_REF = "REPI-UG9L-I1XP";
 export const ON_HOLD_SBI = "104215119";
@@ -22,20 +21,27 @@ export const ON_HOLD_COMPANY = "Mr A Test Farmer";
 export const ON_HOLD_AGREEMENT_DATE = "26/03/2025";
 export const ON_HOLD_CLAIM_STATUS = "Rejected";
 export const ON_HOLD_CLAIM_TYPE = "REVIEW";
-export const ON_HOLD_CLAIM_DATE = new Date(Date.now() - 60 * 60 * 1000).toLocaleDateString("en-GB");
+export const ON_HOLD_CLAIM_DATE = "27/03/2025";
 export const ON_HOLD_HERD_TYPE = "Beef cattle";
 
-// Below references from changelog/insert_mh_application.sql
+export const SEARCH_AGREEMENT_REF = "IAHW-SCV6-E55L";
+export const SEARCH_CLAIM_REF = "REPI-UG9L-I2XR";
+export const SEARCH_SBI = "104215119";
+export const SEARCH_STATUS = "AGREED";
+export const SEARCH_COMPANY = "Mr A Test Farmer";
+export const SEARCH_AGREEMENT_DATE = "26/03/2025";
+export const SEARCH_CLAIM_STATUS = "Paid";
+export const SEARCH_CLAIM_TYPE = "REVIEW";
+export const SEARCH_CLAIM_DATE = "27/03/2025";
+export const SEARCH_HERD_TYPE = "Beef cattle";
+
 export const MULTIPLE_HERD_AGREEMENT_REF = "IAHW-KH2H-WNA1";
 
-// Below references from changelog/insert_pre_mh_application_review.sql
 export const PRE_MULTIPLE_HERD_SBI = "114262075";
 export const PRE_MULTIPLE_HERD_AGREEMENT_REF = "IAHW-KH1H-BBA4";
 
-// Below references from changelog/insert_pre_post_mh_application_review.sql
 export const PRE_POST_MULTIPLE_HERD_SBI = "106817865";
 export const PRE__POST_MULTIPLE_HERD_AGREEMENT_REF = "IAHW-KH3H-BBA5";
 
-// Below references from changelog/insert_applications_for_reviews.sql
 export const PRE_MH_REVIEWS_HERD_SBI = "106817866";
 export const PRE_MH_REVIEWS_AGREEMENT_REF = "IAHW-AC1H-BBA4";
