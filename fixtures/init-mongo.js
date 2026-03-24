@@ -504,8 +504,8 @@ db.getCollection("claims").insertMany([
   {
     reference: "REPI-UG9L-I1XP",
     applicationReference: "IAHW-SCV6-E55L",
-    createdAt: new Date("2025-03-27T06:14:08.122Z"),
-    updatedAt: new Date("2025-03-27T06:14:08.147Z"),
+    createdAt: new Date(Date.now() - 60 * 60 * 1000), // 1 hour ago,
+    updatedAt: new Date(Date.now() - 60 * 60 * 1000), // 1 hour ago,
     createdBy: "admin",
     updatedBy: null,
     type: "REVIEW",
