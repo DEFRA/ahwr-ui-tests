@@ -54,9 +54,12 @@ import {
   ON_HOLD_STATUS,
   ON_HOLD_CLAIM_REF,
   ON_HOLD_AGREEMENT_DATE,
-  ON_HOLD_CLAIM_DATE,
-  ON_HOLD_CLAIM_STATUS,
-  ON_HOLD_HERD_TYPE,
+  SEARCH_SBI,
+  SEARCH_CLAIM_DATE,
+  SEARCH_CLAIM_REF,
+  SEARCH_HERD_TYPE,
+  SEARCH_CLAIM_STATUS,
+  SEARCH_AGREEMENT_REF,
 } from "../../utils/constants.js";
 import { approveClaim } from "../../utils/backoffice-common.js";
 import { createSheepReviewClaim } from "../../utils/reviews/index.js";
