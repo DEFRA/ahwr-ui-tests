@@ -10,6 +10,7 @@ import {
   clickContinueButton,
   enterVisitDateAndContinue,
   chooseRandomHerdReasonsAndContinue,
+  selectFundingType,
 } from "../common.js";
 import { JOHNES_DISEASE } from "../constants.js";
 import {
@@ -31,7 +32,11 @@ import {
   OTHER_HERDS_ON_SBI_NO,
 } from "../multiple-herd-selectors.js";
 
-export async function createPreMultipleHerdSheepFollowUp() {
+export async function createPreMultipleHerdSheepFollowUp(isPoultryEnabled = false) {
+  if (isPoultryEnabled) {
+    await selectFundingType("IAHW");
+  }
+
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("sheep"));
   await clickOnElementAndContinue(getTypeOfReviewSelector("endemics"));
@@ -51,7 +56,12 @@ export async function createPreMultipleHerdSheepFollowUp() {
 export async function createMultipleHerdSheepFollowUp({
   isUnnamedHerdClaimPresent = false,
   visitDate = new Date("2025-07-01"),
+  isPoultryEnabled = false,
 } = {}) {
+  if (isPoultryEnabled) {
+    await selectFundingType("IAHW");
+  }
+
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("sheep"));
   await clickOnElementAndContinue(getTypeOfReviewSelector("endemics"));

@@ -8,6 +8,7 @@ import {
   clickContinueButton,
   enterWhenTestingWasCarriedOutAndContinue,
   verifySubmission,
+  selectFundingType,
 } from "../common.js";
 import {
   HERD_NAME,
@@ -31,7 +32,12 @@ export async function createDairyReviewClaim({
   reviewTestResult = "positive",
   isUnnamedHerdClaimPresent = false,
   urn = "dc-rr-5343461",
+  isPoultryEnabled = false,
 } = {}) {
+  if (isPoultryEnabled) {
+    await selectFundingType("IAHW");
+  }
+
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("dairy"));
   await clickOnElementAndContinue(getTypeOfReviewSelector("review"));
@@ -64,7 +70,12 @@ export async function createDairyReviewForAdditionalHerd({
   herd = "Dairy additional herd 1",
   reviewTestResult = "positive",
   urn = "dc-rr-534351",
+  isPoultryEnabled = false,
 } = {}) {
+  if (isPoultryEnabled) {
+    await selectFundingType("IAHW");
+  }
+
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("dairy"));
   await clickOnElementAndContinue(getTypeOfReviewSelector("review"));

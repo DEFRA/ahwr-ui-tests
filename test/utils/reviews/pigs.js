@@ -8,6 +8,7 @@ import {
   clickContinueButton,
   enterWhenTestingWasCarriedOutAndContinue,
   verifySubmission,
+  selectFundingType,
 } from "../common.js";
 import {
   HERD_NAME,
@@ -36,7 +37,12 @@ export async function createPigsReviewClaim({
   enterVisitDateAndContinueFunc = enterVisitDateAndContinue,
   isUnnamedHerdClaimPresent = false,
   isVisitDatePostPigUpdates = true,
+  isPoultryEnabled = false,
 } = {}) {
+  if (isPoultryEnabled) {
+    await selectFundingType("IAHW");
+  }
+
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("pigs"));
   await clickOnElementAndContinue(getTypeOfReviewSelector("review"));
@@ -77,7 +83,12 @@ export async function createPigsReviewForAdditionalHerd({
   reviewTestResult = "positive",
   urn = "pg-rr-5343462",
   visitDate = new Date("2026-02-01"),
+  isPoultryEnabled = false,
 } = {}) {
+  if (isPoultryEnabled) {
+    await selectFundingType("IAHW");
+  }
+
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("pigs"));
   await clickOnElementAndContinue(getTypeOfReviewSelector("review"));

@@ -9,6 +9,7 @@ import {
   chooseRandomHerdReasonsAndContinue,
   clickContinueButton,
   selectHerdAndContinue,
+  selectFundingType,
 } from "../common.js";
 import {
   getTypeOfLivestockSelector,
@@ -39,7 +40,12 @@ export async function createMultipleHerdDairyFollowUpForFirstHerd({
   piHuntBvdDone = "yes",
   piHuntRecommendedByVet = "yes",
   piHuntDoneForAllCattleHerd = "yes",
+  isPoultryEnabled = false,
 } = {}) {
+  if (isPoultryEnabled) {
+    await selectFundingType("IAHW");
+  }
+
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("dairy"));
   await clickOnElementAndContinue(getTypeOfReviewSelector("endemics"));
@@ -91,7 +97,12 @@ export async function createMultipleHerdDairyFollowUpForAdditionalHerd({
   piHuntBvdDone = "yes",
   piHuntRecommendedByVet = "yes",
   piHuntDoneForAllCattleHerd = "yes",
+  isPoultryEnabled = false,
 } = {}) {
+  if (isPoultryEnabled) {
+    await selectFundingType("IAHW");
+  }
+
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("dairy"));
   await clickOnElementAndContinue(getTypeOfReviewSelector("endemics"));

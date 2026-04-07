@@ -60,13 +60,13 @@ To run the whole thing in a single go
 ./scripts/build_wdio_test_image.sh
 
 # Run livestock main suite
-./scripts/run_tests.sh mainSuite
+./scripts/run_tests.sh mainSuite; ./scripts/teardown.sh
 
 # Run compliance suite
-./scripts/run_tests.sh comp 5
+./scripts/run_tests.sh comp 5; ./scripts/teardown.sh
 
 # Run poultry suite
-./scripts/run_tests.sh poultry
+./scripts/run_tests.sh poultry; ./scripts/teardown.sh
 ```
 
 ## 📦 Working with Pipeline Artifacts
