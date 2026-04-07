@@ -48,6 +48,8 @@ export const config = {
     poultry: [
       "./test/specs/poultrySuite/test.poultry.journeys.js",
       "./test/specs/poultrySuite/test.apply.journeys.js",
+      "./test/specs/poultrySuite/test.beef.journeys.js",
+      "./test/specs/poultrySuite/test.backoffice.journeys.js",
     ],
   },
   // Patterns to exclude.
