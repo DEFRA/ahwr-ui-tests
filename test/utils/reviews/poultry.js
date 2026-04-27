@@ -10,9 +10,6 @@ import {
   clickBackButton,
 } from "../common.js";
 import {
-  SITE_NAME,
-  SITE_CPH,
-  SITE_OTHERS_ON_SBI_NO,
   VETS_NAME,
   VET_RCVS_NUMBER,
   SUBMIT_CLAIM_BUTTON,
@@ -20,98 +17,40 @@ import {
   VISIT_DATE_DAY,
   VISIT_DATE_MONTH,
   VISIT_DATE_YEAR,
+  getBiosecuritySelector,
+} from "../selectors.js";
+import {
+  NEW_SITE_OPTION,
   getTypesOfPoultrySelector,
   getTypesOfChickenSelector,
   getMinimumNumberOfBirdsSelector,
-  getBiosecuritySelector,
   getBiosecurityUsefulnessSelector,
   getChangesInBiosecuritySelector,
   getCostOfChangesSelector,
   getInterviewSelector,
-} from "../selectors.js";
+} from "../poultry-selectors.js";
+import { HERD_NAME, HERD_CPH, OTHER_HERDS_ON_SBI_NO } from "../multiple-herd-selectors.js";
 
-export async function createPoultryReviewClaim({
-  poultryType = "chickens",
-  chickenType = "broilers",
-  siteName = "Poultry Site 1",
-  siteCph = "11/222/3333",
-  enterVisitDateAndContinueFunc = enterVisitDateAndContinue,
-  biosecurityUsefulness = "very-useful",
-  changesInBiosecurity = "infra-and-control",
-  costOfChanges = "0-1500",
-  participateInInterview = "yes",
-} = {}) {
-  await selectFundingType("POUL");
-
-  await clickStartNewClaimButton();
-
-  await enterVisitDateAndContinueFunc();
-
-  await fillInputAndContinue(SITE_NAME, siteName);
-
-  await fillInputAndContinue(SITE_CPH, siteCph);
-
-  await clickOnElementAndContinue(SITE_OTHERS_ON_SBI_NO);
-
-  await $(getTypesOfPoultrySelector(poultryType)).click();
-  // If chickens selected, also need to select chicken type
-  if (poultryType === "chickens") {
-    await $(getTypesOfChickenSelector(chickenType)).click();
-  }
-  await clickContinueButton();
-
-  await clickOnElementAndContinue(getMinimumNumberOfBirdsSelector("yes"));
-
-  await fillInputAndContinue(VETS_NAME, "Mr Auto Test");
-
-  await fillInputAndContinue(VET_RCVS_NUMBER, "1234567");
-
-  await clickOnElementAndContinue(getBiosecuritySelector("yes"));
-
-  await clickOnElementAndContinue(getBiosecurityUsefulnessSelector(biosecurityUsefulness));
-
-  await clickOnElementAndContinue(getChangesInBiosecuritySelector(changesInBiosecurity));
-
-  await clickOnElementAndContinue(getCostOfChangesSelector(costOfChanges));
-
-  await clickOnElementAndContinue(getInterviewSelector(participateInInterview));
-
-  await $(SUBMIT_CLAIM_BUTTON).click();
-  await verifySubmission("Claim complete");
-
-  return await $(CLAIM_REFERENCE).getText();
-}
-
-export async function verifyPoultryClaimBackNavigation({
-  poultryType = "chickens",
-  chickenType = "broilers",
-  siteName = "Poultry Site 1",
-  siteCph = "11/222/3334",
-  biosecurityUsefulness = "very-useful",
-  changesInBiosecurity = "infra-and-control",
-  costOfChanges = "0-1500",
-  participateInInterview = "yes",
-} = {}) {
-  const today = new Date();
-  const expectedDay = today.getDate().toString();
-  const expectedMonth = (today.getMonth() + 1).toString();
-  const expectedYear = today.getFullYear().toString();
-
+async function enterClaimData(poultryType, siteName, siteCph, isReviewForAdditionalSite = false) {
   await selectFundingType("POUL");
 
   await clickStartNewClaimButton();
 
   await enterVisitDateAndContinue();
 
-  await fillInputAndContinue(SITE_NAME, siteName);
+  if (isReviewForAdditionalSite) {
+    await clickOnElementAndContinue(NEW_SITE_OPTION);
+  }
 
-  await fillInputAndContinue(SITE_CPH, siteCph);
+  await fillInputAndContinue(HERD_NAME, siteName);
 
-  await clickOnElementAndContinue(SITE_OTHERS_ON_SBI_NO);
+  await fillInputAndContinue(HERD_CPH, siteCph);
+
+  await clickOnElementAndContinue(OTHER_HERDS_ON_SBI_NO);
 
   await $(getTypesOfPoultrySelector(poultryType)).click();
   if (poultryType === "chickens") {
-    await $(getTypesOfChickenSelector(chickenType)).click();
+    await $(getTypesOfChickenSelector("broilers")).click();
   }
   await clickContinueButton();
 
@@ -123,26 +62,54 @@ export async function verifyPoultryClaimBackNavigation({
 
   await clickOnElementAndContinue(getBiosecuritySelector("yes"));
 
-  await clickOnElementAndContinue(getBiosecurityUsefulnessSelector(biosecurityUsefulness));
+  await clickOnElementAndContinue(getBiosecurityUsefulnessSelector("very-useful"));
 
-  await clickOnElementAndContinue(getChangesInBiosecuritySelector(changesInBiosecurity));
+  await clickOnElementAndContinue(getChangesInBiosecuritySelector("infra-and-control"));
 
-  await clickOnElementAndContinue(getCostOfChangesSelector(costOfChanges));
+  await clickOnElementAndContinue(getCostOfChangesSelector("0-1500"));
 
-  await clickOnElementAndContinue(getInterviewSelector(participateInInterview));
+  await clickOnElementAndContinue(getInterviewSelector("yes"));
+}
+
+export async function createPoultryReviewClaim({
+  poultryType = "chickens",
+  siteName = "Poultry Site 1",
+  siteCph = "11/222/3333",
+  isReviewForAdditionalSite = false,
+} = {}) {
+  await enterClaimData(poultryType, siteName, siteCph, isReviewForAdditionalSite);
+
+  await $(SUBMIT_CLAIM_BUTTON).click();
+  await verifySubmission("Claim complete");
+
+  return $(CLAIM_REFERENCE).getText();
+}
+
+export async function verifyPoultryClaimBackNavigation({
+  poultryType = "chickens",
+  siteName = "Poultry Site 1",
+  siteCph = "11/222/3334",
+  isReviewForAdditionalSite = false,
+} = {}) {
+  const today = new Date();
+  const expectedDay = today.getDate().toString();
+  const expectedMonth = (today.getMonth() + 1).toString();
+  const expectedYear = today.getFullYear().toString();
+
+  await enterClaimData(poultryType, siteName, siteCph, isReviewForAdditionalSite);
 
   // Now we're at check-answers page - start going back and verify each value
   await clickBackButton();
-  await expect($(getInterviewSelector(participateInInterview))).toBeChecked();
+  await expect($(getInterviewSelector("yes"))).toBeChecked();
 
   await clickBackButton();
-  await expect($(getCostOfChangesSelector(costOfChanges))).toBeChecked();
+  await expect($(getCostOfChangesSelector("0-1500"))).toBeChecked();
 
   await clickBackButton();
-  await expect($(getChangesInBiosecuritySelector(changesInBiosecurity))).toBeChecked();
+  await expect($(getChangesInBiosecuritySelector("infra-and-control"))).toBeChecked();
 
   await clickBackButton();
-  await expect($(getBiosecurityUsefulnessSelector(biosecurityUsefulness))).toBeChecked();
+  await expect($(getBiosecurityUsefulnessSelector("very-useful"))).toBeChecked();
 
   await clickBackButton();
   await expect($(getBiosecuritySelector("yes"))).toBeChecked();
@@ -159,17 +126,17 @@ export async function verifyPoultryClaimBackNavigation({
   await clickBackButton();
   await expect($(getTypesOfPoultrySelector(poultryType))).toBeChecked();
   if (poultryType === "chickens") {
-    await expect($(getTypesOfChickenSelector(chickenType))).toBeChecked();
+    await expect($(getTypesOfChickenSelector("broilers"))).toBeChecked();
   }
 
   await clickBackButton();
-  await expect($(SITE_OTHERS_ON_SBI_NO)).toBeChecked();
+  await expect($(OTHER_HERDS_ON_SBI_NO)).toBeChecked();
 
   await clickBackButton();
-  await expect($(SITE_CPH)).toHaveValue(siteCph);
+  await expect($(HERD_CPH)).toHaveValue(siteCph);
 
   await clickBackButton();
-  await expect($(SITE_NAME)).toHaveValue(siteName);
+  await expect($(HERD_NAME)).toHaveValue(siteName);
 
   await clickBackButton();
   await expect($(VISIT_DATE_DAY)).toHaveValue(expectedDay);

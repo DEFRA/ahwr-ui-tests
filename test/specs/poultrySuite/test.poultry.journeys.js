@@ -1,4 +1,4 @@
-import { $ } from "@wdio/globals";
+import { expect, $ } from "@wdio/globals";
 import {
   clickSubmitButton,
   verifySubmission,
@@ -27,16 +27,24 @@ describe("Apply journeys for poultry", async function () {
     await verifyApplicationType("POUL");
   });
 
-  // For now, the order of test is important due to the single agreement
   it("can navigate back through poultry claim journey and verify retained values", async () => {
     await performDevLogin(POULTRY_SBI);
-
     await verifyPoultryClaimBackNavigation();
   });
 
-  it("can create a poultry review claim", async () => {
+  it("can create a poultry review claim for the first site", async () => {
     await performDevLogin(POULTRY_SBI);
+    const claimReference = await createPoultryReviewClaim();
+    expect(claimReference).toEqual(expect.stringContaining("PORE"));
+  });
 
-    await createPoultryReviewClaim();
+  it("can create a poultry review claim for an additional site", async () => {
+    await performDevLogin(POULTRY_SBI);
+    const claimReference = await createPoultryReviewClaim({
+      siteName: "Poultry Site 2",
+      siteCph: "11/222/3335",
+      isReviewForAdditionalSite: true,
+    });
+    expect(claimReference).toEqual(expect.stringContaining("PORE"));
   });
 });
