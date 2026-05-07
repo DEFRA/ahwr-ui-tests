@@ -52,11 +52,13 @@ export const CONTINUE_YOUR_CLAIM = 'a[href*="/biosecurity"]';
 
 export const SUBMIT_CLAIM_BUTTON = "#submit-claim";
 
+export const REJECT_BUTTON = 'button[value="rejected"]';
+
 export const SUBMIT_BUTTON = 'button[type="submit"]';
 
 export const CLAIM_REFERENCE = "#reference";
 
-export const SUBMISSION_PANEL_TITLE = ".govuk-panel__title";
+export const SUBMISSION_PANEL_TITLE = '[id="main-content"]';
 
 export const START_NEW_CLAIM_BUTTON = "#start";
 
