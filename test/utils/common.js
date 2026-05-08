@@ -5,6 +5,7 @@ import {
   VISIT_DATE_DAY,
   VISIT_DATE_MONTH,
   VISIT_DATE_YEAR,
+  REJECT_BUTTON,
   SUBMIT_BUTTON,
   SUBMISSION_PANEL_TITLE,
   getWhenTestingWasCarriedOutSelector,
@@ -48,6 +49,10 @@ export async function selectFundingType(fundingType) {
 
 export async function clickSubmitButton() {
   await $(SUBMIT_BUTTON).click();
+}
+
+export async function clickRejectButton() {
+  await $(REJECT_BUTTON).click();
 }
 
 export async function clickBackButton() {
