@@ -69,6 +69,13 @@ To run the whole thing in a single go
 ./scripts/run_tests.sh poultry; ./scripts/teardown.sh
 ```
 
+### Local Images
+You can run local images when passing parameters to `./scripts/github_run_tests.sh`, in the form of `./scripts/github_run_tests.sh --local ahwr-public-user-ui`. 
+
+The assumption is that the local images exists and is called `app-development`. For example `ahwr-public-user-development:latest`
+
+The image gets retagged so as to keep the names in the rest of the script(s) the same.
+
 ## 📦 Working with Pipeline Artifacts
 
 When the automated tests run in the pipeline, several files are collected and uploaded as artifacts so they can be inspected after the run. These include:
