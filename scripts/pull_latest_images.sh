@@ -10,6 +10,20 @@ IMAGES=(
   "ahwr-public-user-ui"
 )
 
+# Parse --local arguments
+LOCAL_IMAGES=()
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --local)
+      LOCAL_IMAGES+=("$2")
+      shift 2
+      ;;
+    *)
+      shift
+      ;;
+  esac
+done
+
 # Get latest tag from Docker Hub
 get_latest_tag() {
   local repo="$1"
@@ -28,6 +42,14 @@ get_latest_tag() {
 
 # Pull latest images
 for IMAGE in "${IMAGES[@]}"; do
+  # Check if image should use local version
+  if [[ " ${LOCAL_IMAGES[*]} " =~ " ${IMAGE} " ]]; then
+    echo "Using local ${IMAGE}-development:latest"
+    docker tag "${IMAGE}-development:latest" "${IMAGE}:latest"
+    echo "Retagged ${IMAGE}-development:latest → ${IMAGE}:latest"
+    continue
+  fi
+
   LATEST_TAG=$(get_latest_tag "$IMAGE")
 
   if [ -z "$LATEST_TAG" ] || [ "$LATEST_TAG" = "null" ]; then
