@@ -76,6 +76,17 @@ The assumption is that the local images exists and is called `app-development`. 
 
 The image gets retagged so as to keep the names in the rest of the script(s) the same.
 
+### Filtering suites and spec files
+You now can pass the name of a suite to `./scripts/github_run_tests.sh` to execute only the tests on that suite. Also, you can pass `--spec <filename>` parameter to only execute the tests on that file. If you pass `--spec` you need to pass the name of the suite too.
+
+Some examples:
+```
+# Run all suites (original behavior)                                                                                     ./scripts/github_run_tests.sh                                                                                            
+
+# Run only a specific suite                                                                                              ./scripts/github_run_tests.sh mainSuite                                                                                  
+./scripts/github_run_tests.sh comp                                                                                       ./scripts/github_run_tests.sh poultry                                                                                                                                                                                                             # Run a specific file within a suite                                                                                       ./scripts/github_run_tests.sh mainSuite --spec test/specs/mainSuite/test.beef.journeys.js
+```
+
 ## 📦 Working with Pipeline Artifacts
 
 When the automated tests run in the pipeline, several files are collected and uploaded as artifacts so they can be inspected after the run. These include:
