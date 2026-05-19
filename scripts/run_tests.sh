@@ -2,11 +2,39 @@
 
 set -eo pipefail
 
-TEST_COMMAND="$1"
-CLAIM_COMPLIANCE_CHECK_RATIO="$2"
+TEST_COMMAND=""
+CLAIM_COMPLIANCE_CHECK_RATIO=""
+SPEC_FILE=""
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --spec)
+      SPEC_FILE="$2"
+      shift 2
+      ;;
+    mainSuite|comp|compFA|poultry)
+      TEST_COMMAND="$1"
+      shift
+      ;;
+    [0-9]*)
+      CLAIM_COMPLIANCE_CHECK_RATIO="$1"
+      shift
+      ;;
+    *)
+      echo "❌ Unknown argument: $1"
+      exit 1
+      ;;
+  esac
+done
 
 if [ -z "$TEST_COMMAND" ]; then
-  echo "❌ Error: No test command provided. Usage: ./run-tests.sh <mainSuite|comp|compFA|poultry>"
+  echo "❌ Error: No test command provided."
+  echo "Usage: ./run_tests.sh <mainSuite|comp|compFA|poultry> [--spec <spec_file>]"
+  echo "Examples:"
+  echo "  ./run_tests.sh mainSuite"
+  echo "  ./run_tests.sh mainSuite --spec test/specs/mainSuite/test.beef.journeys.js"
+  echo "  ./run_tests.sh comp 5"
   exit 1
 fi
 
@@ -131,7 +159,12 @@ docker image ls --format "{{.Repository}}" \
       docker compose logs -f "$1" > "$LOG_DIR/$1.log" 2>&1 &
     ' sh {}
 
-docker exec -i --user root "$WDIO_CONTAINER" npm run test:"$TEST_COMMAND" | tee "$LOG_DIR/wdio_test_output.log"
+if [ -n "$SPEC_FILE" ]; then
+  echo "📄 Running specific spec file: $SPEC_FILE"
+  docker exec -i --user root "$WDIO_CONTAINER" npx wdio run wdio.conf.js --suite "$TEST_COMMAND" --spec "$SPEC_FILE" | tee "$LOG_DIR/wdio_test_output.log"
+else
+  docker exec -i --user root "$WDIO_CONTAINER" npm run test:"$TEST_COMMAND" | tee "$LOG_DIR/wdio_test_output.log"
+fi
 EXIT_CODE=${PIPESTATUS[0]}
 
 exit $EXIT_CODE
