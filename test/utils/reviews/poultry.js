@@ -173,7 +173,7 @@ export async function createPoultryReviewClaim({
   await enterClaimData(poultryType, siteName, siteCph, isReviewForAdditionalSite);
 
   await $(SUBMIT_CLAIM_BUTTON).click();
-  await verifySubmission("Claim complete");
+  await verifySubmission("Claim submitted");
 
   return $(CLAIM_REFERENCE).getText();
 }

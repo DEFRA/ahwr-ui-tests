@@ -131,7 +131,7 @@ describe("Additional poultry claim journeys and validations", async function () 
     await clickOnElementAndContinue(getCostOfChangesSelector("0-1500"));
     await clickOnElementAndContinue(getInterviewSelector("yes"));
     await $(SUBMIT_CLAIM_BUTTON).click();
-    await verifySubmission("Claim complete");
+    await verifySubmission("Claim submitted");
 
     await expect($(CLAIM_REFERENCE)).toHaveText(expect.stringContaining("PORE"));
   });
