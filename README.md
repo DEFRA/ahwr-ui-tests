@@ -83,11 +83,15 @@ You now can pass the name of a suite to `./scripts/github_run_tests.sh` to execu
 
 Some examples:
 
-```
-# Run all suites (original behavior)                                                                                     ./scripts/github_run_tests.sh
+```bash
+# Run all suites (original behavior)
+./scripts/github_run_tests.sh
+./scripts/github_run_tests.sh mainSuite
+./scripts/github_run_tests.sh comp
+./scripts/github_run_tests.sh poultry
 
-# Run only a specific suite                                                                                              ./scripts/github_run_tests.sh mainSuite
-./scripts/github_run_tests.sh comp                                                                                       ./scripts/github_run_tests.sh poultry                                                                                                                                                                                                             # Run a specific file within a suite                                                                                       ./scripts/github_run_tests.sh mainSuite --spec test/specs/mainSuite/test.beef.journeys.js
+# Run a specific file within a suite
+./scripts/github_run_tests.sh mainSuite --spec test/specs/mainSuite/test.beef.journeys.js
 ```
 
 ## 📦 Working with Pipeline Artifacts

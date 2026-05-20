@@ -89,7 +89,7 @@ describe("Additional poultry claim journeys and validations", async function () 
     await fillInputAndContinue(HERD_CPH, "83/643/7369"); // This is the same CPH of the existing review claim for this site in the test data
 
     await expect($(HERD_CPH_ERROR)).toHaveText(
-      expect.stringContaining("Enter a CPH that you have not used for a different site"),
+      expect.stringContaining("You have already used this CPH, the CPH must be unique"),
     );
   });
 
