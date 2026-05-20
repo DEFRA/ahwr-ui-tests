@@ -70,11 +70,25 @@ To run the whole thing in a single go
 ```
 
 ### Local Images
-You can run local images when passing parameters to `./scripts/github_run_tests.sh`, in the form of `./scripts/github_run_tests.sh --local ahwr-public-user-ui`. 
+
+You can run local images when passing parameters to `./scripts/github_run_tests.sh`, in the form of `./scripts/github_run_tests.sh --local ahwr-public-user-ui`.
 
 The assumption is that the local images exists and is called `app-development`. For example `ahwr-public-user-development:latest`
 
 The image gets retagged so as to keep the names in the rest of the script(s) the same.
+
+### Filtering suites and spec files
+
+You now can pass the name of a suite to `./scripts/github_run_tests.sh` to execute only the tests on that suite. Also, you can pass `--spec <filename>` parameter to only execute the tests on that file. If you pass `--spec` you need to pass the name of the suite too.
+
+Some examples:
+
+```
+# Run all suites (original behavior)                                                                                     ./scripts/github_run_tests.sh
+
+# Run only a specific suite                                                                                              ./scripts/github_run_tests.sh mainSuite
+./scripts/github_run_tests.sh comp                                                                                       ./scripts/github_run_tests.sh poultry                                                                                                                                                                                                             # Run a specific file within a suite                                                                                       ./scripts/github_run_tests.sh mainSuite --spec test/specs/mainSuite/test.beef.journeys.js
+```
 
 ## 📦 Working with Pipeline Artifacts
 

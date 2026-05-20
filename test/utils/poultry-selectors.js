@@ -1,3 +1,5 @@
+export const SAME_SITE_OPTION = "#siteSelected";
+
 export const NEW_SITE_OPTION = "input[value='NEW_SITE']";
 
 export function getTypesOfPoultrySelector(value) {

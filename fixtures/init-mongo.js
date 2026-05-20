@@ -396,6 +396,43 @@ db.getCollection("applications").insertMany([
     flags: [],
     eligiblePiiRedaction: true,
   },
+  {
+    reference: "POUL-D7AB-E2UU",
+    data: {
+      reference: "TEMP-D7AB-E2UU",
+      declaration: true,
+      offerStatus: "accepted",
+      confirmCheckDetails: "yes",
+    },
+    organisation: {
+      sbi: "106299766",
+      farmerName: "Morley Lord",
+      name: "WEST STOKE FARM PARTNERSHIP",
+      orgEmail: "weststokefarmpartnershipb@pihsrentrapmrafekotstsewe.com.test",
+      email: "morleylordb@drolyelromk.com.test",
+      address: "NEWCASTLE UPON TYNE,YO21 2AS,United Kingdom",
+      crn: "1100674675",
+      id: 5679546,
+      userType: "newUser",
+    },
+    createdBy: "admin",
+    createdAt: new Date("2025-03-26T06:12:24.782Z"),
+    updatedAt: new Date("2025-03-26T06:12:24.790Z"),
+    updatedBy: null,
+    status: "AGREED",
+    contactHistory: [],
+    statusHistory: [
+      {
+        status: "AGREED",
+        createdBy: "admin",
+        createdAt: new Date("2025-03-26T06:12:24.790Z"),
+      },
+    ],
+    updateHistory: [],
+    flags: [],
+    redactionHistory: {},
+    eligiblePiiRedaction: true,
+  },
 ]);
 
 db.createCollection("claims");
@@ -553,9 +590,63 @@ db.getCollection("claims").insertMany([
     herd: {},
     updateHistory: [],
   },
+  {
+    applicationReference: "POUL-D7AB-E2UU",
+    reference: "PORE-D7AB-E2UU",
+    type: "REVIEW",
+    createdBy: "admin",
+    data: {
+      dateOfVisit: new Date("2025-03-26T06:12:24.782Z"),
+      isOnlyHerdOnSbi: "no",
+      typesOfPoultry: ["broilers"],
+      minimumNumberOfBirds: "yes",
+      vetsName: "Testy Tester",
+      vetRCVSNumber: "1234567",
+      biosecurity: "yes",
+      biosecurityUsefulness: "very-useful",
+      changesInBiosecurity: "people-and-hygiene",
+      costOfChanges: "not-sure",
+      interview: "no",
+      amount: 430,
+      claimType: "REVIEW",
+    },
+    status: "ON_HOLD",
+    herd: {
+      id: "a47d00ac-559f-49bc-89f8-d01703794d41",
+      version: 1,
+      cph: "83/643/7369",
+      name: "Test Site One",
+      associatedAt: new Date("2025-03-26T06:12:24.542Z"),
+    },
+    createdAt: new Date("2025-03-26T06:12:24.782Z"),
+    updatedAt: new Date("2025-03-26T06:12:24.790Z"),
+    updatedBy: null,
+    statusHistory: [
+      {
+        status: "ON_HOLD",
+        createdBy: "admin",
+        createdAt: new Date("2025-03-26T06:12:24.790Z"),
+      },
+    ],
+    updateHistory: [],
+  },
 ]);
 
 db.createCollection("herds");
+db.getCollection("herds").insertMany([
+  {
+    id: "a47d00ac-559f-49bc-89f8-d01703794d41",
+    version: 1,
+    applicationReference: "POUL-D7AB-E2UU",
+    species: "poultry",
+    name: "Test Site One",
+    cph: "83/643/7369",
+    createdBy: "admin",
+    isCurrent: true,
+    createdAt: new Date("2025-03-26T06:12:24.542Z"),
+  },
+]);
+
 db.createCollection("owapplications");
 
 db.getCollection("compliancecheckcount").drop();

@@ -2,6 +2,8 @@ export const HERD_NAME = "#herdName";
 
 export const HERD_CPH = "#herdCph";
 
+export const HERD_CPH_ERROR = 'a[href="#herdCph"]';
+
 export const OTHER_HERDS_ON_SBI_YES = "#isOnlyHerdOnSbi";
 
 export const OTHER_HERDS_ON_SBI_NO = "#isOnlyHerdOnSbi-2";
