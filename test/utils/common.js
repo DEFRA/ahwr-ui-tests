@@ -20,7 +20,7 @@ import {
   getSelectFundingTypeSelector,
 } from "./selectors.js";
 
-function getDevSignInUrl() {
+export function getDevSignInUrl() {
   const localhostDevLandingPage = "http://localhost:3003/dev-landing-page";
   const dockerDevLandingPage = "http://ahwr-public-user-ui:3000/dev-landing-page";
 
