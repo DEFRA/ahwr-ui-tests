@@ -13,3 +13,4 @@ allure-results
 merged-allure-results
 FAILED
 .vscode/
+accessibility-report/

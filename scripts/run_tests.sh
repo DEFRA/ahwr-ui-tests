@@ -13,7 +13,7 @@ while [[ $# -gt 0 ]]; do
       SPEC_FILE="$2"
       shift 2
       ;;
-    mainSuite|comp|compFA|poultry)
+    mainSuite|comp|compFA|poultry|accessibility)
       TEST_COMMAND="$1"
       shift
       ;;
@@ -30,7 +30,7 @@ done
 
 if [ -z "$TEST_COMMAND" ]; then
   echo "❌ Error: No test command provided."
-  echo "Usage: ./run_tests.sh <mainSuite|comp|compFA|poultry> [--spec <spec_file>]"
+  echo "Usage: ./run_tests.sh <mainSuite|comp|compFA|poultry|accessibility> [--spec <spec_file>]"
   echo "Examples:"
   echo "  ./run_tests.sh mainSuite"
   echo "  ./run_tests.sh mainSuite --spec test/specs/mainSuite/test.beef.journeys.js"
@@ -38,18 +38,22 @@ if [ -z "$TEST_COMMAND" ]; then
   exit 1
 fi
 
-if [[ "$TEST_COMMAND" == "mainSuite" ]]; then
-  echo "No environment overrides required for test command mainSuite"
-elif [[ "$TEST_COMMAND" == "comp" ]]; then
-  echo "No environment overrides required for test command comp"
-elif [[ "$TEST_COMMAND" == "compFA" ]]; then
-  FEATURE_ASSURANCE_ENABLED="true"
-elif [[ "$TEST_COMMAND" == "poultry" ]]; then
-  POULTRY_ENABLED=true
-else
-  echo "❌ Invalid TEST_COMMAND: $TEST_COMMAND (expected 'mainSuite' or 'comp' or 'compFA' or 'poultry')"
-  exit 1
-fi
+case "$TEST_COMMAND" in
+  mainSuite|comp)
+    echo "No environment overrides required for test command: $TEST_COMMAND"
+    ;;
+  accessibility|poultry)
+    POULTRY_ENABLED=true
+    ;;
+  compFA)
+    FEATURE_ASSURANCE_ENABLED=true
+    ;;
+  *)
+    echo "❌ Invalid TEST_COMMAND: $TEST_COMMAND"
+    echo "Expected one of: mainSuite, comp, compFA, poultry, accessibility"
+    exit 1
+    ;;
+esac
 
 ENV_FILE=".env"
 
@@ -98,7 +102,7 @@ for VAR in "${REQUIRED_VARS[@]}"; do
   fi
 done
 
-if [[ "$CLEANUP_FIRST" == "true" ]] && [[ "$TEST_COMMAND" == "mainSuite" ]]; then
+if [[ "$CLEANUP_FIRST" == "true" ]]; then
   echo "🧹 Cleaning up previous outputs..."
   ./scripts/cleanup_outputs.sh
 fi

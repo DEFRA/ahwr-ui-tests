@@ -8,6 +8,7 @@
     "test:comp": "wdio run wdio.conf.js --suite comp",
     "test:compFA": "wdio run wdio.conf.js --suite compFA",
     "test:poultry": "wdio run wdio.conf.js --suite poultry",
+    "test:accessibility": "wdio run wdio.conf.js --suite accessibility",
     "lint": "prettier . --check && eslint",
     "lint:fix": "prettier . --write && eslint --fix",
     "hooks": "cp -r hooks/. .git/hooks/ && chmod -R +x .git/hooks && echo 'hooks copied'"
@@ -27,18 +28,20 @@
   },
   "homepage": "https://github.com/DEFRA/ahwr-ui-tests#readme",
   "dependencies": {
+    "@axe-core/webdriverio": "^4.11.3",
+    "@wdio/allure-reporter": "9.9.0",
     "@wdio/cli": "9.10.0",
     "@wdio/local-runner": "9.10.0",
     "@wdio/mocha-framework": "9.9.0",
     "@wdio/spec-reporter": "9.9.0",
-    "@wdio/allure-reporter": "9.9.0",
+    "axe-html-reporter": "^2.2.11",
     "undici": "7.18.2"
   },
   "devDependencies": {
+    "allure-commandline": "2.32.0",
     "eslint": "^9.22.0",
     "eslint-config-prettier": "^10.1.1",
     "neostandard": "^0.12.1",
-    "prettier": "^3.5.3",
-    "allure-commandline": "2.32.0"
+    "prettier": "^3.5.3"
   }
 }

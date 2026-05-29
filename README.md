@@ -67,6 +67,9 @@ To run the whole thing in a single go
 
 # Run poultry suite
 ./scripts/run_tests.sh poultry; ./scripts/teardown.sh
+
+# Run accessibility suite
+./scripts/run_tests.sh accessibility; ./scripts/teardown.sh
 ```
 
 ### Local Images

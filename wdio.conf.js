@@ -1,6 +1,7 @@
 import { browser } from "@wdio/globals";
 import path from "path";
 import fs from "fs";
+import { createHtmlReport } from "axe-html-reporter";
 
 const projectPath = process.cwd();
 
@@ -60,6 +61,7 @@ export const config = {
       "./test/specs/poultrySuite/test.dashboard.journeys.js",
       "./test/specs/poultrySuite/test.backoffice.journeys.js",
     ],
+    accessibility: ["./test/specs/accessibility/test.poultry.journeys.js"],
   },
   // Patterns to exclude.
   exclude: [
@@ -94,7 +96,8 @@ export const config = {
       "goog:chromeOptions": {
         args: [
           "--no-sandbox",
-          "--headless",
+          "--headless=new",
+          "--window-size=1920,1080",
           "--disable-gpu",
           "--enable-automation",
           "--disable-dev-shm-usage",
@@ -242,7 +245,8 @@ export const config = {
    * @param {Array.<String>} specs        List of spec file paths that are to be run
    * @param {object}         browser      instance of created browser/device session
    */
-  // before: function (capabilities, specs) {
+  // before: async function (capabilities, specs) {
+  //   await browser.setWindowSize(1920, 1080);
   // },
   /**
    * Runs before a WebdriverIO command gets executed.
@@ -359,6 +363,58 @@ export const config = {
     // !Do Not Remove! Required for test status to show correctly in portal.
     if (results?.failed && results.failed > 0) {
       fs.writeFileSync("FAILED", JSON.stringify(results));
+    }
+
+    // Process accessibility results and generate report
+    const rawDir = path.join(process.cwd(), "accessibility-report/raw");
+    const reportDir = path.join(process.cwd(), "accessibility-report");
+
+    fs.mkdirSync(reportDir, { recursive: true });
+    const files = fs.existsSync(rawDir) ? fs.readdirSync(rawDir) : [];
+
+    if (files.length === 0) {
+      console.log("No accessibility results found");
+      return;
+    }
+
+    const merged = {
+      violations: [],
+      passes: [],
+      incomplete: [],
+      inapplicable: [],
+    };
+
+    let totalViolations = 0;
+    files.forEach((file) => {
+      const data = JSON.parse(fs.readFileSync(path.join(rawDir, file)));
+      totalViolations += data.results.violations.length;
+      merged.violations.push(...data.results.violations);
+    });
+
+    const runName = `accessibility-run-${new Date().toISOString().replace(/[:.]/g, "-")}`;
+    const reportTitle = "AHWR UI";
+
+    const html = createHtmlReport({
+      results: merged,
+      options: {
+        projectKey: reportTitle,
+        doNotCreateReportFile: true,
+      },
+    });
+
+    fs.writeFileSync(path.join(reportDir, `${runName}.html`), html);
+
+    fs.writeFileSync(
+      path.join(reportDir, `${runName}.json`),
+      JSON.stringify({ totalViolations, files }, null, 2),
+    );
+    console.log(`\nTotal accessibility violations: ${totalViolations}\n`);
+
+    if (totalViolations > 0) {
+      console.error(
+        `Accessibility failed with ${totalViolations} violations, check report for details.`,
+      );
+      process.exitCode = 1;
     }
   },
   /**
