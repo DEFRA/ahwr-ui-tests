@@ -9,8 +9,13 @@ import {
 } from "../../utils/common.js";
 import { TERMS_AND_CONDITIONS_CHECKBOX } from "../../utils/selectors.js";
 import { LIVESTOCK_SBI } from "../../utils/constants.js";
+import { cleanupSbi } from "../../utils/cleanupSbi.js";
 
-describe("Apply journeys for livestock when poultry is switched on", async function () {
+describe("Apply journeys for livestock when poultry is switched on", function () {
+  beforeEach(async () => {
+    await cleanupSbi(LIVESTOCK_SBI);
+  });
+
   it("can reject terms and create a not-agreed agreement", async () => {
     await performDevLogin(LIVESTOCK_SBI);
     await selectFundingType("IAHW");

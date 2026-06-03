@@ -23,6 +23,9 @@ services:
     environment:
       DOCKER_MODE: true
       USE_INSTANCES: "1"
+      BACKOFFICE_UI_API_KEY: ${BACKOFFICE_UI_API_KEY:-446dcdbe-e02c-4d16-a266-001bbbd5f089}
+      BROWSERSTACK_USERNAME: ${BROWSERSTACK_USERNAME}
+      BROWSERSTACK_ACCESS_KEY: ${BROWSERSTACK_ACCESS_KEY}
 
   ahwr-application-backend:
     container_name: ahwr-application-backend-journey-tests

@@ -44,13 +44,19 @@ The `MESSAGE_QUEUE_HOST` comes from Azure Service Bus. We are using the dev serv
 
 The `MESSAGE_QUEUE_USER` will be "RootManageSharedAccessKey". You can find the key needed to be used under Settings->Shared access policies. You will set that up under `FCP_AHWR_EVENT_QUEUE_SA_KEY`
 
+The `BACKOFFICE_UI_API_KEY` is needed if we cleanup data for any SBIs using the `cleanupSbi` endpoint.
+
+The `BROWSERSTACK_USERNAME` and `BROWSERSTACK_ACCESS_KEY` are needed to run compatibility test suite in BrowserStack.
+
 ### Commands
 
-To run the whole thing in a single go
+To run all functional test suites (such as mainSuite, comp, and poultry) with a single command, use:
 
 ```bash
 ./scripts/github_run_tests.sh
 ```
+
+To run each step individually, use the following commands:
 
 ```bash
 # Pull latest images
@@ -70,6 +76,9 @@ To run the whole thing in a single go
 
 # Run accessibility suite
 ./scripts/run_tests.sh accessibility; ./scripts/teardown.sh
+
+# Run compatibility suite - This will run all the compatibility tests in BrowserStack for the defined capabilities
+./scripts/run_tests.sh compatibility; ./scripts/teardown.sh
 ```
 
 ### Local Images

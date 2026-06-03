@@ -13,7 +13,7 @@ while [[ $# -gt 0 ]]; do
       SPEC_FILE="$2"
       shift 2
       ;;
-    mainSuite|comp|compFA|poultry|accessibility)
+    mainSuite|comp|compFA|poultry|accessibility|compatibility)
       TEST_COMMAND="$1"
       shift
       ;;
@@ -30,7 +30,7 @@ done
 
 if [ -z "$TEST_COMMAND" ]; then
   echo "❌ Error: No test command provided."
-  echo "Usage: ./run_tests.sh <mainSuite|comp|compFA|poultry|accessibility> [--spec <spec_file>]"
+  echo "Usage: ./run_tests.sh <mainSuite|comp|compFA|poultry|accessibility|compatibility> [--spec <spec_file>]"
   echo "Examples:"
   echo "  ./run_tests.sh mainSuite"
   echo "  ./run_tests.sh mainSuite --spec test/specs/mainSuite/test.beef.journeys.js"
@@ -42,7 +42,7 @@ case "$TEST_COMMAND" in
   mainSuite|comp)
     echo "No environment overrides required for test command: $TEST_COMMAND"
     ;;
-  accessibility|poultry)
+  accessibility|compatibility|poultry)
     POULTRY_ENABLED=true
     ;;
   compFA)
@@ -50,7 +50,7 @@ case "$TEST_COMMAND" in
     ;;
   *)
     echo "❌ Invalid TEST_COMMAND: $TEST_COMMAND"
-    echo "Expected one of: mainSuite, comp, compFA, poultry, accessibility"
+    echo "Expected one of: mainSuite, comp, compFA, poultry, accessibility, compatibility"
     exit 1
     ;;
 esac
@@ -83,6 +83,10 @@ else
   AADAR_CLIENT_SECRET=$(grep -E '^AADAR_CLIENT_SECRET=' "$ENV_FILE" | cut -d '=' -f2-)
   AADAR_CLIENT_ID=$(grep -E '^AADAR_CLIENT_ID=' "$ENV_FILE" | cut -d '=' -f2-)
   CLEANUP_FIRST=$(grep -E '^CLEANUP_FIRST=' "$ENV_FILE" | cut -d '=' -f2-)
+  if [[ "$TEST_COMMAND" == "compatibility" ]]; then
+    BROWSERSTACK_USERNAME=$(grep -E '^BROWSERSTACK_USERNAME=' "$ENV_FILE" | cut -d '=' -f2-)
+    BROWSERSTACK_ACCESS_KEY=$(grep -E '^BROWSERSTACK_ACCESS_KEY=' "$ENV_FILE" | cut -d '=' -f2-)
+  fi
 fi
 
 REQUIRED_VARS=(
@@ -94,6 +98,10 @@ REQUIRED_VARS=(
   AADAR_CLIENT_SECRET
   AADAR_CLIENT_ID
 )
+
+if [[ "$TEST_COMMAND" == "compatibility" ]]; then
+    REQUIRED_VARS+=(BROWSERSTACK_USERNAME BROWSERSTACK_ACCESS_KEY)
+fi
 
 for VAR in "${REQUIRED_VARS[@]}"; do
   if [ -z "${!VAR}" ]; then
@@ -123,6 +131,13 @@ SED_ARGS=(
   -e "s|(AADAR_CLIENT_SECRET:).*|\1 ${AADAR_CLIENT_SECRET}|g"
   -e "s|(AADAR_CLIENT_ID:).*|\1 ${AADAR_CLIENT_ID}|g"
 )
+
+if [[ "$TEST_COMMAND" == "compatibility" ]]; then
+  SED_ARGS+=(
+    -e "s|(BROWSERSTACK_USERNAME:).*|\1 ${BROWSERSTACK_USERNAME}|g"
+    -e "s|(BROWSERSTACK_ACCESS_KEY:).*|\1 ${BROWSERSTACK_ACCESS_KEY}|g"
+  )
+fi
 
 if [[ -n "${CLAIM_COMPLIANCE_CHECK_RATIO:-}" ]]; then
   SED_ARGS+=(-e "s|(CLAIM_COMPLIANCE_CHECK_RATIO:).*|\1 ${CLAIM_COMPLIANCE_CHECK_RATIO}|g")
