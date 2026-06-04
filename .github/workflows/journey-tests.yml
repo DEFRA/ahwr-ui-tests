@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
   workflow_call:
   repository_dispatch:
-    types: [run-journey-tests]
+    types: [run-tests]
 
 jobs:
   build:
