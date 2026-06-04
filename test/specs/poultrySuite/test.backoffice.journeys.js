@@ -135,9 +135,7 @@ describe("Backoffice journeys when poultry is switched on", async function () {
     await flaggedAgreementRow.$(BO_DELETE_FLAG_BUTTON).click();
     await fillInput(BO_FLAG_DELETION_NOTE, "Flag deletion notes");
     await $(BO_SUBMIT_DELETE_FLAG_BUTTON).click();
-    const flaggedAgreementRows = await $$(
-      getFlaggedAgreementRowSelector(ON_HOLD_AGREEMENT_REF),
-    );
+    const flaggedAgreementRows = await $$(getFlaggedAgreementRowSelector(ON_HOLD_AGREEMENT_REF));
     expect(flaggedAgreementRows.length).toBe(0);
   });
 
