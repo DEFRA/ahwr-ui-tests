@@ -14,3 +14,5 @@ merged-allure-results
 FAILED
 .vscode/
 accessibility-report/
+log/
+local.log

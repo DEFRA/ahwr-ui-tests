@@ -1,13 +1,10 @@
 name: Run Accessibility Tests on GitHub
 
 permissions:
-  checks: write
-  pull-requests: write
   contents: read
 
 on:
   workflow_dispatch:
-  pull_request:
   workflow_call:
   repository_dispatch:
     types: [run-accessibility-tests]
@@ -28,35 +25,35 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Run test script
         run: ./scripts/github_run_tests.sh accessibility
 
       - name: Upload Allure Report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: allure-report
           path: allure-report/
 
       - name: Upload Logs
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: logs
           path: logs/
 
       - name: Upload Screenshots
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: screenshots
           path: screenshots/
 
       - name: Upload accessibility report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: accessibility-report
           path: accessibility-report/

@@ -25,6 +25,9 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev --ignore-scripts
 
+# Install BrowserStack local binary
+RUN npm install -g browserstack-local
+
 # Copy the rest of the application files
 COPY . .
 

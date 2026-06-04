@@ -18,14 +18,14 @@ while [[ $# -gt 0 ]]; do
       SPEC_ARGS+=("--spec" "$2")
       shift 2
       ;;
-    mainSuite|comp|compFA|poultry|accessibility)
+    mainSuite|comp|compFA|poultry|accessibility|compatibility)
       SUITE="$1"
       shift
       ;;
     *)
       echo "❌ Unknown argument: $1"
       echo "Usage: ./github_run_tests.sh [suite] [--spec <spec_file>] [--local <image>]"
-      echo "Suites: mainSuite, comp, compFA, poultry, accessibility"
+      echo "Suites: mainSuite, comp, compFA, poultry, accessibility, compatibility"
       echo "Examples:"
       echo "  ./github_run_tests.sh                    # Run all suites"
       echo "  ./github_run_tests.sh mainSuite          # Run only mainSuite"
