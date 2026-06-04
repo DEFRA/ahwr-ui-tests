@@ -25,7 +25,6 @@ import {
   BO_SUBMIT_DELETE_FLAG_BUTTON,
   getAgreementReferenceSelector,
   getViewClaimLinkSelector,
-  getAgreeToMultipleHerdTermsSelector,
   getFlaggedAgreementRowSelector,
   BO_REJECT_BUTTON,
   BO_MOVE_TO_IN_CHECK_BUTTON,
@@ -129,16 +128,15 @@ describe("Backoffice journeys when poultry is switched on", async function () {
     await $(BO_CREATE_AGREEMENT_FLAG_CTA).click();
     await fillInput(BO_AGREEMENT_REFERENCE, ON_HOLD_AGREEMENT_REF);
     await fillInput(BO_FLAG_CREATION_NOTE, "Flag creation notes");
-    await $(getAgreeToMultipleHerdTermsSelector("yes")).click();
     await $(BO_CREATE_FLAG_BUTTON).click();
 
     // Agreement flag deletion
-    const flaggedAgreementRow = $(getFlaggedAgreementRowSelector(ON_HOLD_AGREEMENT_REF, "Yes"));
+    const flaggedAgreementRow = $(getFlaggedAgreementRowSelector(ON_HOLD_AGREEMENT_REF));
     await flaggedAgreementRow.$(BO_DELETE_FLAG_BUTTON).click();
     await fillInput(BO_FLAG_DELETION_NOTE, "Flag deletion notes");
     await $(BO_SUBMIT_DELETE_FLAG_BUTTON).click();
     const flaggedAgreementRows = await $$(
-      getFlaggedAgreementRowSelector(ON_HOLD_AGREEMENT_REF, "Yes"),
+      getFlaggedAgreementRowSelector(ON_HOLD_AGREEMENT_REF),
     );
     expect(flaggedAgreementRows.length).toBe(0);
   });
