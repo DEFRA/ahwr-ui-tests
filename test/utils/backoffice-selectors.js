@@ -76,12 +76,8 @@ export function getViewClaimLinkSelector(claimReference) {
   return `a[href*="${claimReference}"]`;
 }
 
-export function getAgreeToMultipleHerdTermsSelector(value) {
-  return `input[name="appliesToMh"][value="${value}"]`;
-}
-
-export function getFlaggedAgreementRowSelector(agreementReference, multipleHerdTermsValue) {
-  return `//tr[td[contains(text(), "${agreementReference}")] and td[text()="${multipleHerdTermsValue}"]]`;
+export function getFlaggedAgreementRowSelector(agreementReference) {
+  return `//tr[td[contains(text(), "${agreementReference}")]]`;
 }
 
 export function getClaimTableStatusColumnForClaimRef(claimReference, status) {
