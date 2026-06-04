@@ -1,13 +1,10 @@
 name: Run Compatibility Tests on GitHub
 
 permissions:
-  checks: write
-  pull-requests: write
   contents: read
 
 on:
   workflow_dispatch:
-  pull_request:
   workflow_call:
   repository_dispatch:
     types: [run-compatibility-tests]
