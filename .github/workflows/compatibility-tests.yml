@@ -9,6 +9,9 @@ on:
   repository_dispatch:
     types: [run-compatibility-tests]
 
+  schedule:
+    - cron: "0 6 * * *"
+
 jobs:
   build:
     name: Run Compatibility Tests

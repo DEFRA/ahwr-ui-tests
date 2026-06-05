@@ -9,6 +9,9 @@ on:
   repository_dispatch:
     types: [run-accessibility-tests]
 
+  schedule:
+    - cron: "0 8 * * *"
+
 jobs:
   build:
     name: Run Accessibility Tests
