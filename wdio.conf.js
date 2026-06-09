@@ -44,7 +44,10 @@ export const config = {
       "./test/specs/mainSuite/test.dashboard.journeys.js",
       "./test/specs/mainSuite/test.backoffice.journeys.js",
     ],
-    comp: ["./test/specs/test.claim-compliance.journeys.js"],
+    comp: [
+      "./test/specs/test.claim-compliance.journeys.js",
+      "./test/specs/poultrySuite/test.backoffice.flag.journeys.js",
+    ],
     compFA: ["./test/specs/test.claim-compliance-feature-assurance.journeys.js"],
     poultry: [
       "./test/specs/poultrySuite/test.poultry.journeys.js",
@@ -60,7 +63,6 @@ export const config = {
       "./test/specs/poultrySuite/test.claim.session.journeys.js",
       "./test/specs/poultrySuite/test.dashboard.journeys.js",
       "./test/specs/poultrySuite/test.backoffice.journeys.js",
-      "./test/specs/poultrySuite/test.backoffice.flag.journeys.js",
     ],
     accessibility: ["./test/specs/accessibility/test.poultry.journeys.js"],
   },

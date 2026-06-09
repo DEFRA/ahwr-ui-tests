@@ -25,8 +25,12 @@ import {
   POULTRY_FLAG_SBI,
   POULTRY_FLAG_AGREEMENT_REF,
   ON_HOLD_AGREEMENT_REF,
+  LIVESTOCK_FLAG_SBI,
+  LIVESTOCK_FLAG_AGREEMENT_REF,
 } from "../../utils/constants.js";
 import { createPoultryReviewClaim } from "../../utils/reviews/poultry.js";
+import { createBeefReviewClaim } from "../../utils/reviews/beef.js";
+
 describe("Backoffice flag journeys", async function () {
   it("creates and deletes a flag for an agreement", async () => {
     await swapBackOfficeUser("super");
@@ -48,18 +52,18 @@ describe("Backoffice flag journeys", async function () {
     expect(flaggedAgreementRows.length).toBe(0);
   });
 
-  it("Claim goes to in-check status when its agreement is flagged", async () => {
+  it("poultry claim goes to in-check status when its agreement is flagged", async () => {
     await swapBackOfficeUser("super");
 
     // Agreement flag creation
     await browser.url(getBackOfficeUrl());
     await $(BO_FLAGS_TAB).click();
     await $(BO_CREATE_AGREEMENT_FLAG_CTA).click();
-    await fillInput(BO_AGREEMENT_REFERENCE, POULTRY_FLAG_SBI);
+    await fillInput(BO_AGREEMENT_REFERENCE, POULTRY_FLAG_AGREEMENT_REF);
     await fillInput(BO_FLAG_CREATION_NOTE, "Flag creation notes");
     await $(BO_CREATE_FLAG_BUTTON).click();
 
-    // Create the claim in the UI and verify it's in-check status
+    // Create the poultry claim and verify its status is in-check
     await performDevLogin(POULTRY_FLAG_SBI);
     const claimReference = await createPoultryReviewClaim({
       poultryType: "chickens",
@@ -71,6 +75,33 @@ describe("Backoffice flag journeys", async function () {
     await browser.url(getBackOfficeUrl());
     await $(BO_AGREEMENTS_TAB).click();
     await $(getAgreementReferenceSelector(POULTRY_FLAG_AGREEMENT_REF)).click();
+    await $(getViewClaimLinkSelector(claimReference)).click();
+    await expect($(BO_CLAIM_STATUS_TEXT)).toHaveText(expect.stringContaining("In check"));
+  });
+
+  it("livestock claim goes to in-check status when its agreement is flagged", async () => {
+    await swapBackOfficeUser("super");
+
+    // Agreement flag creation
+    await browser.url(getBackOfficeUrl());
+    await $(BO_FLAGS_TAB).click();
+    await $(BO_CREATE_AGREEMENT_FLAG_CTA).click();
+    await fillInput(BO_AGREEMENT_REFERENCE, LIVESTOCK_FLAG_AGREEMENT_REF);
+    await fillInput(BO_FLAG_CREATION_NOTE, "Flag creation notes");
+    await $(BO_CREATE_FLAG_BUTTON).click();
+
+    // Create a livestock claim and verify its status is in-check
+    await performDevLogin(LIVESTOCK_FLAG_SBI);
+
+    const claimReference = await createBeefReviewClaim({
+      testResult: "positive",
+      isPoultryEnabled: true,
+      urn: "bc-rr-644351",
+    });
+    expect(claimReference).toEqual(expect.stringContaining("REBC"));
+    await browser.url(getBackOfficeUrl());
+    await $(BO_AGREEMENTS_TAB).click();
+    await $(getAgreementReferenceSelector(LIVESTOCK_FLAG_AGREEMENT_REF)).click();
     await $(getViewClaimLinkSelector(claimReference)).click();
     await expect($(BO_CLAIM_STATUS_TEXT)).toHaveText(expect.stringContaining("In check"));
   });
