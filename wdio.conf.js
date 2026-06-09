@@ -60,6 +60,7 @@ export const config = {
       "./test/specs/poultrySuite/test.claim.session.journeys.js",
       "./test/specs/poultrySuite/test.dashboard.journeys.js",
       "./test/specs/poultrySuite/test.backoffice.journeys.js",
+      "./test/specs/poultrySuite/test.backoffice.flag.journeys.js",
     ],
     accessibility: ["./test/specs/accessibility/test.poultry.journeys.js"],
   },
@@ -363,6 +364,14 @@ export const config = {
     // !Do Not Remove! Required for test status to show correctly in portal.
     if (results?.failed && results.failed > 0) {
       fs.writeFileSync("FAILED", JSON.stringify(results));
+    }
+
+    // Only run accessibility reporting for the accessibility suite
+    const isAccessibilitySuite =
+      _config.suite === "accessibility" || process.argv.includes("accessibility");
+
+    if (!isAccessibilitySuite) {
+      return;
     }
 
     // Process accessibility results and generate report

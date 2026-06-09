@@ -433,6 +433,43 @@ db.getCollection("applications").insertMany([
     redactionHistory: {},
     eligiblePiiRedaction: true,
   },
+  {
+    reference: "POUL-D7AB-E2UZ",
+    data: {
+      reference: "TEMP-D7AB-E2UZ",
+      declaration: true,
+      offerStatus: "accepted",
+      confirmCheckDetails: "yes",
+    },
+    organisation: {
+      sbi: "114214441",
+      farmerName: "Flag Lord",
+      name: "EAST FARM PARTNERSHIP",
+      orgEmail: "eastfarmpartnershipb@pihsrentrapmrafekotstsewe.com.test",
+      email: "flaglordb@drolyelromk.com.test",
+      address: "NEWCASTLE UPON TYNE,YO21 2AS,United Kingdom",
+      crn: "1100675280",
+      id: 5067528,
+      userType: "newUser",
+    },
+    createdBy: "admin",
+    createdAt: new Date(Date.now() - 60 * 60 * 1000),
+    updatedAt: new Date(Date.now() - 60 * 60 * 1000),
+    updatedBy: null,
+    status: "AGREED",
+    contactHistory: [],
+    statusHistory: [
+      {
+        status: "AGREED",
+        createdBy: "admin",
+        createdAt: new Date(Date.now() - 60 * 60 * 1000),
+      },
+    ],
+    updateHistory: [],
+    flags: [],
+    redactionHistory: {},
+    eligiblePiiRedaction: true,
+  },
 ]);
 
 db.createCollection("claims");
