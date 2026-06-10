@@ -6,17 +6,20 @@ import { createSheepReviewClaim } from "../utils/reviews/index.js";
 const fillerSbis = ["106416234", "107361798", "107645299", "106258541", "107346082"];
 const claimRefs = [];
 
-describe("Claim compliance checks", async function () {
-  beforeEach(async () => {
+describe("Livestock claim compliance checks", function () {
+  before(async () => {
     for (const sbi of fillerSbis) {
       await performDevLogin(sbi);
-      const claimReference = await createSheepReviewClaim({ multipleHerdFlag: true });
+      const claimReference = await createSheepReviewClaim({
+        multipleHerdFlag: true,
+        isPoultryEnabled: true,
+      });
       expect(claimReference).toEqual(expect.stringContaining("RESH"));
       claimRefs.push(claimReference);
     }
   });
 
-  it("sets 5th claim to in check status and others to on hold", async () => {
+  it("sets 5th livestock claim to in check status and others to on hold", async () => {
     await browser.url(getBackOfficeUrl());
     await assertClaimToBeInCheck(claimRefs[4]);
 

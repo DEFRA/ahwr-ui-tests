@@ -39,10 +39,10 @@ if [ -z "$TEST_COMMAND" ]; then
 fi
 
 case "$TEST_COMMAND" in
-  mainSuite|comp)
+  mainSuite)
     echo "No environment overrides required for test command: $TEST_COMMAND"
     ;;
-  accessibility|compatibility|poultry)
+  accessibility|compatibility|poultry|comp)
     POULTRY_ENABLED=true
     ;;
   compFA)
