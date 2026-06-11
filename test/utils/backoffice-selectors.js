@@ -24,7 +24,7 @@ export const BO_MOVE_TO_IN_CHECK_BUTTON = 'a[href*="move-to-in-check"]';
 
 export const BO_PAY_BUTTON = 'a[href*="authorise"]';
 
-export const BO_REJECT_BUTTON = 'a[href*="reject"]';
+export const BO_REJECT_BUTTON = 'a[href*="/reject"]:not([href*="recommend"])';
 
 export const BO_PAY_CHECKBOX_ONE = "#confirm";
 
