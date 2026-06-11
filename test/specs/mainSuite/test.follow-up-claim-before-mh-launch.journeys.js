@@ -8,6 +8,7 @@ import {
   verifySubmission,
   clickStartNewClaimButton,
   enterPreMHReleaseDateAndContinue,
+  selectFundingType,
 } from "../../utils/common.js";
 import {
   NUMBER_OF_ANIMALS_TESTED,
@@ -35,6 +36,8 @@ import {
 describe("Follow-up claim journeys for various species before multiple herds launch", async function () {
   it("can create a follow-up claim for sheep", async () => {
     await performDevLogin(SHEEP_ENDEMIC_CLAIM_SBI);
+
+    await selectFundingType("IAHW");
 
     await clickStartNewClaimButton();
 
@@ -69,6 +72,8 @@ describe("Follow-up claim journeys for various species before multiple herds lau
 
   it("can create a follow-up claim for beef", async () => {
     await performDevLogin(BEEF_ENDEMIC_CLAIM_SBI);
+
+    await selectFundingType("IAHW");
 
     await clickStartNewClaimButton();
 

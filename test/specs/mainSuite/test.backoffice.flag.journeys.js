@@ -95,7 +95,6 @@ describe("Backoffice flag journeys", async function () {
 
     const claimReference = await createBeefReviewClaim({
       testResult: "positive",
-      isPoultryEnabled: true,
       urn: "bc-rr-644351",
     });
     expect(claimReference).toEqual(expect.stringContaining("REBC"));

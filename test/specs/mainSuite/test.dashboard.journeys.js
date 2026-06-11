@@ -4,6 +4,7 @@ import {
   verifySubmission,
   verifyElementsExist,
   performDevLogin,
+  selectFundingType,
 } from "../../utils/common.js";
 import {
   TERMS_AND_CONDITIONS_CHECKBOX,
@@ -19,9 +20,11 @@ import {
 import { DASHBOARD_SBI } from "../../utils/constants.js";
 import { createSheepReviewClaim } from "../../utils/reviews/index.js";
 
-describe("Vet-visits dashboard journeys", async function () {
+describe("Vet-visits livestock dashboard journeys when poultry is enabled", async function () {
   it("can verify agreement summary exists and a claim journey can be started from the dashboard", async () => {
     await performDevLogin(DASHBOARD_SBI);
+
+    await selectFundingType("IAHW");
 
     // Create an agreement
     await clickSubmitButton();
@@ -35,12 +38,15 @@ describe("Vet-visits dashboard journeys", async function () {
 
     // Create a claim
     await performDevLogin(DASHBOARD_SBI);
-    const claimReference = await createSheepReviewClaim({ multipleHerdFlag: true });
+    const claimReference = await createSheepReviewClaim({
+      multipleHerdFlag: true,
+    });
 
     expect(claimReference).toEqual(expect.stringContaining("RESH"));
 
     // Dashboard verifications
     await performDevLogin(DASHBOARD_SBI);
+    await selectFundingType("IAHW");
     expect(await $(AGREEMENT_SUMMARY_LINK).getAttribute("href")).toContain(
       `download-application/${DASHBOARD_SBI}/${agreementReference}`,
     );

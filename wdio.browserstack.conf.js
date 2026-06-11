@@ -8,7 +8,7 @@ export const config = {
   maxInstances: 1,
   capabilities: getBrowserStackCapabilities(),
   suites: {
-    compatibility: ["./test/specs/poultrySuite/test.apply.journeys.js"],
+    compatibility: ["./test/specs/mainSuite/test.apply.journeys.js"],
   },
   services: [
     [

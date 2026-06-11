@@ -13,7 +13,7 @@ while [[ $# -gt 0 ]]; do
       SPEC_FILE="$2"
       shift 2
       ;;
-    mainSuite|comp|compFA|poultry|accessibility|compatibility)
+    mainSuite|comp|compFA|accessibility|compatibility)
       TEST_COMMAND="$1"
       shift
       ;;
@@ -30,7 +30,7 @@ done
 
 if [ -z "$TEST_COMMAND" ]; then
   echo "❌ Error: No test command provided."
-  echo "Usage: ./run_tests.sh <mainSuite|comp|compFA|poultry|accessibility|compatibility> [--spec <spec_file>]"
+  echo "Usage: ./run_tests.sh <mainSuite|comp|compFA|accessibility|compatibility> [--spec <spec_file>]"
   echo "Examples:"
   echo "  ./run_tests.sh mainSuite"
   echo "  ./run_tests.sh mainSuite --spec test/specs/mainSuite/test.beef.journeys.js"
@@ -39,18 +39,15 @@ if [ -z "$TEST_COMMAND" ]; then
 fi
 
 case "$TEST_COMMAND" in
-  mainSuite)
+  mainSuite|accessibility|compatibility|comp)
     echo "No environment overrides required for test command: $TEST_COMMAND"
-    ;;
-  accessibility|compatibility|poultry|comp)
-    POULTRY_ENABLED=true
     ;;
   compFA)
     FEATURE_ASSURANCE_ENABLED=true
     ;;
   *)
     echo "❌ Invalid TEST_COMMAND: $TEST_COMMAND"
-    echo "Expected one of: mainSuite, comp, compFA, poultry, accessibility, compatibility"
+    echo "Expected one of: mainSuite, comp, compFA, accessibility, compatibility"
     exit 1
     ;;
 esac
@@ -145,9 +142,6 @@ fi
 if [[ -n "${FEATURE_ASSURANCE_ENABLED:-}" ]]; then
   SED_ARGS+=(-e "s|(FEATURE_ASSURANCE_ENABLED:).*|\1 ${FEATURE_ASSURANCE_ENABLED}|g")
 fi
-if [[ -n "${POULTRY_ENABLED:-}" ]]; then
-  SED_ARGS+=(-e "s|(POULTRY_ENABLED:).*|\1 ${POULTRY_ENABLED}|g")
-fi
 
 sed -E "${SED_ARGS[@]}" docker-compose.yml | docker compose -f - up -d
 
@@ -165,8 +159,6 @@ if [[ "$TEST_COMMAND" == "comp" ]]; then
   LOG_DIR="logsComp"
 elif [[ "$TEST_COMMAND" == "compFA" ]]; then
   LOG_DIR="logsCompFA"
-elif [[ "$TEST_COMMAND" == "poultry" ]]; then
-  LOG_DIR="logsPoultry"
 fi
 
 mkdir -p "$LOG_DIR"

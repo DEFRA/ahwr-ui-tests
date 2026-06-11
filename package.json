@@ -7,7 +7,6 @@
     "test:mainSuite": "wdio run wdio.conf.js --suite mainSuite",
     "test:comp": "wdio run wdio.conf.js --suite comp",
     "test:compFA": "wdio run wdio.conf.js --suite compFA",
-    "test:poultry": "wdio run wdio.conf.js --suite poultry",
     "test:accessibility": "wdio run wdio.conf.js --suite accessibility",
     "test:compatibility": "wdio run wdio.browserstack.conf.js --suite compatibility",
     "lint": "prettier . --check && eslint",

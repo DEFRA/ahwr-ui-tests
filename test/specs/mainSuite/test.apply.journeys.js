@@ -4,13 +4,21 @@ import {
   clickSubmitButton,
   verifySubmission,
   performDevLogin,
+  selectFundingType,
+  verifyApplicationType,
 } from "../../utils/common.js";
 import { TERMS_AND_CONDITIONS_CHECKBOX } from "../../utils/selectors.js";
-import { APPLY_REVIEW_CLAIM_SBI } from "../../utils/constants.js";
+import { LIVESTOCK_SBI } from "../../utils/constants.js";
+import { cleanupSbi } from "../../utils/cleanupSbi.js";
 
-describe("Apply journeys for livestock", async function () {
+describe("Apply journeys for livestock", function () {
+  beforeEach(async () => {
+    await cleanupSbi(LIVESTOCK_SBI);
+  });
+
   it("can reject terms and create a not-agreed agreement", async () => {
-    await performDevLogin(APPLY_REVIEW_CLAIM_SBI);
+    await performDevLogin(LIVESTOCK_SBI);
+    await selectFundingType("IAHW");
     await clickSubmitButton();
     await clickSubmitButton();
     await clickSubmitButton();
@@ -21,7 +29,8 @@ describe("Apply journeys for livestock", async function () {
   });
 
   it("can accept terms and create an agreement", async () => {
-    await performDevLogin(APPLY_REVIEW_CLAIM_SBI);
+    await performDevLogin(LIVESTOCK_SBI);
+    await selectFundingType("IAHW");
     await clickSubmitButton();
     await clickSubmitButton();
     await clickSubmitButton();
@@ -29,5 +38,6 @@ describe("Apply journeys for livestock", async function () {
     await $(TERMS_AND_CONDITIONS_CHECKBOX).click();
     await clickSubmitButton();
     await verifySubmission("Application complete");
+    await verifyApplicationType("IAHW");
   });
 });
