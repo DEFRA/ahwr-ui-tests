@@ -34,11 +34,8 @@ export async function createBeefReviewClaimWithoutApproval({
   isUnnamedHerdClaimPresent = false,
   urn = "bc-rr-5343461",
   dateReview = undefined,
-  isPoultryEnabled = false,
 } = {}) {
-  if (isPoultryEnabled) {
-    await selectFundingType("IAHW");
-  }
+  await selectFundingType("IAHW");
 
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("beef"));
@@ -78,11 +75,8 @@ export async function createBeefReviewForAdditionalHerd({
   reviewTestResult = "positive",
   urn = "bc-rr-534351",
   dateReview = undefined,
-  isPoultryEnabled = false,
 } = {}) {
-  if (isPoultryEnabled) {
-    await selectFundingType("IAHW");
-  }
+  await selectFundingType("IAHW");
 
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("beef"));

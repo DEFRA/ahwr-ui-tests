@@ -37,11 +37,8 @@ export async function createPigsReviewClaim({
   enterVisitDateAndContinueFunc = enterVisitDateAndContinue,
   isUnnamedHerdClaimPresent = false,
   isVisitDatePostPigUpdates = true,
-  isPoultryEnabled = false,
 } = {}) {
-  if (isPoultryEnabled) {
-    await selectFundingType("IAHW");
-  }
+  await selectFundingType("IAHW");
 
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("pigs"));
@@ -83,11 +80,8 @@ export async function createPigsReviewForAdditionalHerd({
   reviewTestResult = "positive",
   urn = "pg-rr-5343462",
   visitDate = new Date("2026-02-01"),
-  isPoultryEnabled = false,
 } = {}) {
-  if (isPoultryEnabled) {
-    await selectFundingType("IAHW");
-  }
+  await selectFundingType("IAHW");
 
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("pigs"));

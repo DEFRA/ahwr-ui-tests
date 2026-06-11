@@ -162,15 +162,13 @@ export async function clickStartNewClaimButton() {
   await $(START_NEW_CLAIM_BUTTON).click();
 }
 
-export async function createAgreement(sbi, { isPoultryEnabled = false } = {}) {
+export async function createAgreement(sbi) {
   await browser.url(getDevSignInUrl());
   await fillAndSubmitSBI(sbi);
   await $(getConfirmCheckDetailsSelector("yes")).click();
   await clickSubmitButton();
 
-  if (isPoultryEnabled) {
-    await selectFundingType("IAHW");
-  }
+  await selectFundingType("IAHW");
 
   await clickSubmitButton();
   await clickSubmitButton();

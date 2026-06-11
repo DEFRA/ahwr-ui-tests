@@ -37,13 +37,8 @@ import {
   OTHER_HERDS_ON_SBI_NO,
 } from "../multiple-herd-selectors.js";
 
-export async function createPreMultipleHerdPigsFollowUp({
-  urn = "pg-fc-5343462",
-  isPoultryEnabled = false,
-} = {}) {
-  if (isPoultryEnabled) {
-    await selectFundingType("IAHW");
-  }
+export async function createPreMultipleHerdPigsFollowUp({ urn = "pg-fc-5343462" } = {}) {
+  await selectFundingType("IAHW");
 
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("pigs"));
@@ -69,11 +64,8 @@ export async function createMultipleHerdPigsFollowUpForFirstHerd({
   isUnnamedHerdClaimPresent = false,
   urn = "pg-fc-5343461",
   visitDate = new Date("2025-07-01"),
-  isPoultryEnabled = false,
 } = {}) {
-  if (isPoultryEnabled) {
-    await selectFundingType("IAHW");
-  }
+  await selectFundingType("IAHW");
 
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("pigs"));
@@ -118,11 +110,8 @@ export async function createMultipleHerdPigsFollowUpForAdditionalHerd({
   pcrTestResult = "positive",
   elisaTestResult = "positive",
   visitDate = new Date("2026-02-02"),
-  isPoultryEnabled = false,
 } = {}) {
-  if (isPoultryEnabled) {
-    await selectFundingType("IAHW");
-  }
+  await selectFundingType("IAHW");
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("pigs"));
   await clickOnElementAndContinue(getTypeOfReviewSelector("endemics"));

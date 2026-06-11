@@ -33,11 +33,8 @@ export async function createSheepReviewClaim({
   urn = "sh-rr-534346",
   enterVisitDateAndContinueFunc = enterVisitDateAndContinue,
   isUnnamedHerdClaimPresent = false,
-  isPoultryEnabled = false,
 } = {}) {
-  if (isPoultryEnabled) {
-    await selectFundingType("IAHW");
-  }
+  await selectFundingType("IAHW");
 
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("sheep"));
@@ -72,11 +69,8 @@ export async function createSheepReviewClaim({
 export async function createSheepReviewForAdditionalHerd(
   urn = "sh-rr-534351",
   herd = "Additional herd 1",
-  isPoultryEnabled = false,
 ) {
-  if (isPoultryEnabled) {
-    await selectFundingType("IAHW");
-  }
+  await selectFundingType("IAHW");
 
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("sheep"));

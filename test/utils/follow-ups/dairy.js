@@ -40,11 +40,8 @@ export async function createMultipleHerdDairyFollowUpForFirstHerd({
   piHuntBvdDone = "yes",
   piHuntRecommendedByVet = "yes",
   piHuntDoneForAllCattleHerd = "yes",
-  isPoultryEnabled = false,
 } = {}) {
-  if (isPoultryEnabled) {
-    await selectFundingType("IAHW");
-  }
+  await selectFundingType("IAHW");
 
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("dairy"));
@@ -97,11 +94,8 @@ export async function createMultipleHerdDairyFollowUpForAdditionalHerd({
   piHuntBvdDone = "yes",
   piHuntRecommendedByVet = "yes",
   piHuntDoneForAllCattleHerd = "yes",
-  isPoultryEnabled = false,
 } = {}) {
-  if (isPoultryEnabled) {
-    await selectFundingType("IAHW");
-  }
+  await selectFundingType("IAHW");
 
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("dairy"));
