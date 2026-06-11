@@ -62,7 +62,7 @@ export async function createBeefReviewClaimWithoutApproval({
 }
 
 export async function createBeefReviewClaim(data) {
-  createBeefReviewClaimWithoutApproval(data);
+  await createBeefReviewClaimWithoutApproval(data);
 
   await $(SUBMIT_CLAIM_BUTTON).click();
   await verifySubmission("Claim complete");
