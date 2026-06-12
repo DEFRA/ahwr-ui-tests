@@ -12,7 +12,6 @@ describe("Livestock claim compliance checks", function () {
       await performDevLogin(sbi);
       const claimReference = await createSheepReviewClaim({
         multipleHerdFlag: true,
-        isPoultryEnabled: true,
       });
       expect(claimReference).toEqual(expect.stringContaining("RESH"));
       claimRefs.push(claimReference);

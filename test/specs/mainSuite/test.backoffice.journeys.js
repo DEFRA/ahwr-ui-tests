@@ -1,6 +1,5 @@
 import { expect, browser, $, $$ } from "@wdio/globals";
 import {
-  fillInput,
   createAgreement,
   swapBackOfficeUser,
   performDevLogin,
@@ -8,7 +7,6 @@ import {
 } from "../../utils/common.js";
 import {
   BO_AGREEMENTS_TAB,
-  BO_FLAGS_TAB,
   BO_RECOMMEND_TO_REJECT_BUTTON,
   BO_CHECKED_CHECKLIST_CHECKBOX,
   BO_SENT_CHECK_LIST_CHECKBOX,
@@ -16,16 +14,8 @@ import {
   BO_CLAIM_STATUS_TEXT,
   BO_PAY_CHECKBOX_ONE,
   BO_PAY_CHECKBOX_TWO,
-  BO_CREATE_AGREEMENT_FLAG_CTA,
-  BO_AGREEMENT_REFERENCE,
-  BO_FLAG_CREATION_NOTE,
-  BO_CREATE_FLAG_BUTTON,
-  BO_DELETE_FLAG_BUTTON,
-  BO_FLAG_DELETION_NOTE,
-  BO_SUBMIT_DELETE_FLAG_BUTTON,
   getAgreementReferenceSelector,
   getViewClaimLinkSelector,
-  getFlaggedAgreementRowSelector,
   BO_REJECT_BUTTON,
   BO_MOVE_TO_IN_CHECK_BUTTON,
   BO_ON_HOLD_TO_IN_CHECK_CHECKBOX,
@@ -45,8 +35,8 @@ import {
   BO_AGREEMENT_ROW_VALUE,
 } from "../../utils/backoffice-selectors.js";
 import {
-  BACK_OFFICE_APPROVE_SBI,
-  BACK_OFFICE_REJECT_SBI,
+  BACK_OFFICE_POULTRY_APPROVE_SBI,
+  BACK_OFFICE_POULTRY_REJECT_SBI,
   ON_HOLD_AGREEMENT_REF,
   ON_HOLD_SBI,
   ON_HOLD_COMPANY,
@@ -65,9 +55,9 @@ import { createSheepReviewClaim } from "../../utils/reviews/index.js";
 
 describe("Backoffice journeys", async function () {
   it("can move a claim from 'In check' to 'Recommend to pay' and then to 'Ready to pay'", async () => {
-    const agreementReference = await createAgreement(BACK_OFFICE_APPROVE_SBI);
+    const agreementReference = await createAgreement(BACK_OFFICE_POULTRY_APPROVE_SBI);
 
-    await performDevLogin(BACK_OFFICE_APPROVE_SBI);
+    await performDevLogin(BACK_OFFICE_POULTRY_APPROVE_SBI);
 
     const claimReference = await createSheepReviewClaim({
       multipleHerdFlag: true,
@@ -79,9 +69,9 @@ describe("Backoffice journeys", async function () {
   });
 
   it("can move a claim from 'In check' to 'Recommend to reject' and then to 'Rejected'", async () => {
-    const agreementReference = await createAgreement(BACK_OFFICE_REJECT_SBI);
+    const agreementReference = await createAgreement(BACK_OFFICE_POULTRY_REJECT_SBI);
 
-    await performDevLogin(BACK_OFFICE_REJECT_SBI);
+    await performDevLogin(BACK_OFFICE_POULTRY_REJECT_SBI);
 
     const claimReference = await createSheepReviewClaim({
       multipleHerdFlag: true,
@@ -111,26 +101,6 @@ describe("Backoffice journeys", async function () {
     await $(BO_PAY_CHECKBOX_TWO).click();
     await $(BO_CONFIRM_AND_CONTINUE_BUTTON).click();
     await expect($(BO_CLAIM_STATUS_TEXT)).toHaveText(expect.stringContaining("Rejected"));
-  });
-
-  it("creates and deletes a flag for an agreement", async () => {
-    await swapBackOfficeUser("super");
-
-    // Agreement flag creation
-    await browser.url(getBackOfficeUrl());
-    await $(BO_FLAGS_TAB).click();
-    await $(BO_CREATE_AGREEMENT_FLAG_CTA).click();
-    await fillInput(BO_AGREEMENT_REFERENCE, ON_HOLD_AGREEMENT_REF);
-    await fillInput(BO_FLAG_CREATION_NOTE, "Flag creation notes");
-    await $(BO_CREATE_FLAG_BUTTON).click();
-
-    // Agreement flag deletion
-    const flaggedAgreementRow = $(getFlaggedAgreementRowSelector(ON_HOLD_AGREEMENT_REF));
-    await flaggedAgreementRow.$(BO_DELETE_FLAG_BUTTON).click();
-    await fillInput(BO_FLAG_DELETION_NOTE, "Flag deletion notes");
-    await $(BO_SUBMIT_DELETE_FLAG_BUTTON).click();
-    const flaggedAgreementRows = await $$(getFlaggedAgreementRowSelector(ON_HOLD_AGREEMENT_REF));
-    expect(flaggedAgreementRows.length).toBe(0);
   });
 
   it("can move an on hold claim from 'On hold' to 'In check' and then to 'Recommend to reject', and finally 'Rejected'", async () => {

@@ -32,10 +32,8 @@ import {
   OTHER_HERDS_ON_SBI_NO,
 } from "../multiple-herd-selectors.js";
 
-export async function createPreMultipleHerdSheepFollowUp(isPoultryEnabled = false) {
-  if (isPoultryEnabled) {
-    await selectFundingType("IAHW");
-  }
+export async function createPreMultipleHerdSheepFollowUp() {
+  await selectFundingType("IAHW");
 
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("sheep"));
@@ -56,11 +54,8 @@ export async function createPreMultipleHerdSheepFollowUp(isPoultryEnabled = fals
 export async function createMultipleHerdSheepFollowUp({
   isUnnamedHerdClaimPresent = false,
   visitDate = new Date("2025-07-01"),
-  isPoultryEnabled = false,
 } = {}) {
-  if (isPoultryEnabled) {
-    await selectFundingType("IAHW");
-  }
+  await selectFundingType("IAHW");
 
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("sheep"));

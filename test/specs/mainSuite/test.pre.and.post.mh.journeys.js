@@ -6,6 +6,7 @@ import {
   enterPreMHReleaseDateAndContinue,
   enterVisitDateAndContinue,
   performDevLogin,
+  selectFundingType,
 } from "../../utils/common.js";
 import {
   CLAIM_REFERENCE,
@@ -44,6 +45,8 @@ describe("Multiple herds journeys when Pre-MH claims present", async function ()
     // This test uses data from the script located at changelog/insert_pre_post_mh_application_review.sql
     await performDevLogin(PRE_POST_MULTIPLE_HERD_SBI);
 
+    await selectFundingType("IAHW");
+
     await clickStartNewClaimButton();
     await clickOnElementAndContinue(getTypeOfLivestockSelector("sheep"));
     await clickOnElementAndContinue(getTypeOfReviewSelector("endemics"));
@@ -81,6 +84,8 @@ describe("Multiple herds journeys when Pre-MH claims present", async function ()
 
   it("cannot create a second review claim for pigs unnamed herd when visit date is after MH release date and second review claim date is within 10 months of its pre-MH review claim", async () => {
     await performDevLogin(PRE_POST_MULTIPLE_HERD_SBI);
+
+    await selectFundingType("IAHW");
 
     await clickStartNewClaimButton();
     await clickOnElementAndContinue(getTypeOfLivestockSelector("pigs"));

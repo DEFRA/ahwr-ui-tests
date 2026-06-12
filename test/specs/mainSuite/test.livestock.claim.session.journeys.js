@@ -109,7 +109,9 @@ describe("Claim session and back navigation journeys", () => {
       const dateReview = new Date(2026, 0, 2);
       const dateFollowUp = new Date(2026, 1, 2);
       await performDevLogin(CLAIM_JOURNEY_SBI);
-      const claimReference = await createBeefReviewForAdditionalHerd({ dateReview });
+      const claimReference = await createBeefReviewForAdditionalHerd({
+        dateReview,
+      });
       await approveClaim(AGREEMENT_REF, claimReference);
 
       await performDevLogin(CLAIM_JOURNEY_SBI);

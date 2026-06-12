@@ -9,6 +9,7 @@ import {
   clickContinueButton,
   enterWhenTestingWasCarriedOutAndContinue,
   chooseRandomHerdReasonsAndContinue,
+  selectFundingType,
 } from "../../utils/common.js";
 import {
   NUMBER_OF_ANIMALS_TESTED,
@@ -51,6 +52,8 @@ describe("Multiple herd sheep claim journeys", async function () {
   it("cannot create a second review claim for the same flock of sheep for the same business", async () => {
     await performDevLogin(MULTIPLE_HERDS_SBI);
 
+    await selectFundingType("IAHW");
+
     await clickStartNewClaimButton();
     await clickOnElementAndContinue(getTypeOfLivestockSelector("sheep"));
     await clickOnElementAndContinue(getTypeOfReviewSelector("review"));
@@ -71,6 +74,7 @@ describe("Multiple herd sheep claim journeys", async function () {
 
   it("cannot create a follow-up claim for a flock of sheep when its review claim is not approved", async () => {
     await performDevLogin(MULTIPLE_HERDS_SBI);
+    await selectFundingType("IAHW");
     await clickStartNewClaimButton();
     await clickOnElementAndContinue(getTypeOfLivestockSelector("sheep"));
     await clickOnElementAndContinue(getTypeOfReviewSelector("endemics"));
@@ -89,6 +93,7 @@ describe("Multiple herd sheep claim journeys", async function () {
 
   it("cannot create follow-up claim for a different flock of sheep when a review claim hasn't been created and approved for it", async () => {
     await performDevLogin(MULTIPLE_HERDS_SBI);
+    await selectFundingType("IAHW");
     await clickStartNewClaimButton();
     await clickOnElementAndContinue(getTypeOfLivestockSelector("sheep"));
     await clickOnElementAndContinue(getTypeOfReviewSelector("endemics"));
@@ -117,6 +122,8 @@ describe("Multiple herd sheep claim journeys", async function () {
 
   it("can create a review claim for a different flock of sheep for the same business", async () => {
     await performDevLogin(MULTIPLE_HERDS_SBI);
+
+    await selectFundingType("IAHW");
 
     await clickStartNewClaimButton();
     await clickOnElementAndContinue(getTypeOfLivestockSelector("sheep"));

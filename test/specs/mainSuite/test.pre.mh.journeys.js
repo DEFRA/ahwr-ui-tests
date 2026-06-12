@@ -4,6 +4,7 @@ import {
   clickStartNewClaimButton,
   enterPreMHReleaseDateAndContinue,
   performDevLogin,
+  selectFundingType,
 } from "../../utils/common.js";
 import {
   createPreMultipleHerdPigsFollowUp,
@@ -26,6 +27,8 @@ describe("Journeys involving Pre-multiple herds launch claims", async function (
   it("cannot create a second review claim for sheep species when visit date is before MH release date and within 10 months of its pre-MH review claim", async () => {
     // This test uses data from the script in changelog/insert_pre_mh_application_review.sql
     await performDevLogin(PRE_MULTIPLE_HERD_SBI);
+
+    await selectFundingType("IAHW");
 
     await clickStartNewClaimButton();
     await clickOnElementAndContinue(getTypeOfLivestockSelector("sheep"));
@@ -53,6 +56,8 @@ describe("Journeys involving Pre-multiple herds launch claims", async function (
   it("cannot create a second follow-up claim, with visit date before MH release date, within 10 months of the first follow-up claim for pre-MH sheep review", async () => {
     // This test uses data from the script in changelog/insert_pre_mh_application_review.sql
     await performDevLogin(PRE_MULTIPLE_HERD_SBI);
+
+    await selectFundingType("IAHW");
 
     await clickStartNewClaimButton();
     await clickOnElementAndContinue(getTypeOfLivestockSelector("sheep"));

@@ -50,7 +50,7 @@ The `BROWSERSTACK_USERNAME` and `BROWSERSTACK_ACCESS_KEY` are needed to run comp
 
 ### Commands
 
-To run all functional test suites (such as mainSuite, comp, and poultry) with a single command, use:
+To run all functional test suites (such as mainSuite and comp) with a single command, use:
 
 ```bash
 ./scripts/github_run_tests.sh
@@ -65,14 +65,11 @@ To run each step individually, use the following commands:
 # Build test image
 ./scripts/build_wdio_test_image.sh
 
-# Run livestock main suite
+# Run main suite
 ./scripts/run_tests.sh mainSuite; ./scripts/teardown.sh
 
 # Run compliance suite
 ./scripts/run_tests.sh comp 5; ./scripts/teardown.sh
-
-# Run poultry suite
-./scripts/run_tests.sh poultry; ./scripts/teardown.sh
 
 # Run accessibility suite
 ./scripts/run_tests.sh accessibility; ./scripts/teardown.sh
@@ -100,7 +97,6 @@ Some examples:
 ./scripts/github_run_tests.sh
 ./scripts/github_run_tests.sh mainSuite
 ./scripts/github_run_tests.sh comp
-./scripts/github_run_tests.sh poultry
 
 # Run a specific file within a suite
 ./scripts/github_run_tests.sh mainSuite --spec test/specs/mainSuite/test.beef.journeys.js

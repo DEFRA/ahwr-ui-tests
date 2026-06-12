@@ -34,10 +34,8 @@ import {
   OTHER_HERDS_ON_SBI_NO,
 } from "../multiple-herd-selectors.js";
 
-export async function createBeefFollowUp({ dateFollowUp = undefined, isPoultryEnabled = false }) {
-  if (isPoultryEnabled) {
-    await selectFundingType("IAHW");
-  }
+export async function createBeefFollowUp({ dateFollowUp = undefined } = {}) {
+  await selectFundingType("IAHW");
 
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("beef"));
@@ -60,11 +58,8 @@ export async function createBeefFollowUp({ dateFollowUp = undefined, isPoultryEn
 
 export async function createMultipleHerdBeefFollowUpForFirstHerd({
   isUnnamedHerdClaimPresent = false,
-  isPoultryEnabled = false,
 } = {}) {
-  if (isPoultryEnabled) {
-    await selectFundingType("IAHW");
-  }
+  await selectFundingType("IAHW");
 
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("beef"));
@@ -104,11 +99,8 @@ export async function createMultipleHerdBeefFollowUpForAdditionalHerd({
   piHuntBvdDone = "yes",
   piHuntRecommendedByVet = "yes",
   piHuntDoneForAllCattleHerd = "yes",
-  isPoultryEnabled = false,
 } = {}) {
-  if (isPoultryEnabled) {
-    await selectFundingType("IAHW");
-  }
+  await selectFundingType("IAHW");
 
   await clickStartNewClaimButton();
   await clickOnElementAndContinue(getTypeOfLivestockSelector("beef"));
