@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "Automated tests for AHWR services",
   "type": "module",
+  "engines": {
+    "npm": ">=11.10.0"
+  },
   "scripts": {
     "test:mainSuite": "wdio run wdio.conf.js --suite mainSuite",
     "test:comp": "wdio run wdio.conf.js --suite comp",
@@ -43,7 +46,19 @@
     "allure-commandline": "2.32.0",
     "eslint": "^9.22.0",
     "eslint-config-prettier": "^10.1.1",
+    "eslint-plugin-import": "^2.32.0",
+    "husky": "^9.1.7",
+    "nano-staged": "^1.0.2",
     "neostandard": "^0.12.1",
     "prettier": "^3.5.3"
+  },
+  "nano-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
   }
 }
