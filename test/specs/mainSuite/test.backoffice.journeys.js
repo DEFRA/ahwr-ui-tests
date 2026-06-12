@@ -7,16 +7,9 @@ import {
 } from "../../utils/common.js";
 import {
   BO_AGREEMENTS_TAB,
-  BO_RECOMMEND_TO_REJECT_BUTTON,
-  BO_CHECKED_CHECKLIST_CHECKBOX,
-  BO_SENT_CHECK_LIST_CHECKBOX,
   BO_CONFIRM_AND_CONTINUE_BUTTON,
-  BO_CLAIM_STATUS_TEXT,
-  BO_PAY_CHECKBOX_ONE,
-  BO_PAY_CHECKBOX_TWO,
   getAgreementReferenceSelector,
   getViewClaimLinkSelector,
-  BO_REJECT_BUTTON,
   BO_MOVE_TO_IN_CHECK_BUTTON,
   BO_ON_HOLD_TO_IN_CHECK_CHECKBOX,
   BO_UPDATE_ISSUES_LOG_CHECKBOX,
@@ -50,7 +43,11 @@ import {
   SEARCH_CLAIM_STATUS,
   SEARCH_AGREEMENT_REF,
 } from "../../utils/constants.js";
-import { approveClaim } from "../../utils/backoffice-common.js";
+import {
+  approveClaim,
+  recommendClaimToReject,
+  rejectClaim,
+} from "../../utils/backoffice-common.js";
 import { createSheepReviewClaim } from "../../utils/reviews/index.js";
 
 describe("Backoffice journeys", async function () {
@@ -83,24 +80,9 @@ describe("Backoffice journeys", async function () {
     await $(BO_AGREEMENTS_TAB).click();
     await $(getAgreementReferenceSelector(agreementReference)).click();
     await $(getViewClaimLinkSelector(claimReference)).click();
-    await $(BO_RECOMMEND_TO_REJECT_BUTTON).click();
-    await $(BO_CHECKED_CHECKLIST_CHECKBOX).click();
-    await $(BO_SENT_CHECK_LIST_CHECKBOX).click();
-    await $(BO_CONFIRM_AND_CONTINUE_BUTTON).click();
-    await expect($(BO_CLAIM_STATUS_TEXT)).toHaveText(
-      expect.stringContaining("Recommended to reject"),
-    );
+    await recommendClaimToReject();
 
-    // Swapping to another user to reject the claim
-    await swapBackOfficeUser("Rejector");
-    await $(BO_AGREEMENTS_TAB).click();
-    await $(getAgreementReferenceSelector(agreementReference)).click();
-    await $(getViewClaimLinkSelector(claimReference)).click();
-    await $(BO_REJECT_BUTTON).click();
-    await $(BO_PAY_CHECKBOX_ONE).click();
-    await $(BO_PAY_CHECKBOX_TWO).click();
-    await $(BO_CONFIRM_AND_CONTINUE_BUTTON).click();
-    await expect($(BO_CLAIM_STATUS_TEXT)).toHaveText(expect.stringContaining("Rejected"));
+    await rejectClaim(agreementReference, claimReference);
   });
 
   it("can move an on hold claim from 'On hold' to 'In check' and then to 'Recommend to reject', and finally 'Rejected'", async () => {
@@ -115,27 +97,9 @@ describe("Backoffice journeys", async function () {
     await $(BO_UPDATE_ISSUES_LOG_CHECKBOX).click();
     await $(BO_CONFIRM_AND_CONTINUE_BUTTON).click();
 
-    await $(BO_RECOMMEND_TO_REJECT_BUTTON).click();
-    await $(BO_CHECKED_CHECKLIST_CHECKBOX).click();
-    await $(BO_SENT_CHECK_LIST_CHECKBOX).click();
-    await $(BO_CONFIRM_AND_CONTINUE_BUTTON).click();
+    await recommendClaimToReject();
 
-    await expect($(BO_CLAIM_STATUS_TEXT)).toHaveText(
-      expect.stringContaining("Recommended to reject"),
-    );
-
-    // Swapping to another user to reject the claim
-    await swapBackOfficeUser("Rejector");
-    await $(BO_AGREEMENTS_TAB).click();
-    await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
-    await $(getViewClaimLinkSelector(ON_HOLD_CLAIM_REF)).click();
-
-    await $(BO_REJECT_BUTTON).click();
-    await $(BO_PAY_CHECKBOX_ONE).click();
-    await $(BO_PAY_CHECKBOX_TWO).click();
-    await $(BO_CONFIRM_AND_CONTINUE_BUTTON).click();
-
-    await expect($(BO_CLAIM_STATUS_TEXT)).toHaveText(expect.stringContaining("Rejected"));
+    await rejectClaim(ON_HOLD_AGREEMENT_REF, ON_HOLD_CLAIM_REF);
   });
 
   it("can search for a claim and view its information", async () => {
