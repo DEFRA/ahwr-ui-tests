@@ -1,4 +1,4 @@
-import { expect, browser, $, $$ } from "@wdio/globals";
+import { expect, browser, $ } from "@wdio/globals";
 import {
   createAgreement,
   swapBackOfficeUser,
@@ -7,16 +7,9 @@ import {
 } from "../../utils/common.js";
 import {
   BO_AGREEMENTS_TAB,
-  BO_RECOMMEND_TO_REJECT_BUTTON,
-  BO_CHECKED_CHECKLIST_CHECKBOX,
-  BO_SENT_CHECK_LIST_CHECKBOX,
   BO_CONFIRM_AND_CONTINUE_BUTTON,
-  BO_CLAIM_STATUS_TEXT,
-  BO_PAY_CHECKBOX_ONE,
-  BO_PAY_CHECKBOX_TWO,
   getAgreementReferenceSelector,
   getViewClaimLinkSelector,
-  BO_REJECT_BUTTON,
   BO_MOVE_TO_IN_CHECK_BUTTON,
   BO_ON_HOLD_TO_IN_CHECK_CHECKBOX,
   BO_UPDATE_ISSUES_LOG_CHECKBOX,
@@ -31,8 +24,6 @@ import {
   BO_PII_YES_RADIO,
   BO_PII_NO_RADIO,
   BO_PII_NOTE,
-  BO_AGREEMENT_LIST,
-  BO_AGREEMENT_ROW_VALUE,
 } from "../../utils/backoffice-selectors.js";
 import {
   BACK_OFFICE_POULTRY_APPROVE_SBI,
@@ -50,7 +41,12 @@ import {
   SEARCH_CLAIM_STATUS,
   SEARCH_AGREEMENT_REF,
 } from "../../utils/constants.js";
-import { approveClaim } from "../../utils/backoffice-common.js";
+import {
+  approveClaim,
+  expectAgreementReference,
+  recommendClaimToReject,
+  rejectClaim,
+} from "../../utils/backoffice-common.js";
 import { createSheepReviewClaim } from "../../utils/reviews/index.js";
 
 describe("Backoffice journeys", async function () {
@@ -83,24 +79,9 @@ describe("Backoffice journeys", async function () {
     await $(BO_AGREEMENTS_TAB).click();
     await $(getAgreementReferenceSelector(agreementReference)).click();
     await $(getViewClaimLinkSelector(claimReference)).click();
-    await $(BO_RECOMMEND_TO_REJECT_BUTTON).click();
-    await $(BO_CHECKED_CHECKLIST_CHECKBOX).click();
-    await $(BO_SENT_CHECK_LIST_CHECKBOX).click();
-    await $(BO_CONFIRM_AND_CONTINUE_BUTTON).click();
-    await expect($(BO_CLAIM_STATUS_TEXT)).toHaveText(
-      expect.stringContaining("Recommended to reject"),
-    );
+    await recommendClaimToReject();
 
-    // Swapping to another user to reject the claim
-    await swapBackOfficeUser("Rejector");
-    await $(BO_AGREEMENTS_TAB).click();
-    await $(getAgreementReferenceSelector(agreementReference)).click();
-    await $(getViewClaimLinkSelector(claimReference)).click();
-    await $(BO_REJECT_BUTTON).click();
-    await $(BO_PAY_CHECKBOX_ONE).click();
-    await $(BO_PAY_CHECKBOX_TWO).click();
-    await $(BO_CONFIRM_AND_CONTINUE_BUTTON).click();
-    await expect($(BO_CLAIM_STATUS_TEXT)).toHaveText(expect.stringContaining("Rejected"));
+    await rejectClaim(agreementReference, claimReference);
   });
 
   it("can move an on hold claim from 'On hold' to 'In check' and then to 'Recommend to reject', and finally 'Rejected'", async () => {
@@ -115,27 +96,9 @@ describe("Backoffice journeys", async function () {
     await $(BO_UPDATE_ISSUES_LOG_CHECKBOX).click();
     await $(BO_CONFIRM_AND_CONTINUE_BUTTON).click();
 
-    await $(BO_RECOMMEND_TO_REJECT_BUTTON).click();
-    await $(BO_CHECKED_CHECKLIST_CHECKBOX).click();
-    await $(BO_SENT_CHECK_LIST_CHECKBOX).click();
-    await $(BO_CONFIRM_AND_CONTINUE_BUTTON).click();
+    await recommendClaimToReject();
 
-    await expect($(BO_CLAIM_STATUS_TEXT)).toHaveText(
-      expect.stringContaining("Recommended to reject"),
-    );
-
-    // Swapping to another user to reject the claim
-    await swapBackOfficeUser("Rejector");
-    await $(BO_AGREEMENTS_TAB).click();
-    await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
-    await $(getViewClaimLinkSelector(ON_HOLD_CLAIM_REF)).click();
-
-    await $(BO_REJECT_BUTTON).click();
-    await $(BO_PAY_CHECKBOX_ONE).click();
-    await $(BO_PAY_CHECKBOX_TWO).click();
-    await $(BO_CONFIRM_AND_CONTINUE_BUTTON).click();
-
-    await expect($(BO_CLAIM_STATUS_TEXT)).toHaveText(expect.stringContaining("Rejected"));
+    await rejectClaim(ON_HOLD_AGREEMENT_REF, ON_HOLD_CLAIM_REF);
   });
 
   it("can search for a claim and view its information", async () => {
@@ -143,15 +106,12 @@ describe("Backoffice journeys", async function () {
     await $(BO_CLAIM_SEARCH).setValue(ON_HOLD_CLAIM_REF);
     await $(BO_SEARCH_BUTTON).click();
     await $(getClaimSelectorFromTable(ON_HOLD_CLAIM_REF)).click();
-    const agreementSummary = await $$(BO_AGREEMENT_LIST)[0];
-    const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
-
-    expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
+    await expectAgreementReference(ON_HOLD_AGREEMENT_REF);
 
     await $(BO_HISTORY_TAB).click();
 
-    const rows = await $$("table.govuk-table tbody tr");
-    await expect(rows.length).toBeGreaterThan(0);
+    // At least one history row is present once the tab has rendered.
+    await expect($("table.govuk-table tbody tr")).toBeDisplayed();
   });
 
   describe("can find correct agreement", () => {
@@ -161,10 +121,7 @@ describe("Backoffice journeys", async function () {
       await $(BO_AGREEMENT_SEARCH).setValue(ON_HOLD_AGREEMENT_REF);
       await $(BO_SEARCH_BUTTON).click();
       await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
-      const agreementSummary = $$(BO_AGREEMENT_LIST)[0];
-      const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
-
-      expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
+      await expectAgreementReference(ON_HOLD_AGREEMENT_REF);
     });
 
     it("by searching using SBI.", async function () {
@@ -173,10 +130,7 @@ describe("Backoffice journeys", async function () {
       await $(BO_AGREEMENT_SEARCH).setValue(ON_HOLD_SBI);
       await $(BO_SEARCH_BUTTON).click();
       await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
-      const agreementSummary = $$(BO_AGREEMENT_LIST)[0];
-      const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
-
-      expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
+      await expectAgreementReference(ON_HOLD_AGREEMENT_REF);
     });
 
     it("by searching using business.", async function () {
@@ -185,10 +139,7 @@ describe("Backoffice journeys", async function () {
       await $(BO_AGREEMENT_SEARCH).setValue(ON_HOLD_COMPANY);
       await $(BO_SEARCH_BUTTON).click();
       await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
-      const agreementSummary = $$(BO_AGREEMENT_LIST)[0];
-      const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
-
-      expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
+      await expectAgreementReference(ON_HOLD_AGREEMENT_REF);
     });
 
     it("by searching using agreement date.", async function () {
@@ -197,10 +148,7 @@ describe("Backoffice journeys", async function () {
       await $(BO_AGREEMENT_SEARCH).setValue(ON_HOLD_AGREEMENT_DATE);
       await $(BO_SEARCH_BUTTON).click();
       await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
-      const agreementSummary = $$(BO_AGREEMENT_LIST)[0];
-      const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
-
-      expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
+      await expectAgreementReference(ON_HOLD_AGREEMENT_REF);
     });
 
     it("by searching using status.", async function () {
@@ -209,10 +157,7 @@ describe("Backoffice journeys", async function () {
       await $(BO_AGREEMENT_SEARCH).setValue(ON_HOLD_STATUS);
       await $(BO_SEARCH_BUTTON).click();
       await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
-      const agreementSummary = $$(BO_AGREEMENT_LIST)[0];
-      const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
-
-      expect(agreementReference).toHaveText(ON_HOLD_AGREEMENT_REF);
+      await expectAgreementReference(ON_HOLD_AGREEMENT_REF);
     });
   });
 
@@ -222,10 +167,7 @@ describe("Backoffice journeys", async function () {
       await $(BO_CLAIM_SEARCH).setValue(SEARCH_CLAIM_REF);
       await $(BO_SEARCH_BUTTON).click();
       await $(getClaimSelectorFromTable(SEARCH_CLAIM_REF)).click();
-      const agreementSummary = $$(BO_AGREEMENT_LIST)[0];
-      const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
-
-      expect(agreementReference).toHaveText(SEARCH_AGREEMENT_REF);
+      await expectAgreementReference(SEARCH_AGREEMENT_REF);
     });
 
     it("by searching using SBI.", async function () {
@@ -233,10 +175,7 @@ describe("Backoffice journeys", async function () {
       await $(BO_CLAIM_SEARCH).setValue(SEARCH_SBI);
       await $(BO_SEARCH_BUTTON).click();
       await $(getClaimSelectorFromTable(SEARCH_CLAIM_REF)).click();
-      const agreementSummary = $$(BO_AGREEMENT_LIST)[0];
-      const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
-
-      expect(agreementReference).toHaveText(SEARCH_AGREEMENT_REF);
+      await expectAgreementReference(SEARCH_AGREEMENT_REF);
     });
 
     it("by searching using herd type.", async function () {
@@ -244,10 +183,7 @@ describe("Backoffice journeys", async function () {
       await $(BO_CLAIM_SEARCH).setValue(SEARCH_HERD_TYPE);
       await $(BO_SEARCH_BUTTON).click();
       await $(getClaimSelectorFromTable(SEARCH_CLAIM_REF)).click();
-      const agreementSummary = $$(BO_AGREEMENT_LIST)[0];
-      const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
-
-      expect(agreementReference).toHaveText(SEARCH_AGREEMENT_REF);
+      await expectAgreementReference(SEARCH_AGREEMENT_REF);
     });
 
     it("by searching using claim date.", async function () {
@@ -255,10 +191,7 @@ describe("Backoffice journeys", async function () {
       await $(BO_CLAIM_SEARCH).setValue(SEARCH_CLAIM_DATE);
       await $(BO_SEARCH_BUTTON).click();
       await $(getClaimSelectorFromTable(SEARCH_CLAIM_REF)).click();
-      const agreementSummary = $$(BO_AGREEMENT_LIST)[0];
-      const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
-
-      expect(agreementReference).toHaveText(SEARCH_AGREEMENT_REF);
+      await expectAgreementReference(SEARCH_AGREEMENT_REF);
     });
 
     it("by searching using status.", async function () {
@@ -266,10 +199,7 @@ describe("Backoffice journeys", async function () {
       await $(BO_CLAIM_SEARCH).setValue(SEARCH_CLAIM_STATUS);
       await $(BO_SEARCH_BUTTON).click();
       await $(getClaimSelectorFromTable(SEARCH_CLAIM_REF)).click();
-      const agreementSummary = $$(BO_AGREEMENT_LIST)[0];
-      const agreementReference = agreementSummary.$(BO_AGREEMENT_ROW_VALUE);
-
-      expect(agreementReference).toHaveText(SEARCH_AGREEMENT_REF);
+      await expectAgreementReference(SEARCH_AGREEMENT_REF);
     });
   });
 
