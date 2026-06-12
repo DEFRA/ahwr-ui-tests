@@ -13,6 +13,8 @@ import {
   BO_PAY_CHECKBOX_ONE,
   BO_PAY_CHECKBOX_TWO,
   BO_REJECT_BUTTON,
+  BO_AGREEMENT_LIST,
+  BO_AGREEMENT_ROW_VALUE,
 } from "./backoffice-selectors.js";
 import { swapBackOfficeUser, getBackOfficeUrl } from "./common.js";
 
@@ -41,6 +43,12 @@ export async function approveClaim(agreementReference, claimReference) {
 
   // Swapping to a different user to the approver to continue with other journeys
   await swapBackOfficeUser("Admin2");
+}
+
+// A single auto-waiting selector lets the read survive the navigation that
+// precedes it, and the awaited matcher retries until the page has settled.
+export async function expectAgreementReference(expectedReference) {
+  await expect($(BO_AGREEMENT_LIST).$(BO_AGREEMENT_ROW_VALUE)).toHaveText(expectedReference);
 }
 
 // Moves a claim that is already 'In check' to 'Recommended to reject'. Assumes
