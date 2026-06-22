@@ -1,4 +1,3 @@
-import { $ } from "@wdio/globals";
 import {
   clickRejectButton,
   clickSubmitButton,
@@ -6,8 +5,11 @@ import {
   performDevLogin,
   selectFundingType,
   verifyApplicationType,
+  submitYouCanClaimMultipleForm,
+  submitNumbersForm,
+  submitTimingsForm,
+  selectTermsAndConditions,
 } from "../../utils/common.js";
-import { TERMS_AND_CONDITIONS_CHECKBOX } from "../../utils/selectors.js";
 import { LIVESTOCK_SBI } from "../../utils/constants.js";
 import { cleanupSbi } from "../../utils/cleanupSbi.js";
 
@@ -19,11 +21,12 @@ describe("Apply journeys for livestock", function () {
   it("can reject terms and create a not-agreed agreement", async () => {
     await performDevLogin(LIVESTOCK_SBI);
     await selectFundingType("IAHW");
-    await clickSubmitButton();
-    await clickSubmitButton();
-    await clickSubmitButton();
 
-    await $(TERMS_AND_CONDITIONS_CHECKBOX).click();
+    await submitYouCanClaimMultipleForm();
+    await submitNumbersForm();
+    await submitTimingsForm();
+    await selectTermsAndConditions();
+
     await clickRejectButton();
     await verifySubmission("Agreement offer rejected");
   });
@@ -31,11 +34,12 @@ describe("Apply journeys for livestock", function () {
   it("can accept terms and create an agreement", async () => {
     await performDevLogin(LIVESTOCK_SBI);
     await selectFundingType("IAHW");
-    await clickSubmitButton();
-    await clickSubmitButton();
-    await clickSubmitButton();
 
-    await $(TERMS_AND_CONDITIONS_CHECKBOX).click();
+    await submitYouCanClaimMultipleForm();
+    await submitNumbersForm();
+    await submitTimingsForm();
+    await selectTermsAndConditions();
+
     await clickSubmitButton();
     await verifySubmission("Application complete");
     await verifyApplicationType("IAHW");

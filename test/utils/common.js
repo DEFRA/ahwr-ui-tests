@@ -1,5 +1,10 @@
 import { expect, browser, $, $$ } from "@wdio/globals";
 import {
+  ACCEPT_COOKIES,
+  HIDE_COOKIE_MESSAGE,
+  SUBMIT_YOU_CAN_CLAIM_MULTIPLE_FORM,
+  SUBMIT_NUMBERS_FORM,
+  SUBMIT_DECLARATION_FORM,
   SBI,
   CONTINUE_BUTTON,
   VISIT_DATE_DAY,
@@ -33,7 +38,7 @@ export function getDevSignInUrl() {
 
 export function getBackOfficeUrl() {
   const localhostBackOfficeClaimsPage = "http://localhost:3002/claims";
-  const dockerBackOfficeClaimsPage = "http:/ahwr-backoffice-ui:3000/claims";
+  const dockerBackOfficeClaimsPage = "http://ahwr-backoffice-ui:3000/claims";
 
   if (process.env.DOCKER_MODE === "true") {
     return dockerBackOfficeClaimsPage;
@@ -48,18 +53,42 @@ export async function selectFundingType(fundingType) {
 }
 
 export async function clickSubmitButton() {
+  await $(SUBMIT_BUTTON).waitForDisplayed({ timeout: 10000 });
   await $(SUBMIT_BUTTON).click();
 }
 
+export async function submitYouCanClaimMultipleForm() {
+  await $(SUBMIT_YOU_CAN_CLAIM_MULTIPLE_FORM).waitForDisplayed({ timeout: 10000 });
+  await clickSubmitButton();
+}
+
+export async function submitNumbersForm() {
+  await $(SUBMIT_NUMBERS_FORM).waitForDisplayed({ timeout: 10000 });
+  await clickSubmitButton();
+}
+
+export async function submitTimingsForm() {
+  await $(SUBMIT_DECLARATION_FORM).waitForDisplayed({ timeout: 10000 });
+  await clickSubmitButton();
+}
+
+export async function selectTermsAndConditions() {
+  await $(TERMS_AND_CONDITIONS_CHECKBOX).waitForDisplayed({ timeout: 10000 });
+  await $(TERMS_AND_CONDITIONS_CHECKBOX).click();
+}
+
 export async function clickRejectButton() {
+  await $(REJECT_BUTTON).waitForDisplayed({ timeout: 10000 });
   await $(REJECT_BUTTON).click();
 }
 
 export async function clickBackButton() {
+  await $(BACK_LINK).waitForDisplayed({ timeout: 10000 });
   await $(BACK_LINK).click();
 }
 
 export async function clickManagerYourClaims() {
+  await $(MANAGE_YOUR_CLAIMS_LINK).waitForDisplayed({ timeout: 10000 });
   await $(MANAGE_YOUR_CLAIMS_LINK).click();
 }
 
@@ -70,6 +99,14 @@ export async function fillAndSubmitSBI(sbi) {
 
 export async function performDevLogin(sbi) {
   await browser.url(getDevSignInUrl());
+
+  if (await $(ACCEPT_COOKIES).isDisplayed()) {
+    await $(ACCEPT_COOKIES).click();
+    if (await $(HIDE_COOKIE_MESSAGE).isDisplayed()) {
+      await $(HIDE_COOKIE_MESSAGE).click();
+    }
+  }
+
   await fillAndSubmitSBI(sbi);
   await $(getConfirmCheckDetailsSelector("yes")).click();
   await clickSubmitButton();

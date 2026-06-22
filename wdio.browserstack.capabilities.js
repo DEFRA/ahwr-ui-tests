@@ -1,5 +1,32 @@
 export const compatibilityTestCapabilities = [
+  // Devices
+  {
+    browserName: "Safari",
+    "bstack:options": {
+      deviceName: "iPhone 17",
+      osVersion: "26",
+      realMobile: true,
+    },
+  },
+  {
+    browserName: "Chrome",
+    "bstack:options": {
+      deviceName: "Galaxy S23",
+      osVersion: "13.0",
+      realMobile: true,
+      browserVersion: "latest",
+    },
+  },
   // Desktop browsers
+  {
+    browserName: "Safari",
+    "bstack:options": {
+      resolution: "1920x1080",
+      browserVersion: "latest",
+      os: "OS X",
+      osVersion: "Sequoia",
+    },
+  },
   {
     browserName: "Chrome",
     "bstack:options": {

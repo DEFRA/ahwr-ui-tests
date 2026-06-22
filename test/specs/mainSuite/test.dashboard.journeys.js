@@ -5,9 +5,12 @@ import {
   verifyElementsExist,
   performDevLogin,
   selectFundingType,
+  submitYouCanClaimMultipleForm,
+  submitNumbersForm,
+  submitTimingsForm,
+  selectTermsAndConditions,
 } from "../../utils/common.js";
 import {
-  TERMS_AND_CONDITIONS_CHECKBOX,
   AGREEMENT_SUMMARY_LINK,
   START_A_NEW_CLAIM_BUTTON,
   CLAIM_TABLE_ROW,
@@ -23,14 +26,13 @@ import { createSheepReviewClaim } from "../../utils/reviews/index.js";
 describe("Vet-visits livestock dashboard journeys", async function () {
   it("can verify agreement summary exists and a claim journey can be started from the dashboard", async () => {
     await performDevLogin(DASHBOARD_SBI);
-
     await selectFundingType("IAHW");
 
     // Create an agreement
-    await clickSubmitButton();
-    await clickSubmitButton();
-    await clickSubmitButton();
-    await $(TERMS_AND_CONDITIONS_CHECKBOX).click();
+    await submitYouCanClaimMultipleForm();
+    await submitNumbersForm();
+    await submitTimingsForm();
+    await selectTermsAndConditions();
     await clickSubmitButton();
     await verifySubmission("Application complete");
 
