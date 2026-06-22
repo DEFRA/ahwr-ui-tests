@@ -1,8 +1,16 @@
+export const ACCEPT_COOKIES = "[value='accept'][name='cookies']";
+
+export const HIDE_COOKIE_MESSAGE = "button=Hide cookie message";
+
 export const SBI = "#sbi";
 
-// In some we have id, in some we don't
-// export const BACK_LINK = "#back";
 export const BACK_LINK = ".govuk-back-link";
+
+export const SUBMIT_YOU_CAN_CLAIM_MULTIPLE_FORM = "#submitYouCanClaimMultipleForm";
+
+export const SUBMIT_NUMBERS_FORM = "#submitNumbersForm";
+
+export const SUBMIT_DECLARATION_FORM = "#submitDeclarationForm";
 
 export const TERMS_AND_CONDITIONS_CHECKBOX = "#terms";
 

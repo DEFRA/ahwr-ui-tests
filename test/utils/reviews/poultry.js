@@ -8,9 +8,13 @@ import {
   verifySubmission,
   selectFundingType,
   clickBackButton,
-  clickSubmitButton,
   performDevLogin,
   verifyApplicationType,
+  submitYouCanClaimMultipleForm,
+  submitNumbersForm,
+  submitTimingsForm,
+  selectTermsAndConditions,
+  clickSubmitButton,
 } from "../common.js";
 import {
   VETS_NAME,
@@ -20,7 +24,6 @@ import {
   VISIT_DATE_DAY,
   VISIT_DATE_MONTH,
   VISIT_DATE_YEAR,
-  TERMS_AND_CONDITIONS_CHECKBOX,
   getBiosecuritySelector,
 } from "../selectors.js";
 import {
@@ -91,13 +94,12 @@ export const createPoultryApplication = async (sbi) => {
   await performDevLogin(sbi);
   await selectFundingType("POUL");
 
-  await clickSubmitButton();
-  await clickSubmitButton();
-  await clickSubmitButton();
+  await submitYouCanClaimMultipleForm();
+  await submitNumbersForm();
+  await submitTimingsForm();
+  await selectTermsAndConditions();
 
-  await $(TERMS_AND_CONDITIONS_CHECKBOX).click();
   await clickSubmitButton();
-
   await verifySubmission("Application complete");
   await verifyApplicationType("POUL");
 };
