@@ -56,6 +56,7 @@ export const DISEASE_STATUS = "#diseaseStatus";
 
 export const ASSESSMENT_PERCENTAGE = "#assessmentPercentage";
 
+// Migration window: substring matches both the old (/biosecurity) and new (/livestock/biosecurity-assessment) href.
 export const CONTINUE_YOUR_CLAIM = 'a[href*="/biosecurity"]';
 
 export const SUBMIT_CLAIM_BUTTON = "#submit-claim";
@@ -70,11 +71,15 @@ export const SUBMISSION_PANEL_TITLE = '[id="main-content"]';
 
 export const START_NEW_CLAIM_BUTTON = "#start";
 
-export const MANAGE_YOUR_CLAIMS_LINK = 'a[href*="/vet-visits"]';
+// Migration window: match both the old and new dashboard href; drop the /vet-visits alternative once the slug rollout is complete.
+export const MANAGE_YOUR_CLAIMS_LINK =
+  'a[href*="/vet-visits"], a[href*="/livestock/manage-claims"]';
 
 export const EXTERNAL_GOV_LINK = '.govuk-link[rel="external"]';
 
-export const DATE_OF_VISIT_GO_BACK_LINK = '.govuk-link[href="/date-of-visit"]';
+// Migration window: match both the old and new date-of-visit back link; drop the /date-of-visit alternative once the slug rollout is complete.
+export const DATE_OF_VISIT_GO_BACK_LINK =
+  '.govuk-link[href="/date-of-visit"], .govuk-link[href="/livestock/date-of-visit"]';
 
 export const GOV_RADIOS_INPUT_LABEL = "label.govuk-radios__label";
 

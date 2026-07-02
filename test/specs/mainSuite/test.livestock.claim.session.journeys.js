@@ -30,12 +30,32 @@ import {
   LABORATORY_URN,
 } from "../../utils/selectors.js";
 
+// Migration window: map a renamed livestock slug to its old form so expectGoBack tolerates either the old or new public-ui image; renamed-tail slugs are listed here, prefix-only renames fall back to stripping "/livestock". Remove once the slug rollout is complete.
+const PRE_RENAME_SLUG = {
+  "/livestock/manage-claims": "/vet-visits",
+  "/livestock/biosecurity-assessment": "/biosecurity",
+  "/livestock/species": "/which-species",
+  "/livestock/review-type": "/which-type-of-review",
+  "/livestock/select-herd": "/select-the-herd",
+  "/livestock/cph": "/enter-cph-number",
+  "/livestock/herd-name": "/enter-herd-name",
+  "/livestock/sbi-herds": "/herd-others-on-sbi",
+  "/livestock/test-date": "/date-of-testing",
+};
+const preRenameSlug = (slug) => PRE_RENAME_SLUG[slug] ?? slug.replace("/livestock", "");
+// Boundary match so a shorter slug (/livestock/species) does not spuriously match a longer one (/livestock/species-numbers).
+const urlMatchesPath = (url, path) => {
+  const i = url.indexOf(path);
+  return i !== -1 && !/[a-z-]/.test(url[i + path.length] ?? "");
+};
+
 describe("Claim session and back navigation journeys", () => {
   describe("beef journey", () => {
     const expectGoBack = async (expectedUrl) => {
       await clickBackButton();
       const url = await browser.getUrl();
-      expect(url).toContain(expectedUrl);
+      const tolerated = [expectedUrl, preRenameSlug(expectedUrl)];
+      expect(tolerated.some((candidate) => urlMatchesPath(url, candidate))).toBe(true);
     };
 
     it("can successfully navigate back from the check-answers page to the which-species page for a review claim journey", async function () {
@@ -45,26 +65,26 @@ describe("Claim session and back navigation journeys", () => {
         testResult: "positive",
       });
 
-      await expectGoBack("/test-results");
-      await expectGoBack("/test-urn");
-      await expectGoBack("/vet-rcvs");
-      await expectGoBack("/vet-name");
-      await expectGoBack("/number-of-species-tested");
-      await expectGoBack("/species-numbers");
+      await expectGoBack("/livestock/test-results");
+      await expectGoBack("/livestock/test-urn");
+      await expectGoBack("/livestock/vet-rcvs");
+      await expectGoBack("/livestock/vet-name");
+      await expectGoBack("/livestock/number-of-species-tested");
+      await expectGoBack("/livestock/species-numbers");
       // Skipping this as currently public-ui
       // has the incorrect back button
       // probably related to the function
       // isMultipleHerdsUserJourney
-      // await expectGoBack("/date-of-testing");
-      await expectGoBack("/check-herd-details");
-      await expectGoBack("/enter-herd-details");
-      await expectGoBack("/herd-others-on-sbi");
-      await expectGoBack("/enter-cph-number");
-      await expectGoBack("/enter-herd-name");
-      await expectGoBack("/date-of-visit");
-      await expectGoBack("/which-type-of-review");
-      await expectGoBack("/which-species");
-      await expectGoBack("/vet-visits");
+      // await expectGoBack("/livestock/test-date");
+      await expectGoBack("/livestock/check-herd-details");
+      await expectGoBack("/livestock/enter-herd-details");
+      await expectGoBack("/livestock/sbi-herds");
+      await expectGoBack("/livestock/cph");
+      await expectGoBack("/livestock/herd-name");
+      await expectGoBack("/livestock/date-of-visit");
+      await expectGoBack("/livestock/review-type");
+      await expectGoBack("/livestock/species");
+      await expectGoBack("/livestock/manage-claims");
     });
 
     it("can successfully navigate back from the check-answers page to the which-species page for a follow-up claim journey", async function () {
@@ -82,26 +102,26 @@ describe("Claim session and back navigation journeys", () => {
 
       await createBeefFollowUp({ dateFollowUp });
 
-      await expectGoBack("/biosecurity");
-      await expectGoBack("/test-results");
-      await expectGoBack("/test-urn");
+      await expectGoBack("/livestock/biosecurity-assessment");
+      await expectGoBack("/livestock/test-results");
+      await expectGoBack("/livestock/test-urn");
       // Why this happens at this time?
       // and not at the same times as the other?
-      await expectGoBack("/date-of-testing");
-      await expectGoBack("/pi-hunt-all-animals");
-      await expectGoBack("/pi-hunt");
-      await expectGoBack("/vet-rcvs");
-      await expectGoBack("/vet-name");
-      await expectGoBack("/species-numbers");
-      await expectGoBack("/check-herd-details");
-      await expectGoBack("/enter-herd-details");
+      await expectGoBack("/livestock/test-date");
+      await expectGoBack("/livestock/pi-hunt-all-animals");
+      await expectGoBack("/livestock/pi-hunt");
+      await expectGoBack("/livestock/vet-rcvs");
+      await expectGoBack("/livestock/vet-name");
+      await expectGoBack("/livestock/species-numbers");
+      await expectGoBack("/livestock/check-herd-details");
+      await expectGoBack("/livestock/enter-herd-details");
       // This one is not present in the createBeefFollowUp?
-      await expectGoBack("/enter-cph-number");
-      await expectGoBack("/select-the-herd");
-      await expectGoBack("/date-of-visit");
-      await expectGoBack("/which-type-of-review");
-      await expectGoBack("/which-species");
-      await expectGoBack("/vet-visits");
+      await expectGoBack("/livestock/cph");
+      await expectGoBack("/livestock/select-herd");
+      await expectGoBack("/livestock/date-of-visit");
+      await expectGoBack("/livestock/review-type");
+      await expectGoBack("/livestock/species");
+      await expectGoBack("/livestock/manage-claims");
     });
 
     // This assumes the above has worked, therefore
