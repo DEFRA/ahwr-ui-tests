@@ -163,7 +163,7 @@ export async function verifyPoultryClaimBackNavigation({
   await expect($(VISIT_DATE_YEAR)).toHaveValue(expectedYear);
 
   await clickBackButton();
-  await expect(browser).toHaveUrl(expect.stringContaining("/poultry/vet-visits"));
+  await expect(browser).toHaveUrl(expect.stringContaining("/poultry/manage-claims"));
 }
 
 export async function createPoultryReviewClaim({
