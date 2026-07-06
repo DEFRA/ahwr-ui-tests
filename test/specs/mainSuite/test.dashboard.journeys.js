@@ -1,4 +1,4 @@
-import { expect, $ } from "@wdio/globals";
+import { expect, $, browser } from "@wdio/globals";
 import {
   clickSubmitButton,
   verifySubmission,
@@ -49,12 +49,14 @@ describe("Vet-visits livestock dashboard journeys", async function () {
     // Dashboard verifications
     await performDevLogin(DASHBOARD_SBI);
     await selectFundingType("IAHW");
+    await expect(browser).toHaveUrl(expect.stringContaining("/livestock/manage-claims"));
     expect(await $(AGREEMENT_SUMMARY_LINK).getAttribute("href")).toContain(
       `download-application/${DASHBOARD_SBI}/${agreementReference}`,
     );
     await $(AGREEMENT_SUMMARY_LINK).click();
     await expect($(CLAIM_TABLE_ROW)).toHaveText(expect.stringContaining(claimReference));
     await $(START_A_NEW_CLAIM_BUTTON).click();
+    await expect(browser).toHaveUrl(expect.stringContaining("/livestock/species"));
 
     const liveStockSelectors = [
       LIVESTOCK_BEEF_RADIO,

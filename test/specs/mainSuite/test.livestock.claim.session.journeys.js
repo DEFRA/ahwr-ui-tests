@@ -30,19 +30,6 @@ import {
   LABORATORY_URN,
 } from "../../utils/selectors.js";
 
-// Migration window: map a renamed livestock slug to its old form so expectGoBack tolerates either the old or new public-ui image; renamed-tail slugs are listed here, prefix-only renames fall back to stripping "/livestock". Remove once the slug rollout is complete.
-const PRE_RENAME_SLUG = {
-  "/livestock/manage-claims": "/vet-visits",
-  "/livestock/biosecurity-assessment": "/biosecurity",
-  "/livestock/species": "/which-species",
-  "/livestock/review-type": "/which-type-of-review",
-  "/livestock/select-herd": "/select-the-herd",
-  "/livestock/cph": "/enter-cph-number",
-  "/livestock/herd-name": "/enter-herd-name",
-  "/livestock/sbi-herds": "/herd-others-on-sbi",
-  "/livestock/test-date": "/date-of-testing",
-};
-const preRenameSlug = (slug) => PRE_RENAME_SLUG[slug] ?? slug.replace("/livestock", "");
 // Boundary match so a shorter slug (/livestock/species) does not spuriously match a longer one (/livestock/species-numbers).
 const urlMatchesPath = (url, path) => {
   const i = url.indexOf(path);
@@ -54,8 +41,7 @@ describe("Claim session and back navigation journeys", () => {
     const expectGoBack = async (expectedUrl) => {
       await clickBackButton();
       const url = await browser.getUrl();
-      const tolerated = [expectedUrl, preRenameSlug(expectedUrl)];
-      expect(tolerated.some((candidate) => urlMatchesPath(url, candidate))).toBe(true);
+      expect(urlMatchesPath(url, expectedUrl)).toBe(true);
     };
 
     it("can successfully navigate back from the check-answers page to the which-species page for a review claim journey", async function () {
