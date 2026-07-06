@@ -1,3 +1,4 @@
+import { expect, browser } from "@wdio/globals";
 import {
   clickRejectButton,
   clickSubmitButton,
@@ -34,6 +35,7 @@ describe("Apply journeys for livestock", function () {
   it("can accept terms and create an agreement", async () => {
     await performDevLogin(LIVESTOCK_SBI);
     await selectFundingType("IAHW");
+    await expect(browser).toHaveUrl(expect.stringContaining("/livestock/what-you-can-claim"));
 
     await submitYouCanClaimMultipleForm();
     await submitNumbersForm();
