@@ -1,5 +1,4 @@
 import { expect, $ } from "@wdio/globals";
-import { addDescription, TYPE } from "@wdio/allure-reporter";
 import {
   clickOnElementAndContinue,
   clickStartNewClaimButton,
@@ -99,20 +98,5 @@ describe("Multiple herds journeys when Pre-MH claims present", async function ()
     await expect($(EXTERNAL_GOV_LINK)).toHaveText(
       expect.stringContaining("There must be at least 10 months between your reviews."),
     );
-  });
-
-  it("cannot create a second follow-up claim for a different herd or flock when the visit date falls on or after the MH release date and both MH and pre-MH claims are present", async function () {
-    addDescription("Test not implemented yet, Jira ticket: AHWR-1050", TYPE.MARKDOWN);
-    this.skip();
-  });
-
-  it("can create a second follow-up claim for an existing herd or flock if the visit date is on or after the MH release date and there are multiple pre-MH claims", async function () {
-    addDescription("Test not implemented yet, Jira ticket: AHWR-1049", TYPE.MARKDOWN);
-    this.skip();
-  });
-
-  it("can create a second follow-up claim for an existing herd or flock when the visit date falls on or after the MH release date and both MH and pre-MH claims are present", async function () {
-    addDescription("Test not implemented yet, Jira ticket: AHWR-1049", TYPE.MARKDOWN);
-    this.skip();
   });
 });
