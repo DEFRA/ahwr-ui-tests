@@ -44,6 +44,7 @@ import {
 import {
   approveClaim,
   expectAgreementReference,
+  expectNoAgreementsFound,
   recommendClaimToReject,
   rejectClaim,
 } from "../../utils/backoffice-common.js";
@@ -141,23 +142,23 @@ describe("Backoffice journeys", async function () {
       await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
       await expectAgreementReference(ON_HOLD_AGREEMENT_REF);
     });
+  });
 
-    it("by searching using agreement date.", async function () {
+  describe("does not search agreements by date or status", () => {
+    it("returns no results when searching by agreement date.", async function () {
       await browser.url(getBackOfficeUrl());
       await $(BO_AGREEMENTS_TAB).click();
       await $(BO_AGREEMENT_SEARCH).setValue(ON_HOLD_AGREEMENT_DATE);
       await $(BO_SEARCH_BUTTON).click();
-      await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
-      await expectAgreementReference(ON_HOLD_AGREEMENT_REF);
+      await expectNoAgreementsFound();
     });
 
-    it("by searching using status.", async function () {
+    it("returns no results when searching by status.", async function () {
       await browser.url(getBackOfficeUrl());
       await $(BO_AGREEMENTS_TAB).click();
       await $(BO_AGREEMENT_SEARCH).setValue(ON_HOLD_STATUS);
       await $(BO_SEARCH_BUTTON).click();
-      await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
-      await expectAgreementReference(ON_HOLD_AGREEMENT_REF);
+      await expectNoAgreementsFound();
     });
   });
 
