@@ -15,6 +15,7 @@ import {
   BO_REJECT_BUTTON,
   BO_AGREEMENT_LIST,
   BO_AGREEMENT_ROW_VALUE,
+  BO_NO_AGREEMENTS_MESSAGE,
 } from "./backoffice-selectors.js";
 import { swapBackOfficeUser, getBackOfficeUrl } from "./common.js";
 
@@ -49,6 +50,10 @@ export async function approveClaim(agreementReference, claimReference) {
 // precedes it, and the awaited matcher retries until the page has settled.
 export async function expectAgreementReference(expectedReference) {
   await expect($(BO_AGREEMENT_LIST).$(BO_AGREEMENT_ROW_VALUE)).toHaveText(expectedReference);
+}
+
+export async function expectNoAgreementsFound() {
+  await expect($(BO_NO_AGREEMENTS_MESSAGE)).toHaveText("No agreements found.");
 }
 
 // Moves a claim that is already 'In check' to 'Recommended to reject'. Assumes
