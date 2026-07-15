@@ -152,7 +152,7 @@ describe("Backoffice journeys", async function () {
       await $(BO_SEARCH_BUTTON).click();
       await expectNoAgreementsFound();
     });
-    1;
+
     it("returns no results when searching by status.", async function () {
       await browser.url(getBackOfficeUrl());
       await $(BO_AGREEMENTS_TAB).click();
