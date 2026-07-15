@@ -16,6 +16,7 @@ import {
   BO_AGREEMENT_LIST,
   BO_AGREEMENT_ROW_VALUE,
   BO_NO_AGREEMENTS_MESSAGE,
+  BO_NO_CLAIMS_MESSAGE,
 } from "./backoffice-selectors.js";
 import { swapBackOfficeUser, getBackOfficeUrl } from "./common.js";
 
@@ -54,6 +55,10 @@ export async function expectAgreementReference(expectedReference) {
 
 export async function expectNoAgreementsFound() {
   await expect($(BO_NO_AGREEMENTS_MESSAGE)).toHaveText("No agreements found.");
+}
+
+export async function expectNoClaimsFound() {
+  await expect($(BO_NO_CLAIMS_MESSAGE)).toHaveText("No claims found.");
 }
 
 // Moves a claim that is already 'In check' to 'Recommended to reject'. Assumes
