@@ -152,7 +152,7 @@ describe("Backoffice journeys", async function () {
       await $(BO_SEARCH_BUTTON).click();
       await expectNoAgreementsFound();
     });
-
+    1;
     it("returns no results when searching by status.", async function () {
       await browser.url(getBackOfficeUrl());
       await $(BO_AGREEMENTS_TAB).click();
@@ -187,20 +187,20 @@ describe("Backoffice journeys", async function () {
       await expectAgreementReference(SEARCH_AGREEMENT_REF);
     });
 
-    it("by searching using claim date.", async function () {
-      await browser.url(getBackOfficeUrl());
-      await $(BO_CLAIM_SEARCH).setValue(SEARCH_CLAIM_DATE);
-      await $(BO_SEARCH_BUTTON).click();
-      await $(getClaimSelectorFromTable(SEARCH_CLAIM_REF)).click();
-      await expectAgreementReference(SEARCH_AGREEMENT_REF);
-    });
+    describe("does not search claims", () => {
+      it("by searching using claim date.", async function () {
+        await browser.url(getBackOfficeUrl());
+        await $(BO_CLAIM_SEARCH).setValue(SEARCH_CLAIM_DATE);
+        await $(BO_SEARCH_BUTTON).click();
+        await expectNoAgreementsFound();
+      });
 
-    it("by searching using status.", async function () {
-      await browser.url(getBackOfficeUrl());
-      await $(BO_CLAIM_SEARCH).setValue(SEARCH_CLAIM_STATUS);
-      await $(BO_SEARCH_BUTTON).click();
-      await $(getClaimSelectorFromTable(SEARCH_CLAIM_REF)).click();
-      await expectAgreementReference(SEARCH_AGREEMENT_REF);
+      it("by searching using status.", async function () {
+        await browser.url(getBackOfficeUrl());
+        await $(BO_CLAIM_SEARCH).setValue(SEARCH_CLAIM_STATUS);
+        await $(BO_SEARCH_BUTTON).click();
+        await expectNoAgreementsFound();
+      });
     });
   });
 
