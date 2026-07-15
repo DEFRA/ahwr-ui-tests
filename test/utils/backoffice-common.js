@@ -20,6 +20,7 @@ import {
   BO_AGREEMENT_TYPE_SELECT,
   BO_ADVANCED_SEARCH_BUTTON,
   BO_AGREEMENT_REFERENCE_LINKS,
+  BO_NO_CLAIMS_MESSAGE,
 } from "./backoffice-selectors.js";
 import { swapBackOfficeUser, getBackOfficeUrl } from "./common.js";
 
@@ -58,6 +59,10 @@ export async function expectAgreementReference(expectedReference) {
 
 export async function expectNoAgreementsFound() {
   await expect($(BO_NO_AGREEMENTS_MESSAGE)).toHaveText("No agreements found.");
+}
+
+export async function expectNoClaimsFound() {
+  await expect($(BO_NO_CLAIMS_MESSAGE)).toHaveText("No claims found.");
 }
 
 // Opens the advanced search disclosure and filters the agreements list by the
