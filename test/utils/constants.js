@@ -35,6 +35,11 @@ export const SEARCH_CLAIM_TYPE = "REVIEW";
 export const SEARCH_CLAIM_DATE = "26/03/2025";
 export const SEARCH_HERD_TYPE = "Beef cattle";
 
+// Advanced search filters agreements by type. The backend translates each type
+// into the set of reference prefixes it covers.
+export const IAHW_REFERENCE_PREFIXES = ["IAHW-", "AHWR-"];
+export const PBR_REFERENCE_PREFIXES = ["POUL-"];
+
 export const MULTIPLE_HERD_AGREEMENT_REF = "IAHW-KH2H-WNA1";
 
 export const PRE_MULTIPLE_HERD_SBI = "114262075";

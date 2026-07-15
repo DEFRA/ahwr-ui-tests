@@ -40,6 +40,8 @@ import {
   SEARCH_HERD_TYPE,
   SEARCH_CLAIM_STATUS,
   SEARCH_AGREEMENT_REF,
+  IAHW_REFERENCE_PREFIXES,
+  PBR_REFERENCE_PREFIXES,
 } from "../../utils/constants.js";
 import {
   approveClaim,
@@ -48,6 +50,8 @@ import {
   expectNoClaimsFound,
   recommendClaimToReject,
   rejectClaim,
+  searchAgreementsByType,
+  expectAllAgreementsToStartWith,
 } from "../../utils/backoffice-common.js";
 import { createSheepReviewClaim } from "../../utils/reviews/index.js";
 
@@ -142,6 +146,18 @@ describe("Backoffice journeys", async function () {
       await $(BO_SEARCH_BUTTON).click();
       await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
       await expectAgreementReference(ON_HOLD_AGREEMENT_REF);
+    });
+  });
+
+  describe("uses advanced search to filter agreements by type", () => {
+    it("can search by IAHW agreement type", async function () {
+      await searchAgreementsByType("IAHW");
+      await expectAllAgreementsToStartWith(IAHW_REFERENCE_PREFIXES);
+    });
+
+    it("can search by PBR agreement type", async function () {
+      await searchAgreementsByType("PBR");
+      await expectAllAgreementsToStartWith(PBR_REFERENCE_PREFIXES);
     });
   });
 
