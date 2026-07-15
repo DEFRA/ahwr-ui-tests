@@ -50,6 +50,7 @@ export const BO_AGREEMENT_SEARCH = "#searchText";
 export const BO_SEARCH_BUTTON = ".search-button";
 
 export const BO_NO_AGREEMENTS_MESSAGE = "p.no-results-message";
+export const BO_NO_CLAIMS_MESSAGE = "p.no-results-message";
 
 export const BO_HISTORY_TAB = "#tab_history";
 

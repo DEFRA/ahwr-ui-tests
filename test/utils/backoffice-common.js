@@ -56,6 +56,10 @@ export async function expectNoAgreementsFound() {
   await expect($(BO_NO_AGREEMENTS_MESSAGE)).toHaveText("No agreements found.");
 }
 
+export async function expectNoClaimsFound() {
+  await expect($(BO_NO_CLAIMS_MESSAGE)).toHaveText("No claims found.");
+}
+
 // Moves a claim that is already 'In check' to 'Recommended to reject'. Assumes
 // the claim page is already open.
 export async function recommendClaimToReject() {
