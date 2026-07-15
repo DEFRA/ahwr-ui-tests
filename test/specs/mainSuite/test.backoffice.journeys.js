@@ -45,6 +45,7 @@ import {
   approveClaim,
   expectAgreementReference,
   expectNoAgreementsFound,
+  expectNoClaimsFound,
   recommendClaimToReject,
   rejectClaim,
 } from "../../utils/backoffice-common.js";

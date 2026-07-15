@@ -16,6 +16,7 @@ import {
   BO_AGREEMENT_LIST,
   BO_AGREEMENT_ROW_VALUE,
   BO_NO_AGREEMENTS_MESSAGE,
+  BO_NO_CLAIMS_MESSAGE,
 } from "./backoffice-selectors.js";
 import { swapBackOfficeUser, getBackOfficeUrl } from "./common.js";
 
