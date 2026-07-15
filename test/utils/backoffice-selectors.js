@@ -49,6 +49,12 @@ export const BO_AGREEMENT_SEARCH = "#searchText";
 
 export const BO_SEARCH_BUTTON = ".search-button";
 
+export const BO_ADVANCED_SEARCH_SUMMARY = ".govuk-details__summary";
+export const BO_AGREEMENT_TYPE_SELECT = "#agreementType";
+export const BO_ADVANCED_SEARCH_BUTTON = 'button[name="submit"][value="advancedSearch"]';
+
+export const BO_AGREEMENT_REFERENCE_LINKS = "#agreements tbody td:first-child a";
+
 export const BO_NO_AGREEMENTS_MESSAGE = "p.no-results-message";
 
 export const BO_HISTORY_TAB = "#tab_history";

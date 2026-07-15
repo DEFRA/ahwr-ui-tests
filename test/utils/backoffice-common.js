@@ -1,4 +1,4 @@
-import { browser, $, expect } from "@wdio/globals";
+import { browser, $, $$, expect } from "@wdio/globals";
 import {
   BO_AGREEMENTS_TAB,
   getAgreementReferenceSelector,
@@ -16,6 +16,10 @@ import {
   BO_AGREEMENT_LIST,
   BO_AGREEMENT_ROW_VALUE,
   BO_NO_AGREEMENTS_MESSAGE,
+  BO_ADVANCED_SEARCH_SUMMARY,
+  BO_AGREEMENT_TYPE_SELECT,
+  BO_ADVANCED_SEARCH_BUTTON,
+  BO_AGREEMENT_REFERENCE_LINKS,
 } from "./backoffice-selectors.js";
 import { swapBackOfficeUser, getBackOfficeUrl } from "./common.js";
 
@@ -54,6 +58,28 @@ export async function expectAgreementReference(expectedReference) {
 
 export async function expectNoAgreementsFound() {
   await expect($(BO_NO_AGREEMENTS_MESSAGE)).toHaveText("No agreements found.");
+}
+
+// Opens the advanced search disclosure and filters the agreements list by the
+// given agreement type (e.g. "IAHW" or "PBR").
+export async function searchAgreementsByType(agreementType) {
+  await browser.url(getBackOfficeUrl());
+  await $(BO_AGREEMENTS_TAB).click();
+  await $(BO_ADVANCED_SEARCH_SUMMARY).click();
+  await $(BO_AGREEMENT_TYPE_SELECT).selectByAttribute("value", agreementType);
+  await $(BO_ADVANCED_SEARCH_BUTTON).click();
+}
+
+// Asserts the results list is non-empty and that every agreement reference
+// begins with one of the allowed prefixes for the searched-for type.
+export async function expectAllAgreementsToStartWith(allowedPrefixes) {
+  const referenceLinks = await $$(BO_AGREEMENT_REFERENCE_LINKS);
+  expect(referenceLinks.length).toBeGreaterThan(0);
+
+  for (const referenceLink of referenceLinks) {
+    const reference = await referenceLink.getText();
+    expect(allowedPrefixes.some((prefix) => reference.startsWith(prefix))).toBe(true);
+  }
 }
 
 // Moves a claim that is already 'In check' to 'Recommended to reject'. Assumes
