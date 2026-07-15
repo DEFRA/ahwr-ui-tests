@@ -180,15 +180,14 @@ describe("Backoffice journeys", async function () {
       await expectAgreementReference(SEARCH_AGREEMENT_REF);
     });
 
-    it("by searching using herd type.", async function () {
-      await browser.url(getBackOfficeUrl());
-      await $(BO_CLAIM_SEARCH).setValue(SEARCH_HERD_TYPE);
-      await $(BO_SEARCH_BUTTON).click();
-      await $(getClaimSelectorFromTable(SEARCH_CLAIM_REF)).click();
-      await expectAgreementReference(SEARCH_AGREEMENT_REF);
-    });
-
     describe("does not search claims", () => {
+      it("by searching using herd type.", async function () {
+        await browser.url(getBackOfficeUrl());
+        await $(BO_CLAIM_SEARCH).setValue(SEARCH_HERD_TYPE);
+        await $(BO_SEARCH_BUTTON).click();
+        await expectNoClaimsFound();
+      });
+
       it("by searching using claim date.", async function () {
         await browser.url(getBackOfficeUrl());
         await $(BO_CLAIM_SEARCH).setValue(SEARCH_CLAIM_DATE);
