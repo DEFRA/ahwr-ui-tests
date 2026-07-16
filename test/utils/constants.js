@@ -40,6 +40,8 @@ export const SEARCH_HERD_TYPE = "Beef cattle";
 export const IAHW_REFERENCE_PREFIXES = ["IAHW-", "AHWR-"];
 export const PBR_REFERENCE_PREFIXES = ["POUL-"];
 
+export const POULTRY_CLAIM_REF = "PORE-D7AB-E2UU";
+
 export const MULTIPLE_HERD_AGREEMENT_REF = "IAHW-KH2H-WNA1";
 
 export const PRE_MULTIPLE_HERD_SBI = "114262075";

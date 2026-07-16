@@ -16,6 +16,10 @@ import {
   BO_CLAIM_SEARCH,
   BO_AGREEMENT_SEARCH,
   BO_SEARCH_BUTTON,
+  BO_ADVANCED_SEARCH_SUMMARY,
+  BO_AGREEMENT_TYPE_SELECT,
+  BO_ADVANCED_SEARCH_BUTTON,
+  BO_CLEAR_FILTERS_LINK,
   getClaimSelectorFromTable,
   BO_HISTORY_TAB,
   BO_PII_TEXT,
@@ -42,6 +46,7 @@ import {
   SEARCH_AGREEMENT_REF,
   IAHW_REFERENCE_PREFIXES,
   PBR_REFERENCE_PREFIXES,
+  POULTRY_CLAIM_REF,
 } from "../../utils/constants.js";
 import {
   approveClaim,
@@ -217,6 +222,43 @@ describe("Backoffice journeys", async function () {
         await $(BO_SEARCH_BUTTON).click();
         await expectNoClaimsFound();
       });
+    });
+  });
+
+  describe("can filter claims by agreement type using advanced search", () => {
+    it("returns poultry claims and excludes livestock claims when PBR is selected.", async () => {
+      await browser.url(getBackOfficeUrl());
+      await $(BO_ADVANCED_SEARCH_SUMMARY).click();
+      await $(BO_AGREEMENT_TYPE_SELECT).selectByAttribute("value", "PBR");
+      await $(BO_ADVANCED_SEARCH_BUTTON).click();
+
+      await expect($(getClaimSelectorFromTable(POULTRY_CLAIM_REF))).toBeDisplayed();
+      await expect($(getClaimSelectorFromTable(SEARCH_CLAIM_REF))).not.toBeExisting();
+    });
+
+    it("returns livestock claims and excludes poultry claims when IAHW is selected.", async () => {
+      await browser.url(getBackOfficeUrl());
+      await $(BO_ADVANCED_SEARCH_SUMMARY).click();
+      await $(BO_AGREEMENT_TYPE_SELECT).selectByAttribute("value", "IAHW");
+      await $(BO_ADVANCED_SEARCH_BUTTON).click();
+
+      await expect($("table.govuk-table tbody tr")).toBeDisplayed();
+      await expect($(getClaimSelectorFromTable(POULTRY_CLAIM_REF))).not.toBeExisting();
+    });
+
+    it("resets the agreement type to all types when the filters are cleared.", async () => {
+      await browser.url(getBackOfficeUrl());
+      await $(BO_ADVANCED_SEARCH_SUMMARY).click();
+      await $(BO_AGREEMENT_TYPE_SELECT).selectByAttribute("value", "PBR");
+      await $(BO_ADVANCED_SEARCH_BUTTON).click();
+      await expect($(getClaimSelectorFromTable(SEARCH_CLAIM_REF))).not.toBeExisting();
+
+      // The advanced search reload collapses the accordion, so re-open it to reach the clear link.
+      await $(BO_ADVANCED_SEARCH_SUMMARY).click();
+      await $(BO_CLEAR_FILTERS_LINK).click();
+
+      await $(BO_ADVANCED_SEARCH_SUMMARY).click();
+      await expect($(BO_AGREEMENT_TYPE_SELECT)).toHaveValue("ALL");
     });
   });
 
