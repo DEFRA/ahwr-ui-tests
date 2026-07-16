@@ -33,7 +33,6 @@ import {
   ON_HOLD_COMPANY,
   ON_HOLD_STATUS,
   ON_HOLD_CLAIM_REF,
-  ON_HOLD_AGREEMENT_DATE,
   SEARCH_SBI,
   SEARCH_CLAIM_DATE,
   SEARCH_CLAIM_REF,
@@ -52,6 +51,8 @@ import {
   rejectClaim,
   searchAgreementsByType,
   expectAllAgreementsToStartWith,
+  searchAgreementsByDateRange,
+  expectAgreementsFound,
 } from "../../utils/backoffice-common.js";
 import { createSheepReviewClaim } from "../../utils/reviews/index.js";
 
@@ -149,27 +150,43 @@ describe("Backoffice journeys", async function () {
     });
   });
 
-  describe("uses advanced search to filter agreements by type", () => {
-    it("can search by IAHW agreement type", async function () {
-      await searchAgreementsByType("IAHW");
-      await expectAllAgreementsToStartWith(IAHW_REFERENCE_PREFIXES);
+  describe("uses advanced search to filter agreements", () => {
+    describe("by type", () => {
+      it("can search by IAHW agreement type", async function () {
+        await searchAgreementsByType("IAHW");
+        await expectAllAgreementsToStartWith(IAHW_REFERENCE_PREFIXES);
+      });
+
+      it("can search by PBR agreement type", async function () {
+        await searchAgreementsByType("PBR");
+        await expectAllAgreementsToStartWith(PBR_REFERENCE_PREFIXES);
+      });
     });
 
-    it("can search by PBR agreement type", async function () {
-      await searchAgreementsByType("PBR");
-      await expectAllAgreementsToStartWith(PBR_REFERENCE_PREFIXES);
+    describe("by date", () => {
+      // Bounds chosen to sit outside every seeded and freshly-created agreement
+      // date, so each test proves the corresponding filter is actually applied.
+      const FAR_FUTURE = { day: "1", month: "1", year: "3000" };
+      const FAR_PAST = { day: "1", month: "1", year: "2000" };
+
+      it("applies the date-from filter, excluding earlier agreements", async function () {
+        await searchAgreementsByDateRange({ from: FAR_FUTURE });
+        await expectNoAgreementsFound();
+      });
+
+      it("applies the date-to filter, excluding later agreements", async function () {
+        await searchAgreementsByDateRange({ to: FAR_PAST });
+        await expectNoAgreementsFound();
+      });
+
+      it("returns agreements that fall within the date range", async function () {
+        await searchAgreementsByDateRange({ from: FAR_PAST, to: FAR_FUTURE });
+        await expectAgreementsFound();
+      });
     });
   });
 
-  describe("does not search agreements by date or status", () => {
-    it("returns no results when searching by agreement date.", async function () {
-      await browser.url(getBackOfficeUrl());
-      await $(BO_AGREEMENTS_TAB).click();
-      await $(BO_AGREEMENT_SEARCH).setValue(ON_HOLD_AGREEMENT_DATE);
-      await $(BO_SEARCH_BUTTON).click();
-      await expectNoAgreementsFound();
-    });
-
+  describe("does not search agreements by status", () => {
     it("returns no results when searching by status.", async function () {
       await browser.url(getBackOfficeUrl());
       await $(BO_AGREEMENTS_TAB).click();

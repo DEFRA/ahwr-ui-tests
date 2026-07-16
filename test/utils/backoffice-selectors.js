@@ -53,6 +53,13 @@ export const BO_ADVANCED_SEARCH_SUMMARY = ".govuk-details__summary";
 export const BO_AGREEMENT_TYPE_SELECT = "#agreementType";
 export const BO_ADVANCED_SEARCH_BUTTON = 'button[name="submit"][value="advancedSearch"]';
 
+export const BO_AGREEMENT_DATE_FROM_DAY = "#dateFrom-day";
+export const BO_AGREEMENT_DATE_FROM_MONTH = "#dateFrom-month";
+export const BO_AGREEMENT_DATE_FROM_YEAR = "#dateFrom-year";
+export const BO_AGREEMENT_DATE_TO_DAY = "#dateTo-day";
+export const BO_AGREEMENT_DATE_TO_MONTH = "#dateTo-month";
+export const BO_AGREEMENT_DATE_TO_YEAR = "#dateTo-year";
+
 export const BO_AGREEMENT_REFERENCE_LINKS = "#agreements tbody td:first-child a";
 
 export const BO_NO_AGREEMENTS_MESSAGE = "p.no-results-message";

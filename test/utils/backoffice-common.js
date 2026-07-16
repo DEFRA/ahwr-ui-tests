@@ -21,6 +21,12 @@ import {
   BO_ADVANCED_SEARCH_BUTTON,
   BO_AGREEMENT_REFERENCE_LINKS,
   BO_NO_CLAIMS_MESSAGE,
+  BO_AGREEMENT_DATE_FROM_DAY,
+  BO_AGREEMENT_DATE_FROM_MONTH,
+  BO_AGREEMENT_DATE_FROM_YEAR,
+  BO_AGREEMENT_DATE_TO_DAY,
+  BO_AGREEMENT_DATE_TO_MONTH,
+  BO_AGREEMENT_DATE_TO_YEAR,
 } from "./backoffice-selectors.js";
 import { swapBackOfficeUser, getBackOfficeUrl } from "./common.js";
 
@@ -85,6 +91,32 @@ export async function expectAllAgreementsToStartWith(allowedPrefixes) {
     const reference = await referenceLink.getText();
     expect(allowedPrefixes.some((prefix) => reference.startsWith(prefix))).toBe(true);
   }
+}
+
+// Opens the advanced search disclosure and filters agreements by an
+// "agreement date from" and/or "agreement date to" range. Each bound is an
+// optional { day, month, year } object; an omitted bound is left blank.
+export async function searchAgreementsByDateRange({ from, to } = {}) {
+  await browser.url(getBackOfficeUrl());
+  await $(BO_AGREEMENTS_TAB).click();
+  await $(BO_ADVANCED_SEARCH_SUMMARY).click();
+  if (from) {
+    await $(BO_AGREEMENT_DATE_FROM_DAY).setValue(from.day);
+    await $(BO_AGREEMENT_DATE_FROM_MONTH).setValue(from.month);
+    await $(BO_AGREEMENT_DATE_FROM_YEAR).setValue(from.year);
+  }
+  if (to) {
+    await $(BO_AGREEMENT_DATE_TO_DAY).setValue(to.day);
+    await $(BO_AGREEMENT_DATE_TO_MONTH).setValue(to.month);
+    await $(BO_AGREEMENT_DATE_TO_YEAR).setValue(to.year);
+  }
+  await $(BO_ADVANCED_SEARCH_BUTTON).click();
+}
+
+// Asserts the results list holds at least one agreement.
+export async function expectAgreementsFound() {
+  const referenceLinks = await $$(BO_AGREEMENT_REFERENCE_LINKS);
+  expect(referenceLinks.length).toBeGreaterThan(0);
 }
 
 // Moves a claim that is already 'In check' to 'Recommended to reject'. Assumes
