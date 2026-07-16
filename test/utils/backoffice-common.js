@@ -141,15 +141,22 @@ export async function searchAgreementsByDateRange({ from, to } = {}) {
   await browser.url(getBackOfficeUrl());
   await $(BO_AGREEMENTS_TAB).click();
   await $(BO_ADVANCED_SEARCH_SUMMARY).click();
-  if (from) {
-    await $(BO_AGREEMENT_DATE_FROM_DAY).setValue(from.day);
-    await $(BO_AGREEMENT_DATE_FROM_MONTH).setValue(from.month);
-    await $(BO_AGREEMENT_DATE_FROM_YEAR).setValue(from.year);
-  }
-  if (to) {
-    await $(BO_AGREEMENT_DATE_TO_DAY).setValue(to.day);
-    await $(BO_AGREEMENT_DATE_TO_MONTH).setValue(to.month);
-    await $(BO_AGREEMENT_DATE_TO_YEAR).setValue(to.year);
+  // Every field is written, blanking omitted parts, so date values left in the
+  // session from an earlier search don't survive to invert the current range.
+  const fields = [
+    [BO_AGREEMENT_DATE_FROM_DAY, from?.day],
+    [BO_AGREEMENT_DATE_FROM_MONTH, from?.month],
+    [BO_AGREEMENT_DATE_FROM_YEAR, from?.year],
+    [BO_AGREEMENT_DATE_TO_DAY, to?.day],
+    [BO_AGREEMENT_DATE_TO_MONTH, to?.month],
+    [BO_AGREEMENT_DATE_TO_YEAR, to?.year],
+  ];
+  for (const [selector, value] of fields) {
+    const field = $(selector);
+    await field.clearValue();
+    if (value) {
+      await field.setValue(value);
+    }
   }
   await $(BO_ADVANCED_SEARCH_BUTTON).click();
 }
