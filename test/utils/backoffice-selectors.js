@@ -52,6 +52,7 @@ export const BO_SEARCH_BUTTON = ".search-button";
 export const BO_ADVANCED_SEARCH_SUMMARY = ".govuk-details__summary";
 export const BO_AGREEMENT_TYPE_SELECT = "#agreementType";
 export const BO_ADVANCED_SEARCH_BUTTON = 'button[name="submit"][value="advancedSearch"]';
+export const BO_CLEAR_FILTERS_LINK = 'a[href="/claims/clear"]';
 
 export const BO_AGREEMENT_DATE_FROM_DAY = "#dateFrom-day";
 export const BO_AGREEMENT_DATE_FROM_MONTH = "#dateFrom-month";
