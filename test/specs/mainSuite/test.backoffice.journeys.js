@@ -58,6 +58,8 @@ import {
   expectAllAgreementsToStartWith,
   searchAgreementsByDateRange,
   expectAgreementsFound,
+  searchAgreementsByStatus,
+  expectAllAgreementsToHaveStatus,
 } from "../../utils/backoffice-common.js";
 import { createSheepReviewClaim } from "../../utils/reviews/index.js";
 
@@ -187,6 +189,13 @@ describe("Backoffice journeys", async function () {
       it("returns agreements that fall within the date range", async function () {
         await searchAgreementsByDateRange({ from: FAR_PAST, to: FAR_FUTURE });
         await expectAgreementsFound();
+      });
+    });
+
+    describe("by status", () => {
+      it("can search by Agreed status", async function () {
+        await searchAgreementsByStatus("AGREED");
+        await expectAllAgreementsToHaveStatus("AGREED");
       });
     });
   });

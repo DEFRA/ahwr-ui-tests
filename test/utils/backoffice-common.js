@@ -3,6 +3,7 @@ import {
   BO_AGREEMENTS_TAB,
   getAgreementReferenceSelector,
   getViewClaimLinkSelector,
+  getAgreementStatusColumnSelector,
   BO_RECOMMEND_TO_PAY_BUTTON,
   BO_RECOMMEND_TO_REJECT_BUTTON,
   BO_CHECKED_CHECKLIST_CHECKBOX,
@@ -18,6 +19,7 @@ import {
   BO_NO_AGREEMENTS_MESSAGE,
   BO_ADVANCED_SEARCH_SUMMARY,
   BO_AGREEMENT_TYPE_SELECT,
+  BO_AGREEMENT_STATUS_SELECT,
   BO_ADVANCED_SEARCH_BUTTON,
   BO_AGREEMENT_REFERENCE_LINKS,
   BO_NO_CLAIMS_MESSAGE,
@@ -112,6 +114,21 @@ export async function searchAgreementsByType(agreementType) {
 }
 
 /**
+ * Opens the advanced search disclosure and filters the agreements list by the
+ * given status ("ALL", "AGREED" or "NOT_AGREED").
+ *
+ * @param {string} status - the status value to filter by.
+ * @returns {Promise<void>}
+ */
+export async function searchAgreementsByStatus(status) {
+  await browser.url(getBackOfficeUrl());
+  await $(BO_AGREEMENTS_TAB).click();
+  await $(BO_ADVANCED_SEARCH_SUMMARY).click();
+  await $(BO_AGREEMENT_STATUS_SELECT).selectByAttribute("value", status);
+  await $(BO_ADVANCED_SEARCH_BUTTON).click();
+}
+
+/**
  * Asserts the results list is non-empty and that every agreement reference
  * begins with one of the allowed prefixes for the searched-for type.
  *
@@ -126,6 +143,21 @@ export async function expectAllAgreementsToStartWith(allowedPrefixes) {
     const reference = await referenceLink.getText();
     expect(allowedPrefixes.some((prefix) => reference.startsWith(prefix))).toBe(true);
   }
+}
+
+/**
+ * Asserts the results list is non-empty and that every agreement has the
+ * given status (e.g. "AGREED").
+ *
+ * @param {string} status - the status every result must have.
+ * @returns {Promise<void>}
+ */
+export async function expectAllAgreementsToHaveStatus(status) {
+  const referenceLinks = await $$(BO_AGREEMENT_REFERENCE_LINKS);
+  expect(referenceLinks.length).toBeGreaterThan(0);
+
+  const statusCells = await $$(getAgreementStatusColumnSelector(status));
+  expect(statusCells.length).toBe(referenceLinks.length);
 }
 
 /**
