@@ -28,6 +28,11 @@ import {
   LIVESTOCK_FLAG_SBI,
   LIVESTOCK_FLAG_AGREEMENT_REF,
 } from "../../utils/constants.js";
+import {
+  searchAgreementsByFlag,
+  expectAllAgreementsToBeFlagged,
+  expectNoAgreementsToBeFlagged,
+} from "../../utils/backoffice-common.js";
 import { createPoultryReviewClaim } from "../../utils/reviews/poultry.js";
 import { createBeefReviewClaim } from "../../utils/reviews/beef.js";
 
@@ -103,5 +108,21 @@ describe("Backoffice flag journeys", async function () {
     await $(getAgreementReferenceSelector(LIVESTOCK_FLAG_AGREEMENT_REF)).click();
     await $(getViewClaimLinkSelector(claimReference)).click();
     await expect($(BO_CLAIM_STATUS_TEXT)).toHaveText(expect.stringContaining("In check"));
+  });
+
+  // These run after the flags above have been created (and not deleted), so at
+  // least one flagged agreement exists for the FLAGGED filter to return.
+  describe("filters agreements by flag using advanced search", () => {
+    it("returns only flagged agreements when FLAGGED is selected", async () => {
+      await searchAgreementsByFlag("FLAGGED");
+      await expectAllAgreementsToBeFlagged();
+      await expect($(getAgreementReferenceSelector(POULTRY_FLAG_AGREEMENT_REF))).toBeDisplayed();
+    });
+
+    it("excludes flagged agreements when NOT_FLAGGED is selected", async () => {
+      await searchAgreementsByFlag("NOT_FLAGGED");
+      await expectNoAgreementsToBeFlagged();
+      await expect($(getAgreementReferenceSelector(POULTRY_FLAG_AGREEMENT_REF))).not.toBeExisting();
+    });
   });
 });

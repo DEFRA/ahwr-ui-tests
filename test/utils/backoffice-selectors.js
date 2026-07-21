@@ -52,6 +52,7 @@ export const BO_SEARCH_BUTTON = ".search-button";
 export const BO_ADVANCED_SEARCH_SUMMARY = ".govuk-details__summary";
 export const BO_AGREEMENT_TYPE_SELECT = "#agreementType";
 export const BO_AGREEMENT_STATUS_SELECT = "#status";
+export const BO_AGREEMENT_FLAG_SELECT = "#flag";
 export const BO_ADVANCED_SEARCH_BUTTON = 'button[name="submit"][value="advancedSearch"]';
 export const BO_CLEAR_FILTERS_LINK = 'a[href="/claims/clear"]';
 
@@ -63,6 +64,10 @@ export const BO_AGREEMENT_DATE_TO_MONTH = "#dateTo-month";
 export const BO_AGREEMENT_DATE_TO_YEAR = "#dateTo-year";
 
 export const BO_AGREEMENT_REFERENCE_LINKS = "#agreements tbody td:first-child a";
+
+// The flag column is the second cell of each row; it shows "Yes 🚩" when the
+// agreement is flagged and is empty otherwise.
+export const BO_AGREEMENT_FLAG_COLUMN = "#agreements tbody td:nth-child(2)";
 
 export function getAgreementStatusColumnSelector(status) {
   return `#agreements tbody td[data-sort-value="${status}"]`;
