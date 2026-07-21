@@ -28,6 +28,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
+      - name: Cache infra Docker images
+        uses: ./.github/actions/cached-infra-images
+
       - name: Run test script
         run: ./scripts/github_run_tests.sh
 
