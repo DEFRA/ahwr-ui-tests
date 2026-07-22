@@ -16,6 +16,9 @@ jobs:
     name: Run Journey Tests
     runs-on: ubuntu-latest
     env:
+      # Run spec files in parallel (4 workers). The livestock quartet is grouped
+      # into one worker in wdio.conf.js, so it stays sequential within that group.
+      USE_INSTANCES: "4"
       MESSAGE_QUEUE_HOST: ${{ secrets.MESSAGE_QUEUE_HOST }}
       EVENT_QUEUE_ADDRESS: ${{ secrets.EVENT_QUEUE_ADDRESS }}
       MESSAGE_QUEUE_USER: ${{ secrets.MESSAGE_QUEUE_USER }}
