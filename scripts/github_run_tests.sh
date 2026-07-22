@@ -61,7 +61,12 @@ while [[ $# -gt 0 ]]; do
 done
 
 ./scripts/pull_latest_images.sh "${LOCAL_ARGS[@]}" || EXIT_CODE=1
-./scripts/build_wdio_test_image.sh || EXIT_CODE=1
+
+# When SKIP_IMAGE_BUILD is set the workflow has already built wdio-tests:latest
+# (with a cached buildx layer cache), so skip the local build here.
+if [[ "${SKIP_IMAGE_BUILD:-}" != "true" ]]; then
+  ./scripts/build_wdio_test_image.sh || EXIT_CODE=1
+fi
 
 if [ -n "$SUITE" ]; then
   # Run specific suite

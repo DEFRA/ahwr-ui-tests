@@ -19,6 +19,9 @@ jobs:
       # Run spec files in parallel (4 workers). The livestock quartet is grouped
       # into one worker in wdio.conf.js, so it stays sequential within that group.
       USE_INSTANCES: "4"
+      # The wdio-tests image is built by the buildx step below, so the test
+      # script skips its own build.
+      SKIP_IMAGE_BUILD: "true"
       MESSAGE_QUEUE_HOST: ${{ secrets.MESSAGE_QUEUE_HOST }}
       EVENT_QUEUE_ADDRESS: ${{ secrets.EVENT_QUEUE_ADDRESS }}
       MESSAGE_QUEUE_USER: ${{ secrets.MESSAGE_QUEUE_USER }}
@@ -30,6 +33,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build wdio-tests image with layer cache
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          load: true
+          tags: wdio-tests:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Run test script
         run: ./scripts/github_run_tests.sh
