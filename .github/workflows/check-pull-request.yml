@@ -15,6 +15,8 @@ jobs:
   pr-build:
     name: Run Journey Tests
     runs-on: ubuntu-latest
+    # Dependabot PRs have no access to secrets, so the journey tests cannot run
+    if: github.actor != 'dependabot[bot]'
     env:
       MESSAGE_QUEUE_HOST: ${{ secrets.MESSAGE_QUEUE_HOST }}
       EVENT_QUEUE_ADDRESS: ${{ secrets.EVENT_QUEUE_ADDRESS }}
