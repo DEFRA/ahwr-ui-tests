@@ -1,6 +1,8 @@
 import { browser, $, $$, expect } from "@wdio/globals";
 import {
   BO_AGREEMENTS_TAB,
+  BO_AGREEMENT_SEARCH,
+  BO_SEARCH_BUTTON,
   getAgreementReferenceSelector,
   getViewClaimLinkSelector,
   getAgreementStatusColumnSelector,
@@ -35,6 +37,24 @@ import {
 import { swapBackOfficeUser, getBackOfficeUrl } from "./common.js";
 
 /**
+ * Opens an agreement from the backoffice.
+ *
+ * The agreements list is paginated (20 per page) and recency-sorted, so under a
+ * parallel run an agreement can be pushed off the first page; search for it by
+ * reference instead of scanning the default list, so it is found regardless of
+ * how many other agreements exist.
+ *
+ * @param {string} agreementReference - the agreement to open.
+ * @returns {Promise<void>}
+ */
+export async function openAgreement(agreementReference) {
+  await $(BO_AGREEMENTS_TAB).click();
+  await $(BO_AGREEMENT_SEARCH).setValue(agreementReference);
+  await $(BO_SEARCH_BUTTON).click();
+  await $(getAgreementReferenceSelector(agreementReference)).click();
+}
+
+/**
  * Opens an agreement then the given claim within it.
  *
  * The agreement page is server-rendered, so a claim created moments earlier can
@@ -42,13 +62,12 @@ import { swapBackOfficeUser, getBackOfficeUrl } from "./common.js";
  * before clicking, rather than relying on a single auto-wait against a static
  * DOM that will never gain the row on its own.
  *
- * @param {string} agreementReference - the agreement to open.
+ * @param {string} agreementReference - the agreement the claim belongs to.
  * @param {string} claimReference - the claim to open within it.
  * @returns {Promise<void>}
  */
-async function openClaim(agreementReference, claimReference) {
-  await $(BO_AGREEMENTS_TAB).click();
-  await $(getAgreementReferenceSelector(agreementReference)).click();
+export async function openClaim(agreementReference, claimReference) {
+  await openAgreement(agreementReference);
   const claimLink = $(getViewClaimLinkSelector(claimReference));
   await browser.waitUntil(
     async () => {
@@ -59,7 +78,7 @@ async function openClaim(agreementReference, claimReference) {
       return false;
     },
     {
-      timeout: 30000,
+      timeout: 60000,
       interval: 2000,
       timeoutMsg: `Claim ${claimReference} did not appear on agreement ${agreementReference}`,
     },

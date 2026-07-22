@@ -32,25 +32,21 @@ export const config = {
   suites: {
     // Ordered longest-running first: WDIO dispatches spec files to free workers
     // in list order, so the heavy specs must lead to avoid starting late behind
-    // the quick ones and dominating the tail.
+    // the quick ones and dominating the tail. beef/dairy/pigs/sheep now each use
+    // their own business + agreement, so they run as independent parallel specs.
     mainSuite: [
-      // Grouped into one worker: all four log in as the same business
-      // (MULTIPLE_HERDS_SBI) and approve claims on the same agreement
-      // (MULTIPLE_HERD_AGREEMENT_REF), so they must not run concurrently.
-      [
-        "./test/specs/mainSuite/test.beef.journeys.js",
-        "./test/specs/mainSuite/test.dairy.journeys.js",
-        "./test/specs/mainSuite/test.pigs.journeys.js",
-        "./test/specs/mainSuite/test.sheep.journeys.js",
-      ],
       "./test/specs/mainSuite/test.livestock.claim.session.journeys.js",
       "./test/specs/mainSuite/test.backoffice.journeys.js",
+      "./test/specs/mainSuite/test.pigs.journeys.js",
       "./test/specs/mainSuite/test.poultry.journeys.js",
       "./test/specs/mainSuite/test.pre.and.post.mh.journeys.js",
       "./test/specs/mainSuite/test.pre.mh.journeys.js",
+      "./test/specs/mainSuite/test.beef.journeys.js",
+      "./test/specs/mainSuite/test.dairy.journeys.js",
       "./test/specs/mainSuite/test.review-claim-before-mh-launch.journeys.js",
       "./test/specs/mainSuite/test.follow-up-claim-before-mh-launch.journeys.js",
       "./test/specs/mainSuite/test.dashboard.journeys.js",
+      "./test/specs/mainSuite/test.sheep.journeys.js",
       "./test/specs/mainSuite/test.apply.journeys.js",
     ],
     comp: [

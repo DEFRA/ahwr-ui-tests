@@ -6,7 +6,13 @@ export const BACK_OFFICE_REJECT_SBI = "106215898";
 export const BACK_OFFICE_ON_HOLD_SBI = "104215119";
 export const DASHBOARD_SBI = "107019440";
 export const JOHNES_DISEASE = "johnes";
-export const MULTIPLE_HERDS_SBI = "123454321";
+// Each livestock species has its own business + agreement so the beef/dairy/
+// pigs/sheep specs can run as independent parallel workers (see the matching
+// IAHW-KH2H-WNA1/8/9/10 agreements seeded in fixtures/init-mongo.js).
+export const BEEF_MULTIPLE_HERD_SBI = "123454321";
+export const DAIRY_MULTIPLE_HERD_SBI = "123454322";
+export const PIGS_MULTIPLE_HERD_SBI = "123454323";
+export const SHEEP_MULTIPLE_HERD_SBI = "123454324";
 export const LIVESTOCK_SBI = "106613836";
 
 export const POULTRY_SBI = "120810710";
@@ -41,7 +47,10 @@ export const PBR_REFERENCE_PREFIXES = ["POUL-"];
 
 export const POULTRY_CLAIM_REF = "PORE-D7AB-E2UU";
 
-export const MULTIPLE_HERD_AGREEMENT_REF = "IAHW-KH2H-WNA1";
+export const BEEF_MULTIPLE_HERD_AGREEMENT_REF = "IAHW-KH2H-WNA1";
+export const DAIRY_MULTIPLE_HERD_AGREEMENT_REF = "IAHW-KH2H-WNA8";
+export const PIGS_MULTIPLE_HERD_AGREEMENT_REF = "IAHW-KH2H-WNA9";
+export const SHEEP_MULTIPLE_HERD_AGREEMENT_REF = "IAHW-KH2H-WNB1";
 
 export const PRE_MULTIPLE_HERD_SBI = "114262075";
 export const PRE_MULTIPLE_HERD_AGREEMENT_REF = "IAHW-KH1H-BBA4";

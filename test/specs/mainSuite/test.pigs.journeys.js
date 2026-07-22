@@ -1,7 +1,7 @@
 import { expect, $ } from "@wdio/globals";
 import { enterVisitDateAndContinue, performDevLogin } from "../../utils/common.js";
 import { CLAIM_REFERENCE } from "../../utils/selectors.js";
-import { MULTIPLE_HERDS_SBI, MULTIPLE_HERD_AGREEMENT_REF } from "../../utils/constants.js";
+import { PIGS_MULTIPLE_HERD_SBI, PIGS_MULTIPLE_HERD_AGREEMENT_REF } from "../../utils/constants.js";
 import { approveClaim } from "../../utils/backoffice-common.js";
 import {
   createPigsReviewClaim,
@@ -16,7 +16,7 @@ let claimReference;
 
 describe("Multiple herds pigs claim journeys", async function () {
   it("can create the first review claim for a pigs herd for a farmer business with a positive test result", async () => {
-    await performDevLogin(MULTIPLE_HERDS_SBI);
+    await performDevLogin(PIGS_MULTIPLE_HERD_SBI);
 
     claimReference = await createPigsReviewClaim({
       multipleHerdFlag: true,
@@ -31,9 +31,9 @@ describe("Multiple herds pigs claim journeys", async function () {
 
   it("can create a vaccinated follow-up claim incorporating both PCR positive and genetic sequencing outcomes for a pigs review with a positive test result", async () => {
     // Use the review claim from the test above for doing the follow-up claim
-    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimReference);
+    await approveClaim(PIGS_MULTIPLE_HERD_AGREEMENT_REF, claimReference);
 
-    await performDevLogin(MULTIPLE_HERDS_SBI);
+    await performDevLogin(PIGS_MULTIPLE_HERD_SBI);
 
     await createMultipleHerdPigsFollowUpForFirstHerd({
       urn: "pg-fc-5343463",
@@ -46,7 +46,7 @@ describe("Multiple herds pigs claim journeys", async function () {
   it("can create a vaccinated follow-up claim incorporating PCR negative but no genetic sequencing outcomes for a pigs review with a positive test result", async () => {
     const herdName = "Pigs additional herd 2";
 
-    await performDevLogin(MULTIPLE_HERDS_SBI);
+    await performDevLogin(PIGS_MULTIPLE_HERD_SBI);
 
     claimReference = await createPigsReviewForAdditionalHerd({
       herd: herdName,
@@ -57,9 +57,9 @@ describe("Multiple herds pigs claim journeys", async function () {
 
     expect(claimReference).toEqual(expect.stringContaining("REPI"));
 
-    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimReference);
+    await approveClaim(PIGS_MULTIPLE_HERD_AGREEMENT_REF, claimReference);
 
-    await performDevLogin(MULTIPLE_HERDS_SBI);
+    await performDevLogin(PIGS_MULTIPLE_HERD_SBI);
 
     await createMultipleHerdPigsFollowUpForAdditionalHerd({
       herdName,
@@ -75,7 +75,7 @@ describe("Multiple herds pigs claim journeys", async function () {
   it("can create an un-vaccinated follow-up claim incorporating both PCR positive and genetic sequencing outcomes for a pigs review with a positive test result", async () => {
     const herdName = "Pigs additional herd 3";
 
-    await performDevLogin(MULTIPLE_HERDS_SBI);
+    await performDevLogin(PIGS_MULTIPLE_HERD_SBI);
 
     claimReference = await createPigsReviewForAdditionalHerd({
       herd: herdName,
@@ -85,9 +85,9 @@ describe("Multiple herds pigs claim journeys", async function () {
 
     expect(claimReference).toEqual(expect.stringContaining("REPI"));
 
-    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimReference);
+    await approveClaim(PIGS_MULTIPLE_HERD_AGREEMENT_REF, claimReference);
 
-    await performDevLogin(MULTIPLE_HERDS_SBI);
+    await performDevLogin(PIGS_MULTIPLE_HERD_SBI);
 
     await createMultipleHerdPigsFollowUpForAdditionalHerd({
       herdName,
@@ -103,7 +103,7 @@ describe("Multiple herds pigs claim journeys", async function () {
   it("can create an un-vaccinated follow-up claim incorporating PCR negative but no genetic sequencing outcomes for a pigs review with a positive test result", async () => {
     const herdName = "Pigs additional herd 4";
 
-    await performDevLogin(MULTIPLE_HERDS_SBI);
+    await performDevLogin(PIGS_MULTIPLE_HERD_SBI);
 
     claimReference = await createPigsReviewForAdditionalHerd({
       herd: herdName,
@@ -113,9 +113,9 @@ describe("Multiple herds pigs claim journeys", async function () {
 
     expect(claimReference).toEqual(expect.stringContaining("REPI"));
 
-    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimReference);
+    await approveClaim(PIGS_MULTIPLE_HERD_AGREEMENT_REF, claimReference);
 
-    await performDevLogin(MULTIPLE_HERDS_SBI);
+    await performDevLogin(PIGS_MULTIPLE_HERD_SBI);
 
     await createMultipleHerdPigsFollowUpForAdditionalHerd({
       herdName,
@@ -131,7 +131,7 @@ describe("Multiple herds pigs claim journeys", async function () {
   it("can create a vaccinated follow-up claim incorporating both PCR positive and genetic sequencing outcomes for a pigs review with a negative test result", async () => {
     const herdName = "Pigs additional herd 5";
 
-    await performDevLogin(MULTIPLE_HERDS_SBI);
+    await performDevLogin(PIGS_MULTIPLE_HERD_SBI);
 
     claimReference = await createPigsReviewForAdditionalHerd({
       herd: herdName,
@@ -141,9 +141,9 @@ describe("Multiple herds pigs claim journeys", async function () {
 
     expect(claimReference).toEqual(expect.stringContaining("REPI"));
 
-    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimReference);
+    await approveClaim(PIGS_MULTIPLE_HERD_AGREEMENT_REF, claimReference);
 
-    await performDevLogin(MULTIPLE_HERDS_SBI);
+    await performDevLogin(PIGS_MULTIPLE_HERD_SBI);
 
     await createMultipleHerdPigsFollowUpForAdditionalHerd({
       herdName,
@@ -159,7 +159,7 @@ describe("Multiple herds pigs claim journeys", async function () {
   it("can create a vaccinated follow-up claim incorporating PCR negative but no genetic sequencing outcomes for a pigs review with a negative test result", async () => {
     const herdName = "Pigs additional herd 6";
 
-    await performDevLogin(MULTIPLE_HERDS_SBI);
+    await performDevLogin(PIGS_MULTIPLE_HERD_SBI);
 
     claimReference = await createPigsReviewForAdditionalHerd({
       herd: herdName,
@@ -169,9 +169,9 @@ describe("Multiple herds pigs claim journeys", async function () {
 
     expect(claimReference).toEqual(expect.stringContaining("REPI"));
 
-    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimReference);
+    await approveClaim(PIGS_MULTIPLE_HERD_AGREEMENT_REF, claimReference);
 
-    await performDevLogin(MULTIPLE_HERDS_SBI);
+    await performDevLogin(PIGS_MULTIPLE_HERD_SBI);
 
     await createMultipleHerdPigsFollowUpForAdditionalHerd({
       herdName,
@@ -187,7 +187,7 @@ describe("Multiple herds pigs claim journeys", async function () {
   it("can create an un-vaccinated follow-up claim incorporating only positive ELISA test result for a pigs review with a negative test result", async () => {
     const herdName = "Pigs additional herd 7";
 
-    await performDevLogin(MULTIPLE_HERDS_SBI);
+    await performDevLogin(PIGS_MULTIPLE_HERD_SBI);
 
     claimReference = await createPigsReviewForAdditionalHerd({
       herd: herdName,
@@ -197,9 +197,9 @@ describe("Multiple herds pigs claim journeys", async function () {
 
     expect(claimReference).toEqual(expect.stringContaining("REPI"));
 
-    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimReference);
+    await approveClaim(PIGS_MULTIPLE_HERD_AGREEMENT_REF, claimReference);
 
-    await performDevLogin(MULTIPLE_HERDS_SBI);
+    await performDevLogin(PIGS_MULTIPLE_HERD_SBI);
 
     await createMultipleHerdPigsFollowUpForAdditionalHerd({
       herdName,
@@ -215,7 +215,7 @@ describe("Multiple herds pigs claim journeys", async function () {
   it("can create an un-vaccinated follow-up claim incorporating only negative ELISA test result for a pigs review with a negative test result", async () => {
     const herdName = "Pigs additional herd 8";
 
-    await performDevLogin(MULTIPLE_HERDS_SBI);
+    await performDevLogin(PIGS_MULTIPLE_HERD_SBI);
 
     claimReference = await createPigsReviewForAdditionalHerd({
       herd: herdName,
@@ -225,9 +225,9 @@ describe("Multiple herds pigs claim journeys", async function () {
 
     expect(claimReference).toEqual(expect.stringContaining("REPI"));
 
-    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimReference);
+    await approveClaim(PIGS_MULTIPLE_HERD_AGREEMENT_REF, claimReference);
 
-    await performDevLogin(MULTIPLE_HERDS_SBI);
+    await performDevLogin(PIGS_MULTIPLE_HERD_SBI);
 
     await createMultipleHerdPigsFollowUpForAdditionalHerd({
       herdName,
