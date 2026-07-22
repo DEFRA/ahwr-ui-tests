@@ -20,6 +20,8 @@ import {
   BO_ADVANCED_SEARCH_SUMMARY,
   BO_AGREEMENT_TYPE_SELECT,
   BO_AGREEMENT_STATUS_SELECT,
+  BO_AGREEMENT_FLAG_SELECT,
+  BO_AGREEMENT_FLAG_COLUMN,
   BO_ADVANCED_SEARCH_BUTTON,
   BO_AGREEMENT_REFERENCE_LINKS,
   BO_NO_CLAIMS_MESSAGE,
@@ -126,6 +128,53 @@ export async function searchAgreementsByStatus(status) {
   await $(BO_ADVANCED_SEARCH_SUMMARY).click();
   await $(BO_AGREEMENT_STATUS_SELECT).selectByAttribute("value", status);
   await $(BO_ADVANCED_SEARCH_BUTTON).click();
+}
+
+/**
+ * Opens the advanced search disclosure and filters the agreements list by the
+ * given flag value ("ALL", "FLAGGED" or "NOT_FLAGGED").
+ *
+ * @param {string} flag - the flag value to filter by.
+ * @returns {Promise<void>}
+ */
+export async function searchAgreementsByFlag(flag) {
+  await browser.url(getBackOfficeUrl());
+  await $(BO_AGREEMENTS_TAB).click();
+  await $(BO_ADVANCED_SEARCH_SUMMARY).click();
+  await $(BO_AGREEMENT_FLAG_SELECT).selectByAttribute("value", flag);
+  await $(BO_ADVANCED_SEARCH_BUTTON).click();
+}
+
+/**
+ * Asserts the results list is non-empty and that every agreement is flagged,
+ * i.e. its flag column reads "Yes".
+ *
+ * @returns {Promise<void>}
+ */
+export async function expectAllAgreementsToBeFlagged() {
+  const referenceLinks = await $$(BO_AGREEMENT_REFERENCE_LINKS);
+  expect(referenceLinks.length).toBeGreaterThan(0);
+
+  const flagCells = await $$(BO_AGREEMENT_FLAG_COLUMN);
+  for (const flagCell of flagCells) {
+    expect(await flagCell.getText()).toContain("Yes");
+  }
+}
+
+/**
+ * Asserts the results list is non-empty and that no agreement is flagged,
+ * i.e. every flag column is empty.
+ *
+ * @returns {Promise<void>}
+ */
+export async function expectNoAgreementsToBeFlagged() {
+  const referenceLinks = await $$(BO_AGREEMENT_REFERENCE_LINKS);
+  expect(referenceLinks.length).toBeGreaterThan(0);
+
+  const flagCells = await $$(BO_AGREEMENT_FLAG_COLUMN);
+  for (const flagCell of flagCells) {
+    expect(await flagCell.getText()).toBe("");
+  }
 }
 
 /**
