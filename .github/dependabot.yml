@@ -44,7 +44,7 @@ updates:
       cronjob: "0 0 * * *"
 
     cooldown:
-      default-days: 3
+      default-days: 7
 
     versioning-strategy: increase
 
@@ -62,4 +62,4 @@ updates:
       cronjob: "0 0 * * *"
 
     cooldown:
-      default-days: 3
+      default-days: 7
