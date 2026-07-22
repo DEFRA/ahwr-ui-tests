@@ -31,7 +31,10 @@ import {
   PREVIOUSLY_CLAIMED_NO_ON_SELECT_THE_HERD_PAGE,
   PREVIOUSLY_CLAIMED_YES_ON_SELECT_THE_HERD_PAGE,
 } from "../../utils/multiple-herd-selectors.js";
-import { MULTIPLE_HERDS_SBI, MULTIPLE_HERD_AGREEMENT_REF } from "../../utils/constants.js";
+import {
+  SHEEP_MULTIPLE_HERD_SBI,
+  SHEEP_MULTIPLE_HERD_AGREEMENT_REF,
+} from "../../utils/constants.js";
 import { approveClaim } from "../../utils/backoffice-common.js";
 import { createSheepReviewClaim } from "../../utils/reviews/index.js";
 import { createMultipleHerdSheepFollowUp } from "../../utils/follow-ups/index.js";
@@ -40,7 +43,7 @@ let claimReference;
 
 describe("Multiple herd sheep claim journeys", async function () {
   it("can create the first review claim for a flock of sheep for a business", async () => {
-    await performDevLogin(MULTIPLE_HERDS_SBI);
+    await performDevLogin(SHEEP_MULTIPLE_HERD_SBI);
 
     claimReference = await createSheepReviewClaim({
       multipleHerdFlag: true,
@@ -50,7 +53,7 @@ describe("Multiple herd sheep claim journeys", async function () {
   });
 
   it("cannot create a second review claim for the same flock of sheep for the same business", async () => {
-    await performDevLogin(MULTIPLE_HERDS_SBI);
+    await performDevLogin(SHEEP_MULTIPLE_HERD_SBI);
 
     await selectFundingType("IAHW");
 
@@ -73,7 +76,7 @@ describe("Multiple herd sheep claim journeys", async function () {
   });
 
   it("cannot create a follow-up claim for a flock of sheep when its review claim is not approved", async () => {
-    await performDevLogin(MULTIPLE_HERDS_SBI);
+    await performDevLogin(SHEEP_MULTIPLE_HERD_SBI);
     await selectFundingType("IAHW");
     await clickStartNewClaimButton();
     await clickOnElementAndContinue(getTypeOfLivestockSelector("sheep"));
@@ -92,7 +95,7 @@ describe("Multiple herd sheep claim journeys", async function () {
   });
 
   it("cannot create follow-up claim for a different flock of sheep when a review claim hasn't been created and approved for it", async () => {
-    await performDevLogin(MULTIPLE_HERDS_SBI);
+    await performDevLogin(SHEEP_MULTIPLE_HERD_SBI);
     await selectFundingType("IAHW");
     await clickStartNewClaimButton();
     await clickOnElementAndContinue(getTypeOfLivestockSelector("sheep"));
@@ -111,9 +114,9 @@ describe("Multiple herd sheep claim journeys", async function () {
   });
 
   it("can create a follow-up claim when a review claim is approved for a flock of sheep", async () => {
-    await approveClaim(MULTIPLE_HERD_AGREEMENT_REF, claimReference);
+    await approveClaim(SHEEP_MULTIPLE_HERD_AGREEMENT_REF, claimReference);
 
-    await performDevLogin(MULTIPLE_HERDS_SBI);
+    await performDevLogin(SHEEP_MULTIPLE_HERD_SBI);
 
     await createMultipleHerdSheepFollowUp({ visitDate: new Date() });
 
@@ -121,7 +124,7 @@ describe("Multiple herd sheep claim journeys", async function () {
   });
 
   it("can create a review claim for a different flock of sheep for the same business", async () => {
-    await performDevLogin(MULTIPLE_HERDS_SBI);
+    await performDevLogin(SHEEP_MULTIPLE_HERD_SBI);
 
     await selectFundingType("IAHW");
 

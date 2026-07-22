@@ -1,6 +1,8 @@
 import { browser, $, $$, expect } from "@wdio/globals";
 import {
   BO_AGREEMENTS_TAB,
+  BO_AGREEMENT_SEARCH,
+  BO_SEARCH_BUTTON,
   getAgreementReferenceSelector,
   getViewClaimLinkSelector,
   getAgreementStatusColumnSelector,
@@ -35,6 +37,56 @@ import {
 import { swapBackOfficeUser, getBackOfficeUrl } from "./common.js";
 
 /**
+ * Opens an agreement from the backoffice.
+ *
+ * The agreements list is paginated (20 per page) and recency-sorted, so under a
+ * parallel run an agreement can be pushed off the first page; search for it by
+ * reference instead of scanning the default list, so it is found regardless of
+ * how many other agreements exist.
+ *
+ * @param {string} agreementReference - the agreement to open.
+ * @returns {Promise<void>}
+ */
+export async function openAgreement(agreementReference) {
+  await $(BO_AGREEMENTS_TAB).click();
+  await $(BO_AGREEMENT_SEARCH).setValue(agreementReference);
+  await $(BO_SEARCH_BUTTON).click();
+  await $(getAgreementReferenceSelector(agreementReference)).click();
+}
+
+/**
+ * Opens an agreement then the given claim within it.
+ *
+ * The agreement page is server-rendered, so a claim created moments earlier can
+ * be missing from the freshly-loaded list; reload until the claim link appears
+ * before clicking, rather than relying on a single auto-wait against a static
+ * DOM that will never gain the row on its own.
+ *
+ * @param {string} agreementReference - the agreement the claim belongs to.
+ * @param {string} claimReference - the claim to open within it.
+ * @returns {Promise<void>}
+ */
+export async function openClaim(agreementReference, claimReference) {
+  await openAgreement(agreementReference);
+  const claimLink = $(getViewClaimLinkSelector(claimReference));
+  await browser.waitUntil(
+    async () => {
+      if (await claimLink.isExisting()) {
+        return true;
+      }
+      await browser.refresh();
+      return false;
+    },
+    {
+      timeout: 60000,
+      interval: 2000,
+      timeoutMsg: `Claim ${claimReference} did not appear on agreement ${agreementReference}`,
+    },
+  );
+  await claimLink.click();
+}
+
+/**
  * Approves a claim end to end: recommends it to pay as one user, then swaps to
  * a second user to authorise it, leaving the claim "Ready to pay".
  *
@@ -45,9 +97,7 @@ import { swapBackOfficeUser, getBackOfficeUrl } from "./common.js";
 export async function approveClaim(agreementReference, claimReference) {
   await swapBackOfficeUser("Admin2");
   await browser.url(getBackOfficeUrl());
-  await $(BO_AGREEMENTS_TAB).click();
-  await $(getAgreementReferenceSelector(agreementReference)).click();
-  await $(getViewClaimLinkSelector(claimReference)).click();
+  await openClaim(agreementReference, claimReference);
   await $(BO_RECOMMEND_TO_PAY_BUTTON).click();
   await $(BO_CHECKED_CHECKLIST_CHECKBOX).click();
   await $(BO_SENT_CHECK_LIST_CHECKBOX).click();
@@ -56,9 +106,7 @@ export async function approveClaim(agreementReference, claimReference) {
 
   // Swapping to another user to approve the claim
   await swapBackOfficeUser("Admin");
-  await $(BO_AGREEMENTS_TAB).click();
-  await $(getAgreementReferenceSelector(agreementReference)).click();
-  await $(getViewClaimLinkSelector(claimReference)).click();
+  await openClaim(agreementReference, claimReference);
   await $(BO_PAY_BUTTON).click();
   await $(BO_PAY_CHECKBOX_ONE).click();
   await $(BO_PAY_CHECKBOX_TWO).click();
@@ -279,9 +327,7 @@ export async function recommendClaimToReject() {
  */
 export async function rejectClaim(agreementReference, claimReference) {
   await swapBackOfficeUser("Rejector");
-  await $(BO_AGREEMENTS_TAB).click();
-  await $(getAgreementReferenceSelector(agreementReference)).click();
-  await $(getViewClaimLinkSelector(claimReference)).click();
+  await openClaim(agreementReference, claimReference);
   await $(BO_REJECT_BUTTON).waitForDisplayed();
   await $(BO_REJECT_BUTTON).click();
   await $(BO_PAY_CHECKBOX_ONE).click();

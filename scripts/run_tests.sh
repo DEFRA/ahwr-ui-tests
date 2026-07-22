@@ -136,6 +136,9 @@ if [[ "$TEST_COMMAND" == "compatibility" ]]; then
   )
 fi
 
+if [[ -n "${USE_INSTANCES:-}" ]]; then
+  SED_ARGS+=(-e "s|(USE_INSTANCES:).*|\1 ${USE_INSTANCES}|g")
+fi
 if [[ -n "${CLAIM_COMPLIANCE_CHECK_RATIO:-}" ]]; then
   SED_ARGS+=(-e "s|(CLAIM_COMPLIANCE_CHECK_RATIO:).*|\1 ${CLAIM_COMPLIANCE_CHECK_RATIO}|g")
 fi

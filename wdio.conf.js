@@ -30,20 +30,24 @@ export const config = {
   //
   // specs: [],
   suites: {
+    // Ordered longest-running first: WDIO dispatches spec files to free workers
+    // in list order, so the heavy specs must lead to avoid starting late behind
+    // the quick ones and dominating the tail. beef/dairy/pigs/sheep now each use
+    // their own business + agreement, so they run as independent parallel specs.
     mainSuite: [
+      "./test/specs/mainSuite/test.livestock.claim.session.journeys.js",
+      "./test/specs/mainSuite/test.backoffice.journeys.js",
+      "./test/specs/mainSuite/test.pigs.journeys.js",
       "./test/specs/mainSuite/test.poultry.journeys.js",
-      "./test/specs/mainSuite/test.apply.journeys.js",
-      "./test/specs/mainSuite/test.review-claim-before-mh-launch.journeys.js",
-      "./test/specs/mainSuite/test.follow-up-claim-before-mh-launch.journeys.js",
-      "./test/specs/mainSuite/test.pre.mh.journeys.js",
       "./test/specs/mainSuite/test.pre.and.post.mh.journeys.js",
+      "./test/specs/mainSuite/test.pre.mh.journeys.js",
       "./test/specs/mainSuite/test.beef.journeys.js",
       "./test/specs/mainSuite/test.dairy.journeys.js",
-      "./test/specs/mainSuite/test.pigs.journeys.js",
-      "./test/specs/mainSuite/test.sheep.journeys.js",
-      "./test/specs/mainSuite/test.livestock.claim.session.journeys.js",
+      "./test/specs/mainSuite/test.review-claim-before-mh-launch.journeys.js",
+      "./test/specs/mainSuite/test.follow-up-claim-before-mh-launch.journeys.js",
       "./test/specs/mainSuite/test.dashboard.journeys.js",
-      "./test/specs/mainSuite/test.backoffice.journeys.js",
+      "./test/specs/mainSuite/test.sheep.journeys.js",
+      "./test/specs/mainSuite/test.apply.journeys.js",
     ],
     comp: [
       "./test/specs/test.claim-compliance.journeys.js",
@@ -80,7 +84,9 @@ export const config = {
   //
   capabilities: [
     {
-      maxInstances: 1,
+      // Must track the top-level maxInstances: a lower per-capability cap would
+      // throttle the single chrome capability back to sequential execution.
+      maxInstances: Number.parseInt(process.env.USE_INSTANCES ?? "1", 10),
       browserName: "chrome",
       "goog:chromeOptions": {
         args: [

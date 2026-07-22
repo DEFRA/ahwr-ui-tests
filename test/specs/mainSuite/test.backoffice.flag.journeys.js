@@ -6,7 +6,6 @@ import {
   getBackOfficeUrl,
 } from "../../utils/common.js";
 import {
-  BO_AGREEMENTS_TAB,
   BO_FLAGS_TAB,
   BO_CLAIM_STATUS_TEXT,
   BO_CREATE_AGREEMENT_FLAG_CTA,
@@ -17,7 +16,6 @@ import {
   BO_FLAG_DELETION_NOTE,
   BO_SUBMIT_DELETE_FLAG_BUTTON,
   getAgreementReferenceSelector,
-  getViewClaimLinkSelector,
   getFlaggedAgreementRowSelector,
 } from "../../utils/backoffice-selectors.js";
 
@@ -29,6 +27,7 @@ import {
   LIVESTOCK_FLAG_AGREEMENT_REF,
 } from "../../utils/constants.js";
 import {
+  openClaim,
   searchAgreementsByFlag,
   expectAllAgreementsToBeFlagged,
   expectNoAgreementsToBeFlagged,
@@ -78,9 +77,7 @@ describe("Backoffice flag journeys", async function () {
     });
     expect(claimReference).toEqual(expect.stringContaining("PORE"));
     await browser.url(getBackOfficeUrl());
-    await $(BO_AGREEMENTS_TAB).click();
-    await $(getAgreementReferenceSelector(POULTRY_FLAG_AGREEMENT_REF)).click();
-    await $(getViewClaimLinkSelector(claimReference)).click();
+    await openClaim(POULTRY_FLAG_AGREEMENT_REF, claimReference);
     await expect($(BO_CLAIM_STATUS_TEXT)).toHaveText(expect.stringContaining("In check"));
   });
 
@@ -104,9 +101,7 @@ describe("Backoffice flag journeys", async function () {
     });
     expect(claimReference).toEqual(expect.stringContaining("REBC"));
     await browser.url(getBackOfficeUrl());
-    await $(BO_AGREEMENTS_TAB).click();
-    await $(getAgreementReferenceSelector(LIVESTOCK_FLAG_AGREEMENT_REF)).click();
-    await $(getViewClaimLinkSelector(claimReference)).click();
+    await openClaim(LIVESTOCK_FLAG_AGREEMENT_REF, claimReference);
     await expect($(BO_CLAIM_STATUS_TEXT)).toHaveText(expect.stringContaining("In check"));
   });
 

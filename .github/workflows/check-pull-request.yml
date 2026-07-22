@@ -18,6 +18,10 @@ jobs:
     # Dependabot PRs have no access to secrets, so the journey tests cannot run
     if: github.actor != 'dependabot[bot]'
     env:
+      # Run spec files in parallel. The shared backend is the bottleneck, so
+      # raising this much higher inflates per-spec time and causes flaky
+      # backoffice timeouts without improving wall-clock.
+      USE_INSTANCES: "4"
       MESSAGE_QUEUE_HOST: ${{ secrets.MESSAGE_QUEUE_HOST }}
       EVENT_QUEUE_ADDRESS: ${{ secrets.EVENT_QUEUE_ADDRESS }}
       MESSAGE_QUEUE_USER: ${{ secrets.MESSAGE_QUEUE_USER }}

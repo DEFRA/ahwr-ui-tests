@@ -9,7 +9,6 @@ import {
   BO_AGREEMENTS_TAB,
   BO_CONFIRM_AND_CONTINUE_BUTTON,
   getAgreementReferenceSelector,
-  getViewClaimLinkSelector,
   BO_MOVE_TO_IN_CHECK_BUTTON,
   BO_ON_HOLD_TO_IN_CHECK_CHECKBOX,
   BO_UPDATE_ISSUES_LOG_CHECKBOX,
@@ -49,6 +48,7 @@ import {
 } from "../../utils/constants.js";
 import {
   approveClaim,
+  openClaim,
   expectAgreementReference,
   expectNoAgreementsFound,
   expectNoClaimsFound,
@@ -90,9 +90,7 @@ describe("Backoffice journeys", async function () {
     expect(claimReference).toEqual(expect.stringContaining("RESH"));
 
     await browser.url(getBackOfficeUrl());
-    await $(BO_AGREEMENTS_TAB).click();
-    await $(getAgreementReferenceSelector(agreementReference)).click();
-    await $(getViewClaimLinkSelector(claimReference)).click();
+    await openClaim(agreementReference, claimReference);
     await recommendClaimToReject();
 
     await rejectClaim(agreementReference, claimReference);
@@ -100,9 +98,7 @@ describe("Backoffice journeys", async function () {
 
   it("can move an on hold claim from 'On hold' to 'In check' and then to 'Recommend to reject', and finally 'Rejected'", async () => {
     await swapBackOfficeUser("Initial-user");
-    await $(BO_AGREEMENTS_TAB).click();
-    await $(getAgreementReferenceSelector(ON_HOLD_AGREEMENT_REF)).click();
-    await $(getViewClaimLinkSelector(ON_HOLD_CLAIM_REF)).click();
+    await openClaim(ON_HOLD_AGREEMENT_REF, ON_HOLD_CLAIM_REF);
 
     await $(BO_MOVE_TO_IN_CHECK_BUTTON).waitForDisplayed();
     await $(BO_MOVE_TO_IN_CHECK_BUTTON).click();
