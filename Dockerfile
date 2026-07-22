@@ -2,10 +2,8 @@ FROM --platform=linux/amd64 selenium/standalone-chrome:133.0-20250222
 
 USER root
 
-# Install necessary dependencies and NVM
-RUN apt-get update && apt-get install -y curl bash \
-    && rm -rf /var/lib/apt/lists/* \
-    && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+# Install NVM.
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
 
 # Set environment variables for NVM and Node.js
 ENV NODE_VERSION=22.14.0
