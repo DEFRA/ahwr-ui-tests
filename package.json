@@ -42,14 +42,14 @@
     "undici": "7.18.2"
   },
   "devDependencies": {
-    "allure-commandline": "2.32.0",
+    "allure-commandline": "2.43.0",
     "eslint": "^9.22.0",
-    "eslint-config-prettier": "^10.1.1",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
     "husky": "^9.1.7",
     "nano-staged": "^1.0.2",
-    "neostandard": "^0.12.1",
-    "prettier": "^3.5.3"
+    "neostandard": "^0.13.0",
+    "prettier": "^3.9.5"
   },
   "nano-staged": {
     "*.js": [
