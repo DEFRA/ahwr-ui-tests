@@ -14,6 +14,10 @@ export const SUBMIT_DECLARATION_FORM = "#submitDeclarationForm";
 
 export const TERMS_AND_CONDITIONS_CHECKBOX = "#terms";
 
+// The GOV.UK checkbox input (#terms) is rendered with opacity:0, so WDIO 9 treats
+// it as "not displayed". Wait on and click the visible label instead.
+export const TERMS_AND_CONDITIONS_LABEL = 'label[for="terms"]';
+
 export const CLAIMS_MAIN_HEADING_SELECTOR = "#main-content h1.govuk-heading-l";
 
 export const LIVESTOCK_BEEF_RADIO = 'input[value="beef"]';

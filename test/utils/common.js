@@ -18,6 +18,7 @@ import {
   START_NEW_CLAIM_BUTTON,
   AGREEMENT_REFERENCE_SELECTOR,
   TERMS_AND_CONDITIONS_CHECKBOX,
+  TERMS_AND_CONDITIONS_LABEL,
   GOV_RADIOS_INPUT_LABEL,
   getConfirmCheckDetailsSelector,
   BACK_LINK,
@@ -73,8 +74,8 @@ export async function submitTimingsForm() {
 }
 
 export async function selectTermsAndConditions() {
-  await $(TERMS_AND_CONDITIONS_CHECKBOX).waitForDisplayed({ timeout: 10000 });
-  await $(TERMS_AND_CONDITIONS_CHECKBOX).click();
+  await $(TERMS_AND_CONDITIONS_LABEL).waitForDisplayed({ timeout: 10000 });
+  await $(TERMS_AND_CONDITIONS_LABEL).click();
 }
 
 export async function clickRejectButton() {
