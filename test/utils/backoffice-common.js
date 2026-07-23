@@ -26,13 +26,14 @@ import {
   BO_AGREEMENT_FLAG_COLUMN,
   BO_ADVANCED_SEARCH_BUTTON,
   BO_AGREEMENT_REFERENCE_LINKS,
+  BO_CLAIM_REFERENCE_LINKS,
   BO_NO_CLAIMS_MESSAGE,
-  BO_AGREEMENT_DATE_FROM_DAY,
-  BO_AGREEMENT_DATE_FROM_MONTH,
-  BO_AGREEMENT_DATE_FROM_YEAR,
-  BO_AGREEMENT_DATE_TO_DAY,
-  BO_AGREEMENT_DATE_TO_MONTH,
-  BO_AGREEMENT_DATE_TO_YEAR,
+  BO_DATE_FROM_DAY,
+  BO_DATE_FROM_MONTH,
+  BO_DATE_FROM_YEAR,
+  BO_DATE_TO_DAY,
+  BO_DATE_TO_MONTH,
+  BO_DATE_TO_YEAR,
 } from "./backoffice-selectors.js";
 import { swapBackOfficeUser, getBackOfficeUrl } from "./common.js";
 
@@ -269,16 +270,45 @@ export async function expectAllAgreementsToHaveStatus(status) {
 export async function searchAgreementsByDateRange({ from, to } = {}) {
   await browser.url(getBackOfficeUrl());
   await $(BO_AGREEMENTS_TAB).click();
+  await fillDateRange({ from, to });
+  await $(BO_ADVANCED_SEARCH_BUTTON).click();
+}
+
+/**
+ * Opens the advanced search disclosure and filters the claims list by a "claim
+ * date from" and/or "claim date to" range. The claims list is the backoffice
+ * landing page, so no tab click is needed.
+ *
+ * @param {object} [range] - the date range to filter by.
+ * @param {{ day: string, month: string, year: string }} [range.from] - the "date from" bound; omitted leaves it blank.
+ * @param {{ day: string, month: string, year: string }} [range.to] - the "date to" bound; omitted leaves it blank.
+ * @returns {Promise<void>}
+ */
+export async function searchClaimsByDateRange({ from, to } = {}) {
+  await browser.url(getBackOfficeUrl());
+  await fillDateRange({ from, to });
+  await $(BO_ADVANCED_SEARCH_BUTTON).click();
+}
+
+/**
+ * Opens the advanced search disclosure and writes the date range into the
+ * shared "date from"/"date to" inputs.
+ *
+ * Every field is written, blanking omitted parts, so date values left in the
+ * session from an earlier search don't survive to invert the current range.
+ *
+ * @param {{ from?: object, to?: object }} range - the date range to write.
+ * @returns {Promise<void>}
+ */
+async function fillDateRange({ from, to }) {
   await $(BO_ADVANCED_SEARCH_SUMMARY).click();
-  // Every field is written, blanking omitted parts, so date values left in the
-  // session from an earlier search don't survive to invert the current range.
   const fields = [
-    [BO_AGREEMENT_DATE_FROM_DAY, from?.day],
-    [BO_AGREEMENT_DATE_FROM_MONTH, from?.month],
-    [BO_AGREEMENT_DATE_FROM_YEAR, from?.year],
-    [BO_AGREEMENT_DATE_TO_DAY, to?.day],
-    [BO_AGREEMENT_DATE_TO_MONTH, to?.month],
-    [BO_AGREEMENT_DATE_TO_YEAR, to?.year],
+    [BO_DATE_FROM_DAY, from?.day],
+    [BO_DATE_FROM_MONTH, from?.month],
+    [BO_DATE_FROM_YEAR, from?.year],
+    [BO_DATE_TO_DAY, to?.day],
+    [BO_DATE_TO_MONTH, to?.month],
+    [BO_DATE_TO_YEAR, to?.year],
   ];
   for (const [selector, value] of fields) {
     const field = $(selector);
@@ -287,7 +317,6 @@ export async function searchAgreementsByDateRange({ from, to } = {}) {
       await field.setValue(value);
     }
   }
-  await $(BO_ADVANCED_SEARCH_BUTTON).click();
 }
 
 /**
@@ -297,6 +326,16 @@ export async function searchAgreementsByDateRange({ from, to } = {}) {
  */
 export async function expectAgreementsFound() {
   const referenceLinks = await $$(BO_AGREEMENT_REFERENCE_LINKS);
+  expect(referenceLinks.length).toBeGreaterThan(0);
+}
+
+/**
+ * Asserts the results list holds at least one claim.
+ *
+ * @returns {Promise<void>}
+ */
+export async function expectClaimsFound() {
+  const referenceLinks = await $$(BO_CLAIM_REFERENCE_LINKS);
   expect(referenceLinks.length).toBeGreaterThan(0);
 }
 
