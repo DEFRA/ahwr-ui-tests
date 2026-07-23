@@ -6,7 +6,7 @@ USER root
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
 
 # Set environment variables for NVM and Node.js
-ENV NODE_VERSION=22.14.0
+ENV NODE_VERSION=22.23.1
 ENV NVM_DIR=$HOME/.nvm
 ENV PATH="$NVM_DIR/versions/node/v${NODE_VERSION}/bin:$PATH"
 
