@@ -18,6 +18,7 @@ import {
   BO_ADVANCED_SEARCH_SUMMARY,
   BO_AGREEMENT_TYPE_SELECT,
   BO_CLAIM_TYPE_SELECT,
+  BO_SPECIES_SELECT,
   BO_ADVANCED_SEARCH_BUTTON,
   BO_CLEAR_FILTERS_LINK,
   getClaimSelectorFromTable,
@@ -344,6 +345,44 @@ describe("Backoffice journeys", async function () {
 
       await $(BO_ADVANCED_SEARCH_SUMMARY).click();
       await expect($(BO_CLAIM_TYPE_SELECT)).toHaveValue("ALL");
+    });
+  });
+
+  describe("can filter claims by species using advanced search", () => {
+    it("returns beef claims and excludes poultry claims when Beef cattle is selected.", async () => {
+      await browser.url(getBackOfficeUrl());
+      await $(BO_ADVANCED_SEARCH_SUMMARY).click();
+      await $(BO_SPECIES_SELECT).selectByAttribute("value", "beef");
+      await $(BO_ADVANCED_SEARCH_BUTTON).click();
+
+      await expect($(getClaimSelectorFromTable(SEARCH_CLAIM_REF))).toBeDisplayed();
+      await expect($(getClaimSelectorFromTable(POULTRY_CLAIM_REF))).not.toBeExisting();
+    });
+
+    it("returns poultry claims and excludes beef claims when Poultry is selected.", async () => {
+      await browser.url(getBackOfficeUrl());
+      await $(BO_ADVANCED_SEARCH_SUMMARY).click();
+      await $(BO_SPECIES_SELECT).selectByAttribute("value", "poultry");
+      await $(BO_ADVANCED_SEARCH_BUTTON).click();
+
+      await expect($(getClaimSelectorFromTable(POULTRY_CLAIM_REF))).toBeDisplayed();
+      await expect($(getClaimSelectorFromTable(SEARCH_CLAIM_REF))).not.toBeExisting();
+    });
+
+    it("resets the species to all species when the filters are cleared.", async () => {
+      await browser.url(getBackOfficeUrl());
+      await $(BO_ADVANCED_SEARCH_SUMMARY).click();
+      await $(BO_SPECIES_SELECT).selectByAttribute("value", "poultry");
+
+      await $(BO_ADVANCED_SEARCH_BUTTON).click();
+      await expect($(getClaimSelectorFromTable(SEARCH_CLAIM_REF))).not.toBeExisting();
+
+      // The advanced search reload collapses the accordion, so re-open it to reach the clear link.
+      await $(BO_ADVANCED_SEARCH_SUMMARY).click();
+      await $(BO_CLEAR_FILTERS_LINK).click();
+
+      await $(BO_ADVANCED_SEARCH_SUMMARY).click();
+      await expect($(BO_SPECIES_SELECT)).toHaveValue("ALL");
     });
   });
 
