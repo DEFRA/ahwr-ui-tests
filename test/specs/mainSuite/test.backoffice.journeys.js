@@ -59,7 +59,9 @@ import {
   searchAgreementsByType,
   expectAllAgreementsToStartWith,
   searchAgreementsByDateRange,
+  searchClaimsByDateRange,
   expectAgreementsFound,
+  expectClaimsFound,
   searchAgreementsByStatus,
   expectAllAgreementsToHaveStatus,
 } from "../../utils/backoffice-common.js";
@@ -283,6 +285,28 @@ describe("Backoffice journeys", async function () {
 
       await $(BO_ADVANCED_SEARCH_SUMMARY).click();
       await expect($(BO_AGREEMENT_TYPE_SELECT)).toHaveValue("ALL");
+    });
+  });
+
+  describe("can filter claims by date using advanced search", () => {
+    // Bounds chosen to sit outside every seeded and freshly-created claim date,
+    // so each test proves the corresponding filter is actually applied.
+    const FAR_FUTURE = { day: "1", month: "1", year: "3000" };
+    const FAR_PAST = { day: "1", month: "1", year: "2000" };
+
+    it("applies the date-from filter, excluding earlier claims", async function () {
+      await searchClaimsByDateRange({ from: FAR_FUTURE });
+      await expectNoClaimsFound();
+    });
+
+    it("applies the date-to filter, excluding later claims", async function () {
+      await searchClaimsByDateRange({ to: FAR_PAST });
+      await expectNoClaimsFound();
+    });
+
+    it("returns claims that fall within the date range", async function () {
+      await searchClaimsByDateRange({ from: FAR_PAST, to: FAR_FUTURE });
+      await expectClaimsFound();
     });
   });
 
