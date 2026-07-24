@@ -52,6 +52,7 @@ export const BO_SEARCH_BUTTON = ".search-button";
 export const BO_ADVANCED_SEARCH_SUMMARY = ".govuk-details__summary";
 export const BO_AGREEMENT_TYPE_SELECT = "#agreementType";
 export const BO_CLAIM_TYPE_SELECT = "#claimType";
+export const BO_SPECIES_SELECT = "#species";
 export const BO_AGREEMENT_STATUS_SELECT = "#status";
 export const BO_AGREEMENT_FLAG_SELECT = "#flag";
 export const BO_ADVANCED_SEARCH_BUTTON = 'button[name="submit"][value="advancedSearch"]';
