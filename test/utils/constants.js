@@ -31,6 +31,7 @@ export const ON_HOLD_CLAIM_TYPE = "REVIEW";
 
 export const SEARCH_AGREEMENT_REF = "IAHW-SCV6-E55L";
 export const SEARCH_CLAIM_REF = "REPI-UG9L-I2XR";
+export const SEARCH_FOLLOW_UP_CLAIM_REF = "FUBC-UG9L-I3XS";
 export const SEARCH_SBI = "104215119";
 export const SEARCH_STATUS = "AGREED";
 export const SEARCH_COMPANY = "Mr A Test Farmer";
