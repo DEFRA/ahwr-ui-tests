@@ -17,6 +17,7 @@ import {
   BO_SEARCH_BUTTON,
   BO_ADVANCED_SEARCH_SUMMARY,
   BO_AGREEMENT_TYPE_SELECT,
+  BO_CLAIM_TYPE_SELECT,
   BO_ADVANCED_SEARCH_BUTTON,
   BO_CLEAR_FILTERS_LINK,
   getClaimSelectorFromTable,
@@ -42,6 +43,7 @@ import {
   SEARCH_HERD_TYPE,
   SEARCH_CLAIM_STATUS,
   SEARCH_AGREEMENT_REF,
+  SEARCH_FOLLOW_UP_CLAIM_REF,
   IAHW_REFERENCE_PREFIXES,
   PBR_REFERENCE_PREFIXES,
   POULTRY_CLAIM_REF,
@@ -281,6 +283,43 @@ describe("Backoffice journeys", async function () {
 
       await $(BO_ADVANCED_SEARCH_SUMMARY).click();
       await expect($(BO_AGREEMENT_TYPE_SELECT)).toHaveValue("ALL");
+    });
+  });
+
+  describe("can filter claims by claim type using advanced search", () => {
+    it("excludes follow-up claims when Review is selected.", async () => {
+      await browser.url(getBackOfficeUrl());
+      await $(BO_ADVANCED_SEARCH_SUMMARY).click();
+      await $(BO_CLAIM_TYPE_SELECT).selectByAttribute("value", "REVIEW");
+      await $(BO_ADVANCED_SEARCH_BUTTON).click();
+
+      await expect($("table.govuk-table tbody tr")).toBeDisplayed();
+      await expect($(getClaimSelectorFromTable(SEARCH_FOLLOW_UP_CLAIM_REF))).not.toBeExisting();
+    });
+
+    it("excludes review claims when Endemics is selected.", async () => {
+      await browser.url(getBackOfficeUrl());
+      await $(BO_ADVANCED_SEARCH_SUMMARY).click();
+      await $(BO_CLAIM_TYPE_SELECT).selectByAttribute("value", "FOLLOW_UP");
+      await $(BO_ADVANCED_SEARCH_BUTTON).click();
+
+      await expect($("table.govuk-table tbody tr")).toBeDisplayed();
+      await expect($(getClaimSelectorFromTable(SEARCH_CLAIM_REF))).not.toBeExisting();
+    });
+
+    it("resets the claim type to all types when the filters are cleared.", async () => {
+      await browser.url(getBackOfficeUrl());
+      await $(BO_ADVANCED_SEARCH_SUMMARY).click();
+      await $(BO_CLAIM_TYPE_SELECT).selectByAttribute("value", "FOLLOW_UP");
+      await $(BO_ADVANCED_SEARCH_BUTTON).click();
+      await expect($(getClaimSelectorFromTable(SEARCH_CLAIM_REF))).not.toBeExisting();
+
+      // The advanced search reload collapses the accordion, so re-open it to reach the clear link.
+      await $(BO_ADVANCED_SEARCH_SUMMARY).click();
+      await $(BO_CLEAR_FILTERS_LINK).click();
+
+      await $(BO_ADVANCED_SEARCH_SUMMARY).click();
+      await expect($(BO_CLAIM_TYPE_SELECT)).toHaveValue("ALL");
     });
   });
 
