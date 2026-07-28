@@ -19,6 +19,7 @@ import {
   BO_AGREEMENT_TYPE_SELECT,
   BO_CLAIM_TYPE_SELECT,
   BO_SPECIES_SELECT,
+  BO_CLAIM_STATUS_SELECT,
   BO_ADVANCED_SEARCH_BUTTON,
   BO_CLEAR_FILTERS_LINK,
   getClaimSelectorFromTable,
@@ -383,6 +384,43 @@ describe("Backoffice journeys", async function () {
 
       await $(BO_ADVANCED_SEARCH_SUMMARY).click();
       await expect($(BO_SPECIES_SELECT)).toHaveValue("ALL");
+    });
+  });
+
+  describe("can filter claims by status using advanced search", () => {
+    it("returns paid claims and excludes on hold claims when Paid is selected.", async () => {
+      await browser.url(getBackOfficeUrl());
+      await $(BO_ADVANCED_SEARCH_SUMMARY).click();
+      await $(BO_CLAIM_STATUS_SELECT).selectByAttribute("value", "PAID");
+      await $(BO_ADVANCED_SEARCH_BUTTON).click();
+
+      await expect($(getClaimSelectorFromTable(SEARCH_CLAIM_REF))).toBeDisplayed();
+      await expect($(getClaimSelectorFromTable(POULTRY_CLAIM_REF))).not.toBeExisting();
+    });
+
+    it("excludes paid claims when On hold is selected.", async () => {
+      await browser.url(getBackOfficeUrl());
+      await $(BO_ADVANCED_SEARCH_SUMMARY).click();
+      await $(BO_CLAIM_STATUS_SELECT).selectByAttribute("value", "ON_HOLD");
+      await $(BO_ADVANCED_SEARCH_BUTTON).click();
+
+      await expect($("table.govuk-table tbody tr")).toBeDisplayed();
+      await expect($(getClaimSelectorFromTable(SEARCH_CLAIM_REF))).not.toBeExisting();
+    });
+
+    it("resets the status to all statuses when the filters are cleared.", async () => {
+      await browser.url(getBackOfficeUrl());
+      await $(BO_ADVANCED_SEARCH_SUMMARY).click();
+      await $(BO_CLAIM_STATUS_SELECT).selectByAttribute("value", "ON_HOLD");
+      await $(BO_ADVANCED_SEARCH_BUTTON).click();
+      await expect($(getClaimSelectorFromTable(SEARCH_CLAIM_REF))).not.toBeExisting();
+
+      // The advanced search reload collapses the accordion, so re-open it to reach the clear link.
+      await $(BO_ADVANCED_SEARCH_SUMMARY).click();
+      await $(BO_CLEAR_FILTERS_LINK).click();
+
+      await $(BO_ADVANCED_SEARCH_SUMMARY).click();
+      await expect($(BO_CLAIM_STATUS_SELECT)).toHaveValue("ALL");
     });
   });
 

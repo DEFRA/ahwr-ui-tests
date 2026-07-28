@@ -54,6 +54,9 @@ export const BO_AGREEMENT_TYPE_SELECT = "#agreementType";
 export const BO_CLAIM_TYPE_SELECT = "#claimType";
 export const BO_SPECIES_SELECT = "#species";
 export const BO_AGREEMENT_STATUS_SELECT = "#status";
+// The status select shares the same id on the agreements and claims pages, so
+// this claims-facing name points at the same selector as the agreements one.
+export const BO_CLAIM_STATUS_SELECT = "#status";
 export const BO_AGREEMENT_FLAG_SELECT = "#flag";
 export const BO_ADVANCED_SEARCH_BUTTON = 'button[name="submit"][value="advancedSearch"]';
 export const BO_CLEAR_FILTERS_LINK = 'a[href="/claims/clear"]';
