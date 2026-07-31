@@ -2,6 +2,7 @@ import { browser } from "@wdio/globals";
 import path from "path";
 import fs from "fs";
 import { createHtmlReport } from "axe-html-reporter";
+import { buildAccessibilityIndex } from "./test/utils/accessibility/build-accessibility-index.js";
 
 const projectPath = process.cwd();
 
@@ -368,11 +369,14 @@ export const config = {
       return;
     }
 
-    // Process accessibility results and generate report
+    // Process accessibility results and generate a per-page report plus an
+    // index listing every page tested, so scope of coverage is visible from
+    // the report itself rather than only from the raw per-page JSON files.
     const rawDir = path.join(process.cwd(), "accessibility-report/raw");
     const reportDir = path.join(process.cwd(), "accessibility-report");
+    const pagesDir = path.join(reportDir, "pages");
 
-    fs.mkdirSync(reportDir, { recursive: true });
+    fs.mkdirSync(pagesDir, { recursive: true });
     const files = fs.existsSync(rawDir) ? fs.readdirSync(rawDir) : [];
 
     if (files.length === 0) {
@@ -380,37 +384,49 @@ export const config = {
       return;
     }
 
-    const merged = {
-      violations: [],
-      passes: [],
-      incomplete: [],
-      inapplicable: [],
-    };
-
+    const reportTitle = "AHWR UI";
     let totalViolations = 0;
-    files.forEach((file) => {
-      const data = JSON.parse(fs.readFileSync(path.join(rawDir, file)));
-      totalViolations += data.results.violations.length;
-      merged.violations.push(...data.results.violations);
+    const pageSummaries = files.map((file) => {
+      const {
+        pageName,
+        url,
+        results: pageResults,
+      } = JSON.parse(fs.readFileSync(path.join(rawDir, file)));
+      const violationCount = pageResults.violations.length;
+      const passed = violationCount === 0;
+      totalViolations += violationCount;
+
+      const pageReportFile = file.replace(/\.json$/, ".html");
+      const pageHtml = createHtmlReport({
+        results: pageResults,
+        options: {
+          projectKey: `${reportTitle} - ${pageName}`,
+          customSummary: `<p><strong>Page:</strong> ${pageName}</p><p><strong>URL:</strong> ${url}</p>`,
+          doNotCreateReportFile: true,
+        },
+      });
+      fs.writeFileSync(path.join(pagesDir, pageReportFile), pageHtml);
+
+      return { pageName, url, violationCount, passed, reportFile: `pages/${pageReportFile}` };
     });
 
     const runName = `accessibility-run-${new Date().toISOString().replace(/[:.]/g, "-")}`;
-    const reportTitle = "AHWR UI";
-
-    const html = createHtmlReport({
-      results: merged,
-      options: {
-        projectKey: reportTitle,
-        doNotCreateReportFile: true,
-      },
-    });
-
-    fs.writeFileSync(path.join(reportDir, `${runName}.html`), html);
 
     fs.writeFileSync(
-      path.join(reportDir, `${runName}.json`),
-      JSON.stringify({ totalViolations, files }, null, 2),
+      path.join(reportDir, "index.html"),
+      buildAccessibilityIndex(reportTitle, pageSummaries, totalViolations),
     );
+    fs.writeFileSync(
+      path.join(reportDir, `${runName}.json`),
+      JSON.stringify({ totalViolations, pages: pageSummaries }, null, 2),
+    );
+
+    console.log(`\nPages tested: ${pageSummaries.length}`);
+    pageSummaries.forEach((page) => {
+      console.log(
+        `  ${page.passed ? "PASS" : "FAIL"} - ${page.pageName} (${page.violationCount} violations) - ${page.url}`,
+      );
+    });
     console.log(`\nTotal accessibility violations: ${totalViolations}\n`);
 
     if (totalViolations > 0) {
