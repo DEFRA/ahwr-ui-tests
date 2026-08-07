@@ -26,7 +26,6 @@ import {
   getBiosecurityUsefulnessSelector,
   getChangesInBiosecuritySelector,
   getCostOfChangesSelector,
-  getInterviewSelector,
 } from "../../utils/poultry-selectors.js";
 import { HERD_NAME, HERD_CPH, HERD_CPH_ERROR } from "../../utils/multiple-herd-selectors.js";
 import { POULTRY_SBI, POULTRY_MULTIPLE_SITE_SBI } from "../../utils/constants.js";
@@ -129,7 +128,6 @@ describe("Additional poultry claim journeys and validations", async function () 
     await clickOnElementAndContinue(getBiosecurityUsefulnessSelector("very-useful"));
     await clickOnElementAndContinue(getChangesInBiosecuritySelector("infra-and-control"));
     await clickOnElementAndContinue(getCostOfChangesSelector("0-1500"));
-    await clickOnElementAndContinue(getInterviewSelector("yes"));
     await $(SUBMIT_CLAIM_BUTTON).click();
     await verifySubmission("Claim submitted");
 
