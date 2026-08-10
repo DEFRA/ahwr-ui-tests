@@ -34,7 +34,6 @@ import {
   getBiosecurityUsefulnessSelector,
   getChangesInBiosecuritySelector,
   getCostOfChangesSelector,
-  getInterviewSelector,
 } from "../poultry-selectors.js";
 import { HERD_NAME, HERD_CPH, OTHER_HERDS_ON_SBI_NO } from "../multiple-herd-selectors.js";
 
@@ -53,7 +52,6 @@ async function enterClaimData(
     biosecurityUsefulness = "very-useful",
     biosecurityChanges = "infra-and-control",
     costOfChanges = "0-1500",
-    interviewRequired = "yes",
     chickenType = "broilers",
   } = options;
 
@@ -87,7 +85,6 @@ async function enterClaimData(
   await clickOnElementAndContinue(getBiosecurityUsefulnessSelector(biosecurityUsefulness));
   await clickOnElementAndContinue(getChangesInBiosecuritySelector(biosecurityChanges));
   await clickOnElementAndContinue(getCostOfChangesSelector(costOfChanges));
-  await clickOnElementAndContinue(getInterviewSelector(interviewRequired));
 }
 
 export const createPoultryApplication = async (sbi) => {
@@ -118,9 +115,6 @@ export async function verifyPoultryClaimBackNavigation({
   await enterClaimData(poultryType, siteName, siteCph, isReviewForAdditionalSite);
 
   // Now we're at check-answers page - start going back and verify each value
-  await clickBackButton();
-  await expect($(getInterviewSelector("yes"))).toBeChecked();
-
   await clickBackButton();
   await expect($(getCostOfChangesSelector("0-1500"))).toBeChecked();
 
