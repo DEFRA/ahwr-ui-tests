@@ -25,3 +25,7 @@ export function getChangesInBiosecuritySelector(value) {
 export function getCostOfChangesSelector(value) {
   return `input[name="costOfChanges"][value="${value}"]`;
 }
+
+export function getBiosecurityImprovementsSelector(value) {
+  return `input[name="biosecurityImprovements"][value="${value}"]`;
+}
