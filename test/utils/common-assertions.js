@@ -19,7 +19,7 @@ export const assertSomeClaimsAreOnHold = async (claimReferences) => {
   const results = await Promise.all(
     claimReferences.map(async (ref) => {
       const el = await getOnHoldStatusElement(ref);
-      return el.isExisting() && /On hold/.test(await el.getText());
+      return (await el.isExisting()) && /On hold/.test(await el.getText());
     }),
   );
 
