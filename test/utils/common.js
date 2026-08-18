@@ -219,6 +219,16 @@ export async function createAgreement(sbi) {
   return agreementReference;
 }
 
+/**
+ * Logs the backoffice in as a different user.
+ *
+ * The login route redirects through /dev-auth to the backoffice home page, so
+ * callers are left on a page carrying the agreements tab and can go straight to
+ * openClaim/openAgreement without navigating first.
+ *
+ * @param {string} userName - the backoffice user to become.
+ * @returns {Promise<void>}
+ */
 export async function swapBackOfficeUser(userName) {
   const backOfficeClaimsRoute = getBackOfficeUrl();
   const loginRoute = backOfficeClaimsRoute.replace("claims", `login?userId=${userName}`);

@@ -97,7 +97,6 @@ export async function openClaim(agreementReference, claimReference) {
  */
 export async function approveClaim(agreementReference, claimReference) {
   await swapBackOfficeUser("Admin2");
-  await browser.url(getBackOfficeUrl());
   await openClaim(agreementReference, claimReference);
   await $(BO_RECOMMEND_TO_PAY_BUTTON).click();
   await $(BO_CHECKED_CHECKLIST_CHECKBOX).click();
