@@ -28,6 +28,7 @@ import {
 
 export function getDevSignInUrl() {
   const localhostDevLandingPage = "http://localhost:3003/dev-landing-page";
+  /* eslint-disable sonarjs/no-clear-text-protocols */
   const dockerDevLandingPage = "http://ahwr-public-user-ui:3000/dev-landing-page";
 
   if (process.env.DOCKER_MODE === "true") {
@@ -39,6 +40,7 @@ export function getDevSignInUrl() {
 
 export function getBackOfficeUrl() {
   const localhostBackOfficeClaimsPage = "http://localhost:3002/claims";
+  /* eslint-disable sonarjs/no-clear-text-protocols */
   const dockerBackOfficeClaimsPage = "http://ahwr-backoffice-ui:3000/claims";
 
   if (process.env.DOCKER_MODE === "true") {
@@ -133,6 +135,7 @@ export async function enterPreMHReleaseDateAndContinue() {
 }
 
 export async function chooseRandomHerdReasonsAndContinue() {
+  /* eslint-disable sonarjs/pseudo-random */
   const count = Math.floor(Math.random() * 5) + 1;
 
   for (let index = 0; index < count; index++) {
