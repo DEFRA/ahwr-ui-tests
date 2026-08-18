@@ -36,7 +36,7 @@ describe("Multiple herd claim feature assurance compliance checks", async functi
 
     // THEN all additional review claims go to 'In check'
     await browser.url(getBackOfficeUrl());
-    assertAllClaimsAreInCheck([claimForHerd2, claimForHerd3]);
+    await assertAllClaimsAreInCheck([claimForHerd2, claimForHerd3]);
   });
 
   it("uses the ratio (1-in-5) check when user claiming for their first herd", async () => {
@@ -56,7 +56,7 @@ describe("Multiple herd claim feature assurance compliance checks", async functi
 
     // THEN max one should go to InCheck due to MH feature assurance rule delegating to ratio (1-in-5) rule
     await browser.url(getBackOfficeUrl());
-    assertSomeClaimsAreOnHold([claimForFirstHerdSBI1, claimForFirstHerdSBI2]);
+    await assertSomeClaimsAreOnHold([claimForFirstHerdSBI1, claimForFirstHerdSBI2]);
   });
 
   it("uses ratio (1-in-5) check when claim is before the MH feature assurance start date, even if user has claimed for more than one herd", async () => {
@@ -86,6 +86,6 @@ describe("Multiple herd claim feature assurance compliance checks", async functi
 
     // THEN ratio (1-in-5) rule is used, at least one claim must go to OnHold
     await browser.url(getBackOfficeUrl());
-    assertSomeClaimsAreOnHold([preMhClaim1, preMhClaim2]);
+    await assertSomeClaimsAreOnHold([preMhClaim1, preMhClaim2]);
   });
 });
