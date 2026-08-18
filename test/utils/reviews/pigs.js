@@ -33,6 +33,7 @@ import {
 
 export async function createPigsReviewClaim({
   multipleHerdFlag = false,
+  reviewTestResult = "positive",
   urn = "pg-rr-5343461",
   enterVisitDateAndContinueFunc = enterVisitDateAndContinue,
   isUnnamedHerdClaimPresent = false,
@@ -67,7 +68,7 @@ export async function createPigsReviewClaim({
     await clickOnElementAndContinue(getTypeOfSamplesTakenSelector("oral-fluid"));
   }
   await fillInputAndContinue(NUMBER_OF_ORAL_FLUID_SAMPLES, "6");
-  await clickOnElementAndContinue(getTestResultsSelector("positive"));
+  await clickOnElementAndContinue(getTestResultsSelector(reviewTestResult));
 
   await $(SUBMIT_CLAIM_BUTTON).click();
   await verifySubmission("Claim complete");
