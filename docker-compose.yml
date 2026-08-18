@@ -16,10 +16,12 @@ services:
         condition: service_healthy
       mongodb:
         condition: service_started
+      ahwr-application-backend:
+        condition: service_healthy
       ahwr-public-user-ui:
-        condition: service_started
+        condition: service_healthy
       ahwr-backoffice-ui:
-        condition: service_started
+        condition: service_healthy
     environment:
       DOCKER_MODE: true
       USE_INSTANCES: "1"
@@ -69,6 +71,15 @@ services:
       BACKOFFICE_UI_API_KEY: 446dcdbe-e02c-4d16-a266-001bbbd5f089
       MESSAGE_GENERATOR_API_KEY: fab78725-3037-45ed-ad2e-28cd86e70ff8
       ENABLE_AUDIT_EVENTS: false
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://localhost:3001/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
+      interval: 5s
+      start_period: 10s
+      retries: 12
 
   localstack:
     container_name: localstack-journey-tests
@@ -118,8 +129,10 @@ services:
     ports:
       - "4002:3000"
     depends_on:
-      - redis
-      - ahwr-application-backend
+      redis:
+        condition: service_started
+      ahwr-application-backend:
+        condition: service_healthy
     environment:
       AADAR_ENABLED: false
       AADAR_REDIRECT_URL: http://http://localhost:3000/authenticate
@@ -141,6 +154,15 @@ services:
       AADAR_CLIENT_ID: AnyOldString
       NODE_ENV: development
       BACKOFFICE_UI_API_KEY: 446dcdbe-e02c-4d16-a266-001bbbd5f089
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://localhost:3000/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
+      interval: 5s
+      start_period: 10s
+      retries: 12
 
   ahwr-public-user-ui:
     container_name: ahwr-public-user-ui-journey-tests
@@ -152,8 +174,10 @@ services:
     ports:
       - "4003:3000"
     depends_on:
-      - redis
-      - ahwr-application-backend
+      redis:
+        condition: service_started
+      ahwr-application-backend:
+        condition: service_healthy
     environment:
       COOKIE_PASSWORD: who-likes-cookies-i-like-cookies-everybody-likes-cookies
       GOOGLE_TAG_MANAGER_KEY: ${GOOGLE_TAG_MANAGER_KEY}
@@ -203,6 +227,15 @@ services:
       NODE_ENV: development
       PUBLIC_UI_API_KEY: dbd47daf-2711-4cb6-b733-0bd60fdb3ce6
       ENABLE_AUDIT_EVENTS: false
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://localhost:3000/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
+      interval: 5s
+      start_period: 10s
+      retries: 12
 
   redis:
     container_name: redis-journey-tests
