@@ -146,17 +146,6 @@ if [[ -n "${FEATURE_ASSURANCE_ENABLED:-}" ]]; then
   SED_ARGS+=(-e "s|(FEATURE_ASSURANCE_ENABLED:).*|\1 ${FEATURE_ASSURANCE_ENABLED}|g")
 fi
 
-sed -E "${SED_ARGS[@]}" docker-compose.yml | docker compose -f - up -d
-
-WDIO_CONTAINER=$(docker ps -qf "name=wdio-tests")
-
-if [ -z "$WDIO_CONTAINER" ]; then
-  echo "❌ Error: WDIO container not found!"
-  exit 1
-fi
-
-echo "🧪 Running WDIO tests: $TEST_COMMAND"
-
 LOG_DIR="logs"
 if [[ "$TEST_COMMAND" == "comp" ]]; then
   LOG_DIR="logsComp"
@@ -166,6 +155,27 @@ fi
 
 mkdir -p "$LOG_DIR"
 export LOG_DIR
+
+UP_STATUS=0
+sed -E "${SED_ARGS[@]}" docker-compose.yml | docker compose -f - up -d || UP_STATUS=$?
+
+if [ "$UP_STATUS" -ne 0 ]; then
+  echo "❌ 'docker compose up' failed (exit $UP_STATUS). Saving container logs to $LOG_DIR/ before exiting..."
+  for c in $(docker ps -a --format '{{.Names}}' | grep -- '-journey-tests'); do
+    echo "  → $LOG_DIR/$c.log"
+    docker logs "$c" > "$LOG_DIR/$c.log" 2>&1 || true
+  done
+  exit "$UP_STATUS"
+fi
+
+WDIO_CONTAINER=$(docker ps -qf "name=wdio-tests")
+
+if [ -z "$WDIO_CONTAINER" ]; then
+  echo "❌ Error: WDIO container not found!"
+  exit 1
+fi
+
+echo "🧪 Running WDIO tests: $TEST_COMMAND"
 
 docker image ls --format "{{.Repository}}" \
   | grep '^ahwr-' \
