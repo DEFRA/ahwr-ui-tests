@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/DEFRA/ahwr-ui-tests#readme",
   "dependencies": {
-    "@axe-core/webdriverio": "^4.12.1",
+    "@axe-core/webdriverio": "^4.13.0",
     "@wdio/allure-reporter": "9.30.1",
     "@wdio/browserstack-service": "^9.33.0",
     "@wdio/cli": "9.30.1",
