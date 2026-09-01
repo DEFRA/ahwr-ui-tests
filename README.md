@@ -27,6 +27,7 @@ logs also get generated in the pipeline when it runs, and they can be accessed f
 - Node version 22.21.1
 - NVM (Node Version manager)
 - Docker
+- [jq](https://jqlang.org/)
 - Create a .env file in the root of the repo
 - Make sure you have MESSAGE_QUEUE_PASSWORD, MESSAGE_QUEUE_SUFFIX and APPLICATIONINSIGHTS_CONNECTION_STRING in your .env file
 - MESSAGE_QUEUE_SUFFIX should be whichever queues you want to use in DEV, e.g. -auto. The -pipe queues are reserved for the pipeline.
