@@ -210,7 +210,6 @@ services:
       TERMS_AND_CONDITIONS_URL: ${TERMS_AND_CONDITIONS_URL:-http://http://localhost:3000/terms/v3}
       POULTRY_TERMS_AND_CONDITIONS_URL: ${POULTRY_TERMS_AND_CONDITIONS_URL:-https://www.gov.uk/government/publications/terms-and-conditions-poultry-biosecurity-review}
       POULTRY_VET_SUMMARY_TEMPLATE_URL: ${POULTRY_VET_SUMMARY_TEMPLATE_URL:-https://www.gov.uk/guidance/vet-summary-template-for-poultry-biosecurity-reviews}
-      MULTI_SPECIES_RELEASE_DATE: ${MULTI_SPECIES_RELEASE_DATE}
       CUSTOMER_SURVEY_CLAIM_URI: ${CUSTOMER_SURVEY_CLAIM_URI:-https://forms.office.com/e/SLKqfJQ499}
       CUSTOMER_SURVEY_APPLY_URI: ${CUSTOMER_SURVEY_APPLY_URI:-https://forms.office.com/e/4frXv6SqvR}
       MULTI_HERDS_RELEASE_DATE: ${MULTI_HERDS_RELEASE_DATE:-2025-05-01}
