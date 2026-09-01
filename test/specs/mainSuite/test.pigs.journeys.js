@@ -239,4 +239,18 @@ describe("Multiple herds pigs claim journeys", async function () {
 
     await expect($(CLAIM_REFERENCE)).toHaveText(expect.stringContaining("FUPI"));
   });
+
+  it.todo("can create review claim for a pigs herd for a farmer business with a test result of sequencing not possible", async () => {
+    await performDevLogin(PIGS_MULTIPLE_HERD_SBI);
+
+    claimReference = await createPigsReviewClaim({
+      multipleHerdFlag: true,
+      reviewTestResult: "sequencing-not-possible",
+      enterVisitDateAndContinueFunc: async () => {
+        await enterVisitDateAndContinue(new Date("2026-01-22"));
+      },
+    });
+
+    expect(claimReference).toEqual(expect.stringContaining("REPI"));
+  });
 });
