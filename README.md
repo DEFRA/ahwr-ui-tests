@@ -7,6 +7,8 @@
 - [🧪 Running Automated Tests](#-running-automated-tests)
 - [📦 Working with Pipeline Artifacts](#-Working-with-Pipeline-Artifacts)
 - [🙈 Gotchas](#-gotchas)
+- [Dependabot](#dependabot)
+- [SonarCloud](#sonarcloud)
 
 ---
 
@@ -136,3 +138,14 @@ When the automated tests run in the pipeline, several files are collected and up
 - Screenshots have been added to the tests, and volume in the /screenshots folder. If any errors occur, they will be visible there.
 
 - Artifacts are retained only for a limited time (default 90 days in GitHub Actions). Download them if you need a permanent copy.
+
+## Dependabot
+
+Currently setup to work into four groups, so we don't have PRs per package. The updates run once a week, on a Monday. Except for the security group, which is advisory-triggered and ignores the schedule.
+
+## SonarCloud
+
+This project is set up to integrate with sonarcloud, and scans will be performed on all pull requests, and on
+publish to main branch. We follow the quality gates as per DEFRA standards, and if coverage falls below the
+acceptable level, or new issues are introduced the build will fail.
+
