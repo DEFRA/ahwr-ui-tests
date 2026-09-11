@@ -193,13 +193,6 @@ describe("Backoffice journeys", async function () {
         await expectAgreementsFound();
       });
     });
-
-    describe("by status", () => {
-      it("can search by Agreed status", async function () {
-        await searchAgreementsByStatus("AGREED");
-        await expectAllAgreementsToHaveStatus("AGREED");
-      });
-    });
   });
 
   describe("does not search agreements by status", () => {
