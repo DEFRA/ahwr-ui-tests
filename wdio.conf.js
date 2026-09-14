@@ -38,6 +38,7 @@ export const config = {
     mainSuite: [
       "./test/specs/mainSuite/test.livestock.claim.session.journeys.js",
       "./test/specs/mainSuite/test.backoffice.journeys.js",
+      "./test/specs/mainSuite/test.backoffice.withdrawal.journeys.js",
       "./test/specs/mainSuite/test.pigs.journeys.js",
       "./test/specs/mainSuite/test.poultry.journeys.js",
       "./test/specs/mainSuite/test.pre.and.post.mh.journeys.js",

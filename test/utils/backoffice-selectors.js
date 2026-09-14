@@ -86,6 +86,8 @@ export const BO_NO_CLAIMS_MESSAGE = "p.no-results-message";
 
 export const BO_HISTORY_TAB = "#tab_history";
 
+export const BO_HISTORY_PANEL = "#history";
+
 export const BO_PII_ROW_SELECTOR = "dt*=Eligible for automated data redaction";
 export const BO_PII_CHANGE_BUTTON =
   '//dt[contains(text(), "Eligible for automated data redaction")]/following-sibling::dd[@class="govuk-summary-list__actions"]//a';
@@ -121,4 +123,33 @@ export function getClaimTableStatusColumnForClaimRef(claimReference, status) {
      and
      .//td[@data-sort-value="${status}"]
    ]`;
+}
+
+export const BO_WITHDRAW_CLAIM_LINK = 'a[href*="/withdraw-claim/"]';
+
+export function getWithdrawalReasonRadioSelector(value) {
+  return `input[name="reasonForWithdrawal"][value="${value}"]`;
+}
+
+export function getWithdrawalIssueDiscoveryRadioSelector(value) {
+  return `input[name="issueDiscovery"][value="${value}"]`;
+}
+
+export const BO_WITHDRAWAL_DETAILS_TEXTAREA = "#withdrawalDetails";
+
+export const BO_WITHDRAW_CLAIM_SUBMIT_BUTTON = "button.govuk-button--warning=Withdraw claim";
+
+export const BO_DO_NOT_WITHDRAW_CLAIM_LINK = "a=Do not withdraw claim";
+
+export const BO_VISIT_DATE_CHANGE_LINK =
+  '//dt[contains(text(), "Date of review")]/following-sibling::dd[@class="govuk-summary-list__actions"]//a';
+
+export const BO_VETS_NAME_CHANGE_LINK =
+  '//dt[contains(text(), "Vet’s name")]/following-sibling::dd[@class="govuk-summary-list__actions"]//a';
+
+export const BO_VET_RCVS_NUMBER_CHANGE_LINK =
+  '//dt[contains(text(), "Vet’s RCVS number")]/following-sibling::dd[@class="govuk-summary-list__actions"]//a';
+
+export function getFlagNoteForAgreementSelector(agreementReference) {
+  return `//table//tr[td[1][contains(text(), "${agreementReference}")]]/td[3]`;
 }

@@ -1,5 +1,8 @@
 import { $, expect } from "@wdio/globals";
-import { getClaimTableStatusColumnForClaimRef } from "./backoffice-selectors.js";
+import {
+  getClaimTableStatusColumnForClaimRef,
+  BO_CLAIM_STATUS_TEXT,
+} from "./backoffice-selectors.js";
 
 export const assertClaimToBeInCheck = async (claimReference) => {
   await expect(await getInCheckStatusElement(claimReference)).toHaveText(/In check/);
@@ -7,6 +10,10 @@ export const assertClaimToBeInCheck = async (claimReference) => {
 
 export const assertClaimToBeOnHold = async (claimReference) => {
   await expect(await getOnHoldStatusElement(claimReference)).toHaveText(/On hold/);
+};
+
+export const assertClaimToBeWithdrawn = async () => {
+  await expect($(BO_CLAIM_STATUS_TEXT)).toHaveText(/Withdrawn/);
 };
 
 export const assertAllClaimsAreInCheck = async (claimReferences) => {
