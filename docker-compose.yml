@@ -154,6 +154,7 @@ services:
       AADAR_CLIENT_ID: AnyOldString
       NODE_ENV: development
       BACKOFFICE_UI_API_KEY: 446dcdbe-e02c-4d16-a266-001bbbd5f089
+      WITHDRAW_CLAIM_ENABLED: true
     healthcheck:
       test:
         - CMD

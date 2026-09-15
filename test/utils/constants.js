@@ -23,6 +23,17 @@ export const CLAIM_JOURNEY_SBI = "107346087";
 export const AGREEMENT_REF = "IAHW-KH2H-WNA7";
 
 export const ON_HOLD_AGREEMENT_REF = "IAHW-SCV6-E55L";
+
+export const BACK_OFFICE_WITHDRAW_SBI = "105112233";
+
+export const WITHDRAWAL_REASON = {
+  value: "vetSummaryEnteredIncorrectly",
+  label: "Data from the vet summary was entered incorrectly",
+};
+export const WITHDRAWAL_ISSUE_DISCOVERY = {
+  value: "customerContactedRPA",
+  label: "Customer contacted the RPA",
+};
 export const ON_HOLD_CLAIM_REF = "REPI-UG9L-I1XP";
 export const ON_HOLD_SBI = "104215119";
 export const ON_HOLD_STATUS = "AGREED";

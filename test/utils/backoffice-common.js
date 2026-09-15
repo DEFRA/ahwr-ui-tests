@@ -34,6 +34,19 @@ import {
   BO_DATE_TO_DAY,
   BO_DATE_TO_MONTH,
   BO_DATE_TO_YEAR,
+  BO_WITHDRAW_CLAIM_LINK,
+  getWithdrawalReasonRadioSelector,
+  getWithdrawalIssueDiscoveryRadioSelector,
+  BO_WITHDRAWAL_DETAILS_TEXTAREA,
+  BO_WITHDRAW_CLAIM_SUBMIT_BUTTON,
+  BO_VISIT_DATE_CHANGE_LINK,
+  BO_VETS_NAME_CHANGE_LINK,
+  BO_VET_RCVS_NUMBER_CHANGE_LINK,
+  BO_MOVE_TO_IN_CHECK_BUTTON,
+  BO_HISTORY_TAB,
+  BO_HISTORY_PANEL,
+  BO_FLAGS_TAB,
+  getFlagNoteForAgreementSelector,
 } from "./backoffice-selectors.js";
 import { swapBackOfficeUser, getBackOfficeUrl } from "./common.js";
 
@@ -115,6 +128,80 @@ export async function approveClaim(agreementReference, claimReference) {
 
   // Swapping to a different user to the approver to continue with other journeys
   await swapBackOfficeUser("Admin2");
+}
+
+/**
+ * Withdraws a claim as SuperAdmin: opens it, follows the withdrawal link, fills
+ * in the reason/discovery/details, and submits.
+ *
+ * @param {string} agreementReference - the agreement the claim belongs to.
+ * @param {string} claimReference - the claim to withdraw.
+ * @param {{reason: string, discovery: string, details: string}} withdrawal - the
+ *   reason/issueDiscovery radio values (see ahwr-backoffice-ui's
+ *   constants/withdrawal.js for the valid option values) and the free-text details.
+ * @returns {Promise<void>}
+ */
+export async function withdrawClaim(agreementReference, claimReference, { reason, discovery, details }) {
+  await swapBackOfficeUser("super");
+  await openClaim(agreementReference, claimReference);
+  await $(BO_WITHDRAW_CLAIM_LINK).click();
+  await $(getWithdrawalReasonRadioSelector(reason)).click();
+  await $(getWithdrawalIssueDiscoveryRadioSelector(discovery)).click();
+  await $(BO_WITHDRAWAL_DETAILS_TEXTAREA).setValue(details);
+  await $(BO_WITHDRAW_CLAIM_SUBMIT_BUTTON).click();
+}
+
+/**
+ * Asserts none of the claim-view page's change/action links are present -
+ * neither the visit-date/vet's-name/vet-RCVS-number "Change" links nor the
+ * workflow-transition buttons. Intended to run against a Withdrawn claim,
+ * where both categories should be hidden regardless of role.
+ *
+ * @returns {Promise<void>}
+ */
+export async function expectClaimActionsToBeHidden() {
+  for (const selector of [
+    BO_VISIT_DATE_CHANGE_LINK,
+    BO_VETS_NAME_CHANGE_LINK,
+    BO_VET_RCVS_NUMBER_CHANGE_LINK,
+    BO_RECOMMEND_TO_PAY_BUTTON,
+    BO_RECOMMEND_TO_REJECT_BUTTON,
+    BO_MOVE_TO_IN_CHECK_BUTTON,
+    BO_PAY_BUTTON,
+    BO_REJECT_BUTTON,
+  ]) {
+    expect(await $(selector).isExisting()).toBe(false);
+  }
+}
+
+/**
+ * Asserts the History tab shows a withdrawal entry with the given reason
+ * label, discovery label, and details text.
+ *
+ * @param {{reasonLabel: string, discoveryLabel: string, details: string}} withdrawal
+ * @returns {Promise<void>}
+ */
+export async function expectWithdrawalHistoryEntry({ reasonLabel, discoveryLabel, details }) {
+  await $(BO_HISTORY_TAB).click();
+  const historyText = await $(BO_HISTORY_PANEL).getText();
+  expect(historyText).toContain(reasonLabel);
+  expect(historyText).toContain(discoveryLabel);
+  expect(historyText).toContain(details);
+}
+
+/**
+ * Asserts the given agreement now appears on the Flags list with the
+ * auto-generated withdrawal flag note.
+ *
+ * @param {string} agreementReference
+ * @returns {Promise<void>}
+ */
+export async function expectAgreementFlaggedForWithdrawal(agreementReference) {
+  await browser.url(getBackOfficeUrl());
+  await $(BO_FLAGS_TAB).click();
+  await expect($(getFlagNoteForAgreementSelector(agreementReference))).toHaveText(
+    "Flag added due to withdrawn claim",
+  );
 }
 
 /**
