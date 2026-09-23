@@ -41,15 +41,15 @@
     "axe-html-reporter": "^2.2.11"
   },
   "devDependencies": {
-    "allure-commandline": "2.43.0",
+    "allure-commandline": "2.46.1",
     "eslint": "^9.39.5",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-sonarjs": "4.2.0",
+    "eslint-plugin-sonarjs": "4.2.1",
     "husky": "^9.1.7",
     "nano-staged": "^1.0.2",
     "neostandard": "^0.13.0",
-    "prettier": "^3.9.6"
+    "prettier": "^3.9.7"
   },
   "nano-staged": {
     "*.js": [
