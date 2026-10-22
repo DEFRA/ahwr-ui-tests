@@ -88,6 +88,10 @@ You can run local images when passing parameters to `./scripts/github_run_tests.
 The assumption is that the local images exists and is called `app-development`. For example `ahwr-public-user-development:latest`
 
 The image gets retagged so as to keep the names in the rest of the script(s) the same.
+If you are running on an Apple Silicon Mac, the docker builds an image based on the ARM architecture (linux/arm64), so you will need to set the following environment variable before running the tests:
+```bash
+export DOCKER_DEFAULT_PLATFORM=linux/amd64
+```
 
 ### Filtering suites and spec files
 

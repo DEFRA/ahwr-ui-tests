@@ -1,33 +1,29 @@
+FROM --platform=linux/amd64 node:22-bookworm-slim AS node
+
 FROM --platform=linux/amd64 selenium/standalone-chrome:133.0-20250222
 
 USER root
 
-# Install NVM.
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+# Copy Node.js from the official image (same platform as the final image)
+COPY --from=node /usr/local/bin/node /usr/local/bin/node
+COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
+RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
+    && ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx \
+    && node -v && npm -v
 
-# Set environment variables for NVM and Node.js
-ENV NODE_VERSION=22.23.1
-ENV NVM_DIR=$HOME/.nvm
-ENV PATH="$NVM_DIR/versions/node/v${NODE_VERSION}/bin:$PATH"
-
-# Install Node.js and set it as default
-RUN bash -c ". $NVM_DIR/nvm.sh && nvm install ${NODE_VERSION} && nvm use ${NODE_VERSION} && nvm alias default ${NODE_VERSION}" \
-    && ln -s "$NVM_DIR/versions/node/v${NODE_VERSION}/bin/node" /usr/local/bin/node \
-    && ln -s "$NVM_DIR/versions/node/v${NODE_VERSION}/bin/npm" /usr/local/bin/npm \
-    && ln -s "$NVM_DIR/versions/node/v${NODE_VERSION}/bin/npx" /usr/local/bin/npx
-
-# Set working directory
-WORKDIR /app
-
-# Copy package files first to optimize caching
-COPY package.json package-lock.json ./
-RUN npm ci --omit=dev --ignore-scripts
-
-# Install BrowserStack local binary
+# Global tools (before app files so this layer caches well)
 RUN npm install -g browserstack-local
 
+# Set working directory and give the non-root user ownership
+WORKDIR /app
+RUN chown seluser:seluser /app
+
+# Copy package files first to optimize caching
+COPY --chown=seluser:seluser package.json package-lock.json ./
+RUN npm ci --omit=dev --ignore-scripts
+
 # Copy the rest of the application files
-COPY . .
+COPY --chown=seluser:seluser . .
 
 # Switch to non-root user for security
 USER seluser
