@@ -4,6 +4,7 @@
 
 - [📖 Overview](#-overview)
 - [🚀 Prerequisites](#️-prerequisites)
+- [🪟 Windows Setup (WSL2)](#-windows-setup-wsl2)
 - [🧪 Running Automated Tests](#-running-automated-tests)
 - [📦 Working with Pipeline Artifacts](#-Working-with-Pipeline-Artifacts)
 - [🙈 Gotchas](#-gotchas)
@@ -26,7 +27,8 @@ logs also get generated in the pipeline when it runs, and they can be accessed f
 
 ## 🚀 Prerequisites
 
-- Node version 22.21.1
+- On Windows: WSL2 with Ubuntu — see [🪟 Windows Setup (WSL2)](#-windows-setup-wsl2). Everything below is run from the Ubuntu terminal, not from PowerShell or cmd.
+- Node version 24.22.1 (see `.nvmrc`)
 - NVM (Node Version manager)
 - Docker
 - [jq](https://jqlang.org/)
@@ -36,6 +38,93 @@ logs also get generated in the pipeline when it runs, and they can be accessed f
 - Add CLEANUP_FIRST=true to your .env file if you want to ensure a clean-up of logs and screenshots before running the tests locally
 - Add USE_INSTANCES=10 to your .env file if you want to run tests in parallel, to make things faster
 - You can find these values by speaking to the AHWR dev team
+
+## 🪟 Windows Setup (WSL2)
+
+The orchestration scripts in `/scripts` are bash-based, so on Windows the tests are run from inside WSL2 rather than PowerShell or cmd. The tests themselves run headless inside Docker containers, so results are identical to macOS/Linux.
+
+### One-time setup
+
+1. **Install WSL2 with Ubuntu** from an elevated PowerShell prompt, then restart when prompted:
+
+   ```powershell
+   wsl --install
+   ```
+
+   Launch Ubuntu from the Start menu and create a Linux username and password.
+
+2. **Install Docker Desktop for Windows** with the WSL 2 based engine enabled (Settings → General) and WSL integration enabled for Ubuntu (Settings → Resources → WSL Integration). This makes the `docker` and `docker compose` commands available inside the Ubuntu terminal.
+
+3. **In the Ubuntu terminal**, install the remaining prerequisites:
+
+   ```bash
+   sudo apt update && sudo apt install -y curl jq
+   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+   source ~/.bashrc
+   ```
+
+### Set up a separate SSH key for WSL
+
+WSL is its own Linux environment with its own `~/.ssh` directory — it cannot use the SSH keys you set up for Git on the Windows side, so you need a separate key for WSL:
+
+1. Generate a new key in the Ubuntu terminal and copy the public key:
+
+   ```bash
+   ssh-keygen -t ed25519 -C "your.name@defra.gov.uk"
+   cat ~/.ssh/id_ed25519.pub
+   ```
+
+2. Add that public key to GitHub (**Settings → SSH and GPG keys → New SSH key**).
+
+3. Verify it works:
+
+   ```bash
+   ssh -T git@github.com
+   ```
+
+If you would rather reuse your existing Windows key, you can copy the private key into WSL and fix its permissions:
+
+```bash
+mkdir -p ~/.ssh && cp /mnt/c/Users/<you>/.ssh/id_ed25519* ~/.ssh/ && chmod 600 ~/.ssh/id_ed25519
+```
+
+However, a separate key is recommended — shared keys mean revoking access for one environment revokes it for both.
+
+### Clone into the Linux filesystem
+
+Keep the repository inside the WSL filesystem (e.g. `~/repos/ahwr-ui-tests`), not under `/mnt/c/...`:
+
+```bash
+mkdir -p ~/repos && cd ~/repos
+git clone git@github.com:DEFRA/ahwr-ui-tests.git
+cd ahwr-ui-tests
+nvm install   # picks up the version from .nvmrc
+```
+
+Bind mounts from the Windows drives are much slower under WSL2, and the tests stream screenshots, logs and Allure results through those mounts. To work with the files from Windows, use `\\wsl$\Ubuntu\home\<you>\repos\ahwr-ui-tests` in File Explorer or the WSL remote in VS Code.
+
+### Line endings
+
+Git inside WSL checks files out with LF endings by default, which is what the scripts and the `.env` parsing in `scripts/run_tests.sh` expect. If you have `core.autocrlf=true` set in your WSL git config, override it for this repo:
+
+```bash
+git config core.autocrlf input
+```
+
+### Running the tests
+
+Everything from [Running Automated Tests locally](#-running-automated-tests-locally) works unchanged inside the Ubuntu terminal once your `.env` file is in place, e.g.:
+
+```bash
+./scripts/github_run_tests.sh mainSuite
+```
+
+Ports are forwarded from WSL2 to Windows automatically, so the services (and the Allure report served with `python3 -m http.server`) are reachable in your Windows browser as usual.
+
+### Known limitations
+
+- The compose file pins `platform: linux/amd64`. On Windows-on-ARM devices those images run under emulation and will be significantly slower.
+- Do not run the `.sh` scripts from PowerShell or cmd — they will not work there.
 
 ## 🧪 Running Automated Tests locally
 
@@ -133,7 +222,7 @@ When the automated tests run in the pipeline, several files are collected and up
 
 - We use the -auto queues that have been created in the DEV environment. When the tests run in the pipeline, they will use the -auto queues too. If this becomes an issue, we can create -pipe queues.
 
-- The repo has been developed to work on macOS / Linux. This means you might struggle to run it on Windows, unless you can make alterations to scripts etc.
+- The orchestration scripts are bash-based, so the tests must be run from macOS, Linux, or Windows via WSL2 (see [🪟 Windows Setup (WSL2)](#-windows-setup-wsl2)). They will not run from PowerShell or cmd.
 
 - Screenshots have been added to the tests, and volume in the /screenshots folder. If any errors occur, they will be visible there.
 
