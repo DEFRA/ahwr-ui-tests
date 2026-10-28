@@ -63,6 +63,33 @@ The orchestration scripts in `/scripts` are bash-based, so on Windows the tests 
    source ~/.bashrc
    ```
 
+### Set up a separate SSH key for WSL
+
+WSL is its own Linux environment with its own `~/.ssh` directory — it cannot use the SSH keys you set up for Git on the Windows side, so you need a separate key for WSL:
+
+1. Generate a new key in the Ubuntu terminal and copy the public key:
+
+   ```bash
+   ssh-keygen -t ed25519 -C "your.name@defra.gov.uk"
+   cat ~/.ssh/id_ed25519.pub
+   ```
+
+2. Add that public key to GitHub (**Settings → SSH and GPG keys → New SSH key**).
+
+3. Verify it works:
+
+   ```bash
+   ssh -T git@github.com
+   ```
+
+If you would rather reuse your existing Windows key, you can copy the private key into WSL and fix its permissions:
+
+```bash
+mkdir -p ~/.ssh && cp /mnt/c/Users/<you>/.ssh/id_ed25519* ~/.ssh/ && chmod 600 ~/.ssh/id_ed25519
+```
+
+However, a separate key is recommended — shared keys mean revoking access for one environment revokes it for both.
+
 ### Clone into the Linux filesystem
 
 Keep the repository inside the WSL filesystem (e.g. `~/repos/ahwr-ui-tests`), not under `/mnt/c/...`:
