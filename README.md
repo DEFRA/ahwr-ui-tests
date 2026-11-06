@@ -178,6 +178,11 @@ The assumption is that the local images exists and is called `app-development`. 
 
 The image gets retagged so as to keep the names in the rest of the script(s) the same.
 
+If you are running on an Apple Silicon Mac, the docker builds an image based on the ARM architecture (linux/arm64), so you will need to set the following environment variable before running the tests:
+```bash
+export DOCKER_DEFAULT_PLATFORM=linux/amd64
+```
+
 ### Filtering suites and spec files
 
 You now can pass the name of a suite to `./scripts/github_run_tests.sh` to execute only the tests on that suite. Also, you can pass `--spec <filename>` parameter to only execute the tests on that file. If you pass `--spec` you need to pass the name of the suite too.
