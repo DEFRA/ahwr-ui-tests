@@ -121,6 +121,9 @@ Everything from [Running Automated Tests locally](#-running-automated-tests-loca
 
 Ports are forwarded from WSL2 to Windows automatically, so the services (and the Allure report served with `python3 -m http.server`) are reachable in your Windows browser as usual.
 
+If you are using Windows or MacOS (Apple Silicon), the `Dockerfile` may not run properly. 
+Replace the content of `Dockerfile` with `Dockerfile.mac` and run tests locally. Do not commit this change.
+
 ### Known limitations
 
 - The compose file pins `platform: linux/amd64`. On Windows-on-ARM devices those images run under emulation and will be significantly slower.
